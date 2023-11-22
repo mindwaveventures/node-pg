@@ -14,6 +14,7 @@ const {
 const {
   additemscontroller,
   updateitemController,
+  getbysingleitemcontroller,
 } = require("../controllers/items.controller");
 
 router.post("/add-items", validate(additemSchema), additemscontroller);
@@ -23,5 +24,7 @@ router.patch(
   validate(updateitemSchema),
   updateitemController
 );
+
+router.get("/items/:itemId"), getbysingleitemcontroller;
 
 module.exports = router;

@@ -28,7 +28,19 @@ const updateitemController = async (req, res) => {
   });
 };
 
+const getbysingleitemcontroller = async (req, res) => {
+  const itemId = req.params.item_id;
+  const pgRes = await pgClient.query("SELECT * FROM items WHERE item_id = $1", [
+    itemId,
+  ]);
+  res.json({
+    rows: pgRes.rows,
+    count: pgRes.rowCount,
+  });
+};
+
 module.exports = {
   additemscontroller,
   updateitemController,
+  getbysingleitemcontroller,
 };
