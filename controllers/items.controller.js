@@ -38,9 +38,20 @@ const getbysingleitemcontroller = async (req, res) => {
     count: pgRes.rowCount,
   });
 };
+const getallitemcontroller = async (req, res) => {
+  const pgRes = await pgClient.query("SELECT item_name from items LIMIT $1", [
+    req.query.limit || 1,
+  ]);
+
+  res.json({
+    rows: pgRes.rows,
+    count: pgRes.rowCount,
+  });
+};
 
 module.exports = {
   additemscontroller,
   updateitemController,
   getbysingleitemcontroller,
+  getallitemcontroller,
 };
