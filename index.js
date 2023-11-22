@@ -34,12 +34,12 @@ app.post("/add-item", async function (req, res) {
   });
 });
 
-app.patch("/update-", async function (req, res) {
+app.patch("/update-item-content", async function (req, res) {
   const queryText =
-    "UPDATE users set name=$1 where userid=$2 RETURNING userid,name";
+    "UPDATE items set item_content=$1 where item_id=$2 RETURNING item_content,item_id";
   const pgRes = await pgClient.query(queryText, [
-    req.body.name,
-    req.body.userid,
+    req.body.item_content,
+    req.body.item_id,
   ]);
 
   res.json({
