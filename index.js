@@ -34,7 +34,7 @@ app.post("/add-item", async function (req, res) {
   });
 });
 
-app.patch("/update-user", async function (req, res) {
+app.patch("/update-", async function (req, res) {
   const queryText =
     "UPDATE users set name=$1 where userid=$2 RETURNING userid,name";
   const pgRes = await pgClient.query(queryText, [
