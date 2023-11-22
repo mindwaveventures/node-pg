@@ -24,6 +24,7 @@ app.post("/add-item", async function (req, res) {
     req.body.price,
     req.body.status_of_item,
   ]);
+
   // const postQueryText = 'INSERT INTO posts(postcontent,userid) VALUES($1,$2) RETURNING postid';
   // const postPgRes = await pgClient.query(postQueryText, [req.body.postcontent, pgRes.rows[0].userid]);
 
@@ -33,6 +34,7 @@ app.post("/add-item", async function (req, res) {
     // postInsert: postPgRes.rows,
   });
 });
+
 // To update data in update-content
 app.patch("/update-item-content", async function (req, res) {
   const queryText =
