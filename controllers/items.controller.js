@@ -14,6 +14,21 @@ const additemscontroller = async (req, res) => {
     count: pgRes.rowCount,
   });
 };
+const updateitemController = async (req, res) => {
+  const queryText =
+    "UPDATE items set item_content=$1 where item_id=$2 RETURNING item_content,item_id";
+  const pgRes = await pgClient.query(queryText, [
+    req.body.item_content,
+    req.body.item_id,
+  ]);
+
+  res.json({
+    rows: pgRes.rows,
+    count: pgRes.rowCount,
+  });
+};
+
 module.exports = {
   additemscontroller,
+  updateitemController,
 };
