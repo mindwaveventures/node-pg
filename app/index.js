@@ -21,8 +21,8 @@ app.use(urlencodedParser);
 //routers
 app.use("/", userRouter);
 
-app.use(errorHandler);
 app.use(notfound);
+app.use(errorHandler);
 
 app.listen(process.env.PORT, process.env.HOST, () => {
   console.log(

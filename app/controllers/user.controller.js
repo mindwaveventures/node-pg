@@ -97,8 +97,28 @@ const loginController = async (req, res, next) => {
   });
 };
 
+// view the account details
+const getAccountController = async (req, res, next) => {
+  const queryText = "select * from account_users au where id = $1";
+  const pgRes = await pgClient.query(queryText, [req.params.id]);
+  const idpgRes = pgRes.rows[0];
+
+  if (!idpgRes) {
+    return next({
+      status: 400,
+      message: "user not found",
+    });
+  }
+
+  res.json({
+    rows: pgRes.rows,
+    count: pgRes.rowCount,
+  });
+};
+
 module.exports = {
   addUserController,
   updateUserController,
   loginController,
+  getAccountController,
 };
