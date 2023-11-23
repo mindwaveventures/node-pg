@@ -54,7 +54,7 @@ const updateUserController = async (req, res, next) => {
 
   if (searchPgRes.rowCount == 0) {
     const queryText =
-      "update account_users set first_name  = $1, last_name=$2, email=$3, username=$4, user_password=$5, phone_no=$6 where id = 3  returning *";
+      "update account_users set first_name  = $1, last_name=$2, email=$3, username=$4, user_password=$5, phone_no=$6 where id = $7  returning *";
     const pgRes = await pgClient.query(queryText, [
       req.body.first_name || userToUpdate.first_name,
       req.body.last_name || userToUpdate.last_name,
@@ -62,6 +62,7 @@ const updateUserController = async (req, res, next) => {
       req.body.username || userToUpdate.username,
       req.body.user_password || userToUpdate.user_password,
       req.body.phone_no || userToUpdate.phone_no,
+      req.params.id,
     ]);
     res.json({
       rows: pgRes.rows,
