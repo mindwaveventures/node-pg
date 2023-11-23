@@ -3,7 +3,7 @@ const validate = (schema) => (req, res, next) => {
   if (error) {
     return next({
       status: 400,
-      message: " error from validation",
+      message: error.details.map((d) => d.message),
     });
   }
   req.body = value;

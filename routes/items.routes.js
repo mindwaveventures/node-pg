@@ -1,5 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const { validate } = require("../middlewares/validate.middleware");
+const {
+  itemaddSchema,
+  updateitemSchema,
+} = require("../validations/items.schema");
 
 const {
   additemcontroller,
@@ -15,7 +20,7 @@ const {
   searchController,
 } = require("../controller/items.controller");
 
-router.post("/add-items", additemcontroller);
+router.post("/add-items", validate(itemaddSchema), additemcontroller);
 router.get("/items", getlistofitemscontroller);
 router.patch("/update-item-content", updateitemcontentcontroller);
 router.post("/favourites", addfavouritecontroller);
