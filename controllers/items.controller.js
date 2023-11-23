@@ -94,7 +94,19 @@ const sortItemnameDecensingcontroller = async (req, res) => {
     rows: pgRes.rows,
   });
 };
-
+const filterItemPricecontroller = async (req, res) => {
+  if (req.query.priceRange) {
+    const priceRanges = req.query.priceRange.split("-");
+    const minPrice = parseFloat(priceRanges[0]);
+    const maxPrice = parseFloat(priceRanges[1]);
+    query = `SELECT * FROM items  WHERE items.price BETWEEN ${minPrice} AND ${maxPrice}`;
+  }
+  const pgRes = await pgClient.query(query);
+  res.json({
+    rows: pgRes.rows,
+    count: pgRes.rowCount,
+  });
+};
 module.exports = {
   additemscontroller,
   updateitemController,
@@ -105,4 +117,5 @@ module.exports = {
   sortPriceDecendingcontroller,
   sortItemnameAScensingcontroller,
   sortItemnameDecensingcontroller,
+  filterItemPricecontroller,
 };
