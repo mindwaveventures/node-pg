@@ -8,9 +8,11 @@ app.use(express.json());
 app.use(jsonParser);
 app.use(urlencodedParser);
 const itemRouter = require("./routes/items.route");
+const { errorHandler } = require("./middlewares/errorhandler.middleware");
 
 // items routes
 app.use("/", itemRouter);
+app.use(errorHandler);
 
 app.listen(process.env.PORT, process.env.HOST, () => {
   console.log(
