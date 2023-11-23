@@ -19,6 +19,7 @@ const {
   sortItemnameAScensingcontroller,
   sortItemnameDecensingcontroller,
   filterItemPricecontroller,
+  SearchItemNamecontroller,
 } = require("../controllers/items.controller");
 
 router.post("/add-items", validate(itemaddSchema), additemscontroller);
@@ -35,5 +36,6 @@ router.get("/sort/dec-by-price", sortPriceDecendingcontroller);
 router.get("/sort/asc-by-item-name", sortItemnameAScensingcontroller);
 router.get("/sort/dec-by-item-name", sortItemnameDecensingcontroller);
 router.get("/filter", filterItemPricecontroller);
+router.get("/search", SearchItemNamecontroller);
 
 module.exports = router;
