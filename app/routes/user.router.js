@@ -4,14 +4,18 @@ const router = express.Router();
 const {
   getUsers,
   addUserController,
+  updateUserController,
 } = require("../controllers/user.controller");
 const { validate } = require("../middlewares/validate.midddleware");
-const { signUpSchema } = require("../validations/authentication.schema");
-
-//GET
-router.get("/u", getUsers);
+const {
+  signUpSchema,
+  updateUserSchema,
+} = require("../validations/authentication.schema");
 
 //CREATE
 router.post("/signup", validate(signUpSchema), addUserController);
+
+//UPDATE
+router.put("/user/:id", validate(updateUserSchema), updateUserController);
 
 module.exports = router;
