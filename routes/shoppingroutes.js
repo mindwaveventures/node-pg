@@ -1,18 +1,16 @@
 const express = require("express");
 const { ratingValueSchema } = require("../validation/ratingValueSchema");
 const { addToCartSchema } = require("../validation/addToCartSchema");
+const { buyItemSchema } = require("../validation/buyItemSchema");
 const { validate } = require("../middlewares/validate.middleware");
-
+// const pgClient = require("../pg-config");
 const router = express.Router();
-
 const {
   addRatingController,
   addToCartController,
+  buyItemController,
+  listController,
 } = require("../controllers/shoppingController");
-
-router.post("/addRating", validate(ratingValueSchema), addRatingController);
-router.post("/addToCart", validate(addToCartSchema), addToCartController);
-module.exports = router;
 
 // router.post("/addRating", async function (req, res) {
 //   const queryText =
@@ -28,4 +26,9 @@ module.exports = router;
 //     count: pgRes.rowCount,
 //   });
 // });
-// const pgClient = require("../pg-config");
+
+router.post("/addRating", validate(ratingValueSchema), addRatingController);
+router.post("/addToCart", validate(addToCartSchema), addToCartController);
+router.post("/buyItem", validate(buyItemSchema), buyItemController);
+router.get("/listBoughtItems/:user_id", listController);
+module.exports = router;
