@@ -1,5 +1,5 @@
 const express = require("express");
-const amazonRouter = require("./routes/amazonroutes");
+const shoppingRouter = require("./routes/shoppingroutes");
 // require("dotenv").config();
 const pgClient = require("./pg-config");
 const bodyParser = require("body-parser");
@@ -15,7 +15,7 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.use(jsonParser);
 app.use(urlencodedParser);
 
-app.use("/amazonclone", amazonRouter);
+app.use("/", shoppingRouter);
 // app.post("/addRating", async function (req, res) {
 //   const queryText =
 //     "INSERT INTO rating(item_id,user_id,ratingvalue) VALUES($1,$2,$3) RETURNING item_id,user_id,ratingvalue";

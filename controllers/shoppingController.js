@@ -14,6 +14,27 @@ async function addRatingController(req, res) {
     count: pgRes.rowCount,
   });
 }
+async function addToCartController(req, res) {
+  const CartqueryText =
+    "INSERT INTO cart (item_id,item_name,user_id,item_price) VALUES ($1,$2,$3,$4) RETURNING  *";
+  console.log(
+    req.xop.item_id,
+    req.xop.item_name,
+    req.xop.user_id,
+    req.xop.item_price
+  );
+  const cartRes = await pgClient.query(CartqueryText, [
+    req.xop.item_id,
+    req.xop.item_name,
+    req.xop.user_id,
+    req.xop.item_price,
+  ]);
+  res.json({
+    rows: cartRes.rows,
+    count: cartRes.rowCount,
+  });
+}
 module.exports = {
   addRatingController,
+  addToCartController,
 };

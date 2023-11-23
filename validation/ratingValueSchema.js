@@ -5,6 +5,7 @@ const ratingValueSchema = Joi.object({
   user_id: Joi.number().required(),
   ratingValue: Joi.number().integer().min(1).max(5).required(),
 });
+
 module.exports = {
   ratingValueSchema,
 };

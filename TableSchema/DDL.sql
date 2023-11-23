@@ -18,3 +18,4 @@ alter table items add column item_price DECIMAL(10, 2) NOT null;
 --date_of_order date, item_price DECIMAL(10, 2) NOT null );
 
 --drop table my_orders;
+alter table cart add column item_price DECIMAL(10, 2) NOT null;
