@@ -8,6 +8,10 @@
 
 ## Add items to cart
 
+### For using Transactions
+
+    https://node-postgres.com/features/transactions
+
 ## To run
 
     npm i

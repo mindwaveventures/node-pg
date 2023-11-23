@@ -1,12 +1,14 @@
 const express = require("express");
 const { ratingValueSchema } = require("../validation/ratingValueSchema");
 const { addToCartSchema } = require("../validation/addToCartSchema");
+const { buyItemSchema } = require("../validation/buyItemSchema");
 const { validate } = require("../middlewares/validate.middleware");
 // const pgClient = require("../pg-config");
 const router = express.Router();
 const {
   addRatingController,
   addToCartController,
+  buyItemController,
 } = require("../controllers/shoppingController");
 
 // router.post("/addRating", async function (req, res) {
@@ -26,4 +28,5 @@ const {
 
 router.post("/addRating", validate(ratingValueSchema), addRatingController);
 router.post("/addToCart", validate(addToCartSchema), addToCartController);
+router.post("/buyItem", validate(buyItemSchema), buyItemController);
 module.exports = router;
