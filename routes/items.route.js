@@ -2,12 +2,9 @@ const express = require("express");
 
 const router = express.Router();
 
+const { validate } = require("../middlewares/validate.middleware");
 const {
-  validate,
-  updatevalidate,
-} = require("../middlewares/validate.middleware");
-const {
-  additemSchema,
+  itemaddSchema,
   updateitemSchema,
 } = require("../validations/items.schema");
 
@@ -16,16 +13,17 @@ const {
   updateitemController,
   getbysingleitemcontroller,
   getallitemcontroller,
+  addfavoritescontroller,
 } = require("../controllers/items.controller");
 
-router.post("/add-items", validate(additemSchema), additemscontroller);
-
+router.post("/add-items", validate(itemaddSchema), additemscontroller);
 router.patch(
   "/update-item-content",
   validate(updateitemSchema),
   updateitemController
 );
-router.get("/"), getallitemcontroller;
-router.get("/items/:itemId"), getbysingleitemcontroller;
+router.get("/items", getallitemcontroller);
+router.get("/items/:itemId", getbysingleitemcontroller);
+router.post("/favourites", addfavoritescontroller);
 
 module.exports = router;
