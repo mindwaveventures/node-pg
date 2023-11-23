@@ -14,3 +14,8 @@ user_password VARCHAR not null,
 phone_no VARCHAR,
 createdAt TIMESTAMP default current_timestamp
 )
+
+## sign up
+
+- Creates the user data with first_name, last_name, unique username and email
+- joi validation
