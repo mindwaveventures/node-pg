@@ -28,3 +28,7 @@ createdAt TIMESTAMP default current_timestamp
 
 - update the user_data with validation
 - username and email should not repeat in the database with joi validation
+
+## login
+
+- using email id and password

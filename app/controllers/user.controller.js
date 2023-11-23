@@ -75,7 +75,30 @@ const updateUserController = async (req, res, next) => {
   }
 };
 
+// login
+const loginController = async (req, res, next) => {
+  const queryText =
+    "select * from account_users au where email = $1 and user_password =$2";
+  const pgRes = await pgClient.query(queryText, [
+    req.body.email,
+    req.body.user_password,
+  ]);
+
+  if (pgRes.rowCount == 0) {
+    return next({
+      status: 400,
+      message: "user not found",
+    });
+  }
+
+  res.json({
+    rows: pgRes.rows,
+    count: pgRes.rowCount,
+  });
+};
+
 module.exports = {
   addUserController,
   updateUserController,
+  loginController,
 };

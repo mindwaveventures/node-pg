@@ -5,6 +5,7 @@ const {
   getUsers,
   addUserController,
   updateUserController,
+  loginController,
 } = require("../controllers/user.controller");
 const { validate } = require("../middlewares/validate.midddleware");
 const {
@@ -12,10 +13,13 @@ const {
   updateUserSchema,
 } = require("../validations/authentication.schema");
 
-//CREATE
+//CREATE USER ACCOUNT
 router.post("/signup", validate(signUpSchema), addUserController);
 
-//UPDATE
+//LOGIN
+router.post("/login", loginController);
+
+//UPDATE USER DATA
 router.put("/user/:id", validate(updateUserSchema), updateUserController);
 
 module.exports = router;
