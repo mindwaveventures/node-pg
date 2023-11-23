@@ -9,6 +9,7 @@ const {
   addRatingController,
   addToCartController,
   buyItemController,
+  listController,
 } = require("../controllers/shoppingController");
 
 // router.post("/addRating", async function (req, res) {
@@ -29,4 +30,5 @@ const {
 router.post("/addRating", validate(ratingValueSchema), addRatingController);
 router.post("/addToCart", validate(addToCartSchema), addToCartController);
 router.post("/buyItem", validate(buyItemSchema), buyItemController);
+router.get("/listBoughtItems/:user_id", listController);
 module.exports = router;
