@@ -66,15 +66,18 @@ async function buyItemController(req, res) {
   }
 }
 async function listController(req, res) {
+  let queryText = `SELECT purchases.*,items.item_name FROM purchases JOIN items ON purchases.item_id = items.item_id WHERE purchases.user_id = $1`;
   try {
-    let ListqueryText =
-      "SELECT purchases.*,items.item_name FROM purchases JOIN items ON purchases.item_id = items.item_id WHERE purchases.user_id = $1 ";
-
     // //http://localhost:5001/fav?user_id=2
     // if (req.query.user_id) {
     //   query += ` WHERE favourites.user_id = ${req.query.user_id}`;
     // }
-    const listRes = await pgClient.query(ListqueryText, [req.params.user_id]);
+
+    if (req.query.search) {
+      queryText += ` AND items.item_name ILIKE '%${req.query.search}%'`;
+    }
+
+    const listRes = await pgClient.query(queryText, [req.params.user_id]);
     res.json({
       rows: listRes.rows,
       count: listRes.rowCount,
