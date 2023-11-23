@@ -63,8 +63,15 @@ const addfavoritescontroller = async (req, res) => {
   });
 };
 // sort by price ascending
-const sortPriceAScendingcontroller = async (req, res) => {
+const sortPriceAscendingcontroller = async (req, res) => {
   const pgRes = await pgClient.query("SELECT * from items ORDER BY price ASC");
+  res.json({
+    rows: pgRes.rows,
+  });
+};
+// Sort price in descending order
+const sortPriceDecendingcontroller = async (req, res) => {
+  const pgRes = await pgClient.query("SELECT * from items ORDER BY price DESC");
   res.json({
     rows: pgRes.rows,
   });
@@ -76,4 +83,6 @@ module.exports = {
   getbysingleitemcontroller,
   getallitemcontroller,
   addfavoritescontroller,
+  sortPriceAscendingcontroller,
+  sortPriceDecendingcontroller,
 };
