@@ -1,5 +1,4 @@
 const pgClient = require("../pg-config");
-const { connect } = require("../routes/shoppingroutes");
 
 async function addRatingController(req, res) {
   const queryText =
