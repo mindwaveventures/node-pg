@@ -16,6 +16,8 @@ const {
   addfavoritescontroller,
   sortPriceAscendingcontroller,
   sortPriceDecendingcontroller,
+  sortItemnameAScensingcontroller,
+  sortItemnameDecensingcontroller,
 } = require("../controllers/items.controller");
 
 router.post("/add-items", validate(itemaddSchema), additemscontroller);
@@ -29,5 +31,7 @@ router.get("/items/:itemId", getbysingleitemcontroller);
 router.post("/favourites", addfavoritescontroller);
 router.get("/sort/asc-by-price", sortPriceAscendingcontroller);
 router.get("/sort/dec-by-price", sortPriceDecendingcontroller);
+router.get("/sort/asc-by-item-name", sortItemnameAScensingcontroller);
+router.get("/sort/dec-by-item-name", sortItemnameDecensingcontroller);
 
 module.exports = router;

@@ -76,6 +76,24 @@ const sortPriceDecendingcontroller = async (req, res) => {
     rows: pgRes.rows,
   });
 };
+// sort  item name ascending order
+const sortItemnameAScensingcontroller = async (req, res) => {
+  const pgRes = await pgClient.query(
+    "SELECT * from items ORDER BY item_name ASC"
+  );
+  res.json({
+    rows: pgRes.rows,
+  });
+};
+//Descending by item name
+const sortItemnameDecensingcontroller = async (req, res) => {
+  const pgRes = await pgClient.query(
+    "SELECT * from items ORDER BY item_name DESC"
+  );
+  res.json({
+    rows: pgRes.rows,
+  });
+};
 
 module.exports = {
   additemscontroller,
@@ -85,4 +103,6 @@ module.exports = {
   addfavoritescontroller,
   sortPriceAscendingcontroller,
   sortPriceDecendingcontroller,
+  sortItemnameAScensingcontroller,
+  sortItemnameDecensingcontroller,
 };
