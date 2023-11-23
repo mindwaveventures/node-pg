@@ -1,15 +1,17 @@
 const express = require("express");
 const shoppingRouter = require("./routes/shoppingroutes");
 // require("dotenv").config();
-const pgClient = require("./pg-config");
+//const pgClient = require("./pg-config");
 const bodyParser = require("body-parser");
+
+const { notfound } = require("./middlewares/notfound.middleware");
+
 const { errorHandler } = require("./middlewares/errorHandler.middleware");
 
 const app = express();
-// create application/json parser
+
 const jsonParser = bodyParser.json();
 
-// create application/x-www-form-urlencoded parser
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(jsonParser);
@@ -30,7 +32,15 @@ app.use("/", shoppingRouter);
 //     count: pgRes.rowCount,
 //   });
 // });
+app.use(notfound);
+app.use(errorHandler);
+app.listen(process.env.PORT, process.env.HOST, () => {
+  console.log(
+    `Server running at http://${process.env.HOST}:${process.env.PORT}/`
+  );
+});
 
+//-----Example--------------
 // app.post("/save-user", async function (req, res) {
 //   const queryText = "INSERT INTO users(name) VALUES($1) RETURNING userid,name";
 //   const pgRes = await pgClient.query(queryText, [req.body.name]);
@@ -85,9 +95,3 @@ app.use("/", shoppingRouter);
 //     count: pgRes.rowCount,
 //   });
 // });
-app.use(errorHandler);
-app.listen(process.env.PORT, process.env.HOST, () => {
-  console.log(
-    `Server running at http://${process.env.HOST}:${process.env.PORT}/`
-  );
-});
