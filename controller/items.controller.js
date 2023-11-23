@@ -1,52 +1,19 @@
-// const express = require("express");
-// const app = express();
-// const bodyParser = require("body-parser");
-// require("dotenv").config();
-// const jsonParser = bodyParser.json();
-// const urlencodedParser = bodyParser.urlencoded({ extended: false });
-// app.use(express.json());
-// app.use(jsonParser);
-// app.use(urlencodedParser);
-// const itemRouter = require("./routes/items.routes");
-// // items routes
-// app.use("/", itemRouter);
-// app.listen(process.env.PORT, process.env.HOST, () => {
-//   console.log(
-//     `Server running at http://${process.env.HOST}:${process.env.PORT}/`
-//   );
-// });
+const pgClient = require("../pg-config");
 
-const express = require("express");
-const app = express();
-const bodyParser = require("body-parser");
-require("dotenv").config();
-const pgClient = require("./pg-config");
-// create application/json parser
-const jsonParser = bodyParser.json();
-// create application/x-www-form-urlencoded parser
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
-app.use(jsonParser);
-app.use(urlencodedParser);
-app.use(express.json());
-
-// To insert a data in add-item
-
-app.post("/add-items", async function (req, res) {
-  const queryText =
-    "INSERT INTO items(item_name,item_content,price,status_of_item) VALUES($1,$2,$3,$4) RETURNING item_id,item_name";
-  const pgRes = await pgClient.query(queryText, [
-    req.body.item_name,
-    req.body.item_content,
-    req.body.price,
-    req.body.status_of_item,
+// To add a item
+const additemcontroller = async (req, res) => {
+  const pgRes = await pgClient.query("SELECT name from users LIMIT $1", [
+    req.query.limit || 1,
   ]);
+
   res.json({
     rows: pgRes.rows,
     count: pgRes.rowCount,
   });
-});
-// To update data in update-content
-app.patch("/update-item-content", async function (req, res) {
+};
+
+// To update item content
+const updateitemcontentcontroller = async (req, res) => {
   const queryText =
     "UPDATE items set item_content=$1 where item_id=$2 RETURNING item_content,item_id";
   const pgRes = await pgClient.query(queryText, [
@@ -58,9 +25,10 @@ app.patch("/update-item-content", async function (req, res) {
     rows: pgRes.rows,
     count: pgRes.rowCount,
   });
-});
-// to add favourites
-app.post("/favourites", async function (req, res) {
+};
+
+// To add favourite
+const addfavouritecontroller = async (req, res) => {
   const queryText =
     "INSERT INTO favourites(item_id,user_id) VALUES($1,$2) RETURNING item_id,user_id";
   const pgRes = await pgClient.query(queryText, [
@@ -71,9 +39,10 @@ app.post("/favourites", async function (req, res) {
     rows: pgRes.rows,
     count: pgRes.rowCount,
   });
-});
-// To view single item
-app.get("/items/:itemId", async function (req, res) {
+};
+
+// To get single item
+const getsingleitemcontroller = async (req, res) => {
   try {
     const itemId = req.params.itemId;
     const pgRes = await pgClient.query(
@@ -92,51 +61,54 @@ app.get("/items/:itemId", async function (req, res) {
     console.error("Error in handling request:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
-});
+};
+
 // To get list of items
-app.get("/items", async function (req, res) {
+const getlistofitemscontroller = async (req, res) => {
   const pgRes = await pgClient.query("SELECT * from items ");
   res.json({
     rows: pgRes.rows,
   });
-});
+};
+
 // Sort price in ascending order
-app.get("/sort/asc-by-price", async function (req, res) {
+const sortpriceasccontroller = async (req, res) => {
   const pgRes = await pgClient.query("SELECT * from items ORDER BY price ASC");
   res.json({
     rows: pgRes.rows,
   });
-});
+};
+
 // Sort price in descending order
-app.get("/sort/desc-by-price", async function (req, res) {
+const sortpricedesccontroller = async (req, res) => {
   const pgRes = await pgClient.query("SELECT * from items ORDER BY price DESC");
   res.json({
     rows: pgRes.rows,
   });
-});
+};
 
 //ascending by item name
-app.get("/sort/asc-by-itemname", async function (req, res) {
+const sortitemnameasccontroller = async (req, res) => {
   const pgRes = await pgClient.query(
     "SELECT * from items ORDER BY item_name ASC"
   );
   res.json({
     rows: pgRes.rows,
   });
-});
+};
 
 //Descending by item name
-app.get("/sort/desc-by-itemname", async function (req, res) {
+const sortItemnameDescController = async (req, res) => {
   const pgRes = await pgClient.query(
     "SELECT * from items ORDER BY item_name DESC"
   );
   res.json({
     rows: pgRes.rows,
   });
-});
+};
 
 // to filter the price range
-app.get("/filter", async function (req, res) {
+const filterPriceController = async (req, res) => {
   try {
     if (req.query.priceRange) {
       const priceRanges = req.query.priceRange.split("-");
@@ -155,10 +127,10 @@ app.get("/filter", async function (req, res) {
   } catch (error) {
     console.error("Error fetching items:", error);
   }
-});
+};
 
 // To search
-app.get("/search", async function (req, res) {
+const searchController = async (req, res) => {
   try {
     if (req.query.search) {
       query = `  SELECT * FROM items WHERE item_name ILIKE '%${req.query.search}%'`;
@@ -175,22 +147,18 @@ app.get("/search", async function (req, res) {
   } catch (error) {
     console.error("Error fetching items:", error);
   }
-});
+};
 
-// app.delete("/remove", async function (req, res) {
-//   const pgRes = await pgClient.query(
-//     "DELETE from users where userid=$1 RETURNING userid",
-//     [req.query.userid]
-//   );
-
-//   res.json({
-//     rows: pgRes.rows,
-//     count: pgRes.rowCount,
-//   });
-// });
-
-app.listen(process.env.PORT, process.env.HOST, () => {
-  console.log(
-    `Server running at http://${process.env.HOST}:${process.env.PORT}/`
-  );
-});
+module.exports = {
+  additemcontroller,
+  updateitemcontentcontroller,
+  addfavouritecontroller,
+  getsingleitemcontroller,
+  getlistofitemscontroller,
+  sortpriceasccontroller,
+  sortpricedesccontroller,
+  sortitemnameasccontroller,
+  sortItemnameDescController,
+  filterPriceController,
+  searchController,
+};
