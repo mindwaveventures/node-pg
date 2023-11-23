@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-// const { validate } = require("../middlewares/validate.middleware");
+const { validate } = require("../middlewares/validate.middleware");
 const {
   itemaddSchema,
   updateitemSchema,
