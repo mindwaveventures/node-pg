@@ -125,15 +125,16 @@ function filteredtitle(searchText) {
   return result.filter((res) => res.item_name);
 }
 
-app.get("/filter/filter-by-price", async function (req, res) {
+// to filter the price range
+app.get("/filter", async function (req, res) {
   try {
-    let query = "SELECT items.* FROM items ";
+    let query = "SELECT * FROM items ";
     if (req.query.priceRange) {
       const priceRanges = req.query.priceRange.split("-");
       const minPrice = parseFloat(priceRanges[0]);
       const maxPrice = parseFloat(priceRanges[1]);
 
-      query += ` AND items.price BETWEEN ${minPrice} AND ${maxPrice}`;
+      query += ` WHERE items.price BETWEEN ${minPrice} AND ${maxPrice}`;
     }
 
     const pgRes = await pgClient.query(query);
@@ -144,7 +145,6 @@ app.get("/filter/filter-by-price", async function (req, res) {
     });
   } catch (error) {
     console.error("Error fetching items:", error);
-    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 app.delete("/remove", async function (req, res) {
