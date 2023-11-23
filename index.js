@@ -2,20 +2,18 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 require("dotenv").config();
-
 const pgClient = require("./pg-config");
-
 // create application/json parser
 const jsonParser = bodyParser.json();
-
 // create application/x-www-form-urlencoded parser
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
-
 app.use(jsonParser);
 app.use(urlencodedParser);
+app.use(express.json());
 
 // To insert a data in add-item
-app.post("/add-item", async function (req, res) {
+
+app.post("/add-items", async function (req, res) {
   const queryText =
     "INSERT INTO items(item_name,item_content,price,status_of_item) VALUES($1,$2,$3,$4) RETURNING item_id,item_name";
   const pgRes = await pgClient.query(queryText, [
@@ -24,17 +22,11 @@ app.post("/add-item", async function (req, res) {
     req.body.price,
     req.body.status_of_item,
   ]);
-
-  // const postQueryText = 'INSERT INTO posts(postcontent,userid) VALUES($1,$2) RETURNING postid';
-  // const postPgRes = await pgClient.query(postQueryText, [req.body.postcontent, pgRes.rows[0].userid]);
-
   res.json({
     rows: pgRes.rows,
     count: pgRes.rowCount,
-    // postInsert: postPgRes.rows,
   });
 });
-
 // To update data in update-content
 app.patch("/update-item-content", async function (req, res) {
   const queryText =
@@ -49,18 +41,19 @@ app.patch("/update-item-content", async function (req, res) {
     count: pgRes.rowCount,
   });
 });
-
-app.get("/", async function (req, res) {
-  const pgRes = await pgClient.query("SELECT name from users LIMIT $1", [
-    req.query.limit || 1,
+// to add favourites
+app.post("/favourites", async function (req, res) {
+  const queryText =
+    "INSERT INTO favourites(item_id,user_id) VALUES($1,$2) RETURNING item_id,user_id";
+  const pgRes = await pgClient.query(queryText, [
+    req.body.item_id,
+    req.body.user_id,
   ]);
-
   res.json({
     rows: pgRes.rows,
     count: pgRes.rowCount,
   });
 });
-
 // To view single item
 app.get("/items/:itemId", async function (req, res) {
   const itemId = req.params.itemId;
@@ -74,7 +67,86 @@ app.get("/items/:itemId", async function (req, res) {
     count: pgRes.rowCount,
   });
 });
+// To show list of items
+app.get("/items", async function (req, res) {
+  const pgRes = await pgClient.query("SELECT * from items ");
+  res.json({
+    rows: pgRes.rows,
+  });
+});
+// Sort price in ascending order
+app.get("/sort/asc-by-price", async function (req, res) {
+  const pgRes = await pgClient.query("SELECT * from items ORDER BY price ASC");
+  res.json({
+    rows: pgRes.rows,
+  });
+});
+// Sort price in descending order
+app.get("/sort/desc-by-price", async function (req, res) {
+  const pgRes = await pgClient.query("SELECT * from items ORDER BY price DESC");
+  res.json({
+    rows: pgRes.rows,
+  });
+});
 
+//ascending by item name
+app.get("/sort/asc-by-itemname", async function (req, res) {
+  const pgRes = await pgClient.query(
+    "SELECT * from items ORDER BY item_name ASC"
+  );
+  res.json({
+    rows: pgRes.rows,
+  });
+});
+
+//Descending by item name
+app.get("/sort/desc-by-itemname", async function (req, res) {
+  const pgRes = await pgClient.query(
+    "SELECT * from items ORDER BY item_name DESC"
+  );
+  res.json({
+    rows: pgRes.rows,
+  });
+});
+
+// to search
+app.get("/items", (req, res) => {
+  let search = req.query.search;
+  const pgRes = filteredtitle(search);
+  return res.json({
+    rows: pgRes.rows,
+  });
+});
+function filteredtitle(searchText) {
+  const searchTextLow = searchText.toLowerCase();
+  const result = items.filter((m) =>
+    m.title.toLowerCase().includes(searchTextLow)
+  );
+  return result.filter((res) => res.item_name);
+}
+
+app.get("/filter/filter-by-price", async function (req, res) {
+  try {
+    let query = "SELECT items.* FROM items ";
+    if (req.query.priceRange) {
+      const priceRanges = req.query.priceRange.split("-");
+      const minPrice = parseFloat(priceRanges[0]);
+      const maxPrice = parseFloat(priceRanges[1]);
+
+      query += ` AND items.price BETWEEN ${minPrice} AND ${maxPrice}`;
+    }
+
+    const pgRes = await pgClient.query(query);
+
+    res.json({
+      rows: pgRes.rows,
+      count: pgRes.rowCount,
+    });
+  } catch (error) {
+    console.error("Error fetching items:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 app.delete("/remove", async function (req, res) {
   const pgRes = await pgClient.query(
     "DELETE from users where userid=$1 RETURNING userid",
