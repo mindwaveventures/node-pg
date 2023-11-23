@@ -43,10 +43,14 @@ const getbysingleitemcontroller = async (req, res) => {
   const pgRes = await pgClient.query("SELECT * FROM items WHERE item_id = $1", [
     itemId,
   ]);
-  res.json({
-    rows: pgRes.rows,
-    count: pgRes.rowCount,
-  });
+  if (pgRes.rowCount === 0) {
+    res.status(404).json({ error: "Item not found" });
+  } else {
+    res.json({
+      rows: pgRes.rows,
+      count: pgRes.rowCount,
+    });
+  }
 };
 // favourites add
 const addfavoritescontroller = async (req, res) => {
@@ -115,10 +119,14 @@ const SearchItemNamecontroller = async (req, res) => {
     query = `  SELECT * FROM items WHERE item_name ILIKE '%${req.query.search}%'`;
   }
   const pgRes = await pgClient.query(query);
-  res.json({
-    rows: pgRes.rows,
-    count: pgRes.rowCount,
-  });
+  if (pgRes.rowCount === 0) {
+    res.status(404).json({ error: "Item not found" });
+  } else {
+    res.json({
+      rows: pgRes.rows,
+      count: pgRes.rowCount,
+    });
+  }
 };
 module.exports = {
   additemscontroller,
