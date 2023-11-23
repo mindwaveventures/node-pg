@@ -77,7 +77,8 @@ async function listController(req, res) {
     // }
     //sort by price
     if (req.query.sortOrder) {
-      const sortOrder = req.query.sortOrder === "desc" ? "DESC" : "ASC";
+      //const sortOrder = req.query.sortOrder === "desc" ? "DESC" : "ASC";
+      const sortOrder = req.query.sortOrder;
       queryText += ` ORDER BY purchases.item_price ${sortOrder}`;
       console.log(sortOrder);
       console.log(queryText);
