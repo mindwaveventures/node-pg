@@ -68,13 +68,37 @@ async function buyItemController(req, res) {
 async function listController(req, res) {
   let queryText = `SELECT purchases.*,items.item_name FROM purchases JOIN items ON purchases.item_id = items.item_id WHERE purchases.user_id = $1`;
   try {
-    // //http://localhost:5001/fav?user_id=2
-    // if (req.query.user_id) {
-    //   query += ` WHERE favourites.user_id = ${req.query.user_id}`;
-    // }
-
+    //search by name
     if (req.query.search) {
       queryText += ` AND items.item_name ILIKE '%${req.query.search}%'`;
+    }
+    // // sort by date
+    // if (req.query.sortbyDate) {
+    //   queryText += ` ORDER BY date_of_order desc`;
+    // }
+    //sort by price
+    if (req.query.sortOrder) {
+      const sortOrder = req.query.sortOrder === "desc" ? "DESC" : "ASC";
+      queryText += ` ORDER BY purchases.item_price ${sortOrder}`;
+      console.log(sortOrder);
+      console.log(queryText);
+    }
+    //sort by date
+    // if (req.query.sortDateOrder) {
+    //   const sortOrder = req.query.sortDateOrder === "desc" ? "DESC" : "ASC";
+    //   queryText += ` ORDER BY purchases.date_of_order ${sortOrder}`;
+    //   console.log(sortOrder);
+    //   console.log(queryText);
+    // }
+
+    //filter by price range
+
+    if (req.query.priceRange) {
+      const priceRanges = req.query.priceRange.split("-");
+      const minPrice = parseFloat(priceRanges[0]);
+      const maxPrice = parseFloat(priceRanges[1]);
+
+      queryText += ` AND purchases.item_price BETWEEN ${minPrice} AND ${maxPrice}`;
     }
 
     const listRes = await pgClient.query(queryText, [req.params.user_id]);
