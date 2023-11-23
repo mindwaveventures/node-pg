@@ -128,13 +128,12 @@ function filteredtitle(searchText) {
 // to filter the price range
 app.get("/filter", async function (req, res) {
   try {
-    let query = "SELECT * FROM items ";
     if (req.query.priceRange) {
       const priceRanges = req.query.priceRange.split("-");
       const minPrice = parseFloat(priceRanges[0]);
       const maxPrice = parseFloat(priceRanges[1]);
 
-      query += ` WHERE items.price BETWEEN ${minPrice} AND ${maxPrice}`;
+      query = ` SELECT * FROM items WHERE items.price BETWEEN ${minPrice} AND ${maxPrice}`;
     }
 
     const pgRes = await pgClient.query(query);
@@ -147,6 +146,25 @@ app.get("/filter", async function (req, res) {
     console.error("Error fetching items:", error);
   }
 });
+
+// To search
+app.get("/search", async function (req, res) {
+  try {
+    if (req.query.search) {
+      query = `  SELECT * FROM items WHERE item_name ILIKE '%${req.query.search}%'`;
+    }
+
+    const pgRes = await pgClient.query(query);
+
+    res.json({
+      rows: pgRes.rows,
+      count: pgRes.rowCount,
+    });
+  } catch (error) {
+    console.error("Error fetching items:", error);
+  }
+});
+
 app.delete("/remove", async function (req, res) {
   const pgRes = await pgClient.query(
     "DELETE from users where userid=$1 RETURNING userid",
