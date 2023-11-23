@@ -1,4 +1,6 @@
 const express = require("express");
+const { ratingValueSchema } = require("../validation/ratingValueSchema");
+const { validate } = require("../middlewares/validate.middleware");
 // const pgClient = require("../pg-config");
 const router = express.Router();
 const { addRatingController } = require("../controllers/amazoncontroller");
@@ -17,5 +19,6 @@ const { addRatingController } = require("../controllers/amazoncontroller");
 //     count: pgRes.rowCount,
 //   });
 // });
-router.post("/addRating", addRatingController);
+
+router.post("/addRating", validate(ratingValueSchema), addRatingController);
 module.exports = router;

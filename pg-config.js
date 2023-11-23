@@ -9,7 +9,7 @@ const client = new pgClient.Client({
   database: process.env.PG_DB,
   port: process.env.PG_PORT,
 });
-console.log(process.env.PG_USER);
+console.log("PG_USER", process.env.PG_USER);
 const connectPg = async () => {
   try {
     await client.connect();

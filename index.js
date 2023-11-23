@@ -3,6 +3,7 @@ const amazonRouter = require("./routes/amazonroutes");
 // require("dotenv").config();
 const pgClient = require("./pg-config");
 const bodyParser = require("body-parser");
+const { errorHandler } = require("./middlewares/errorHandler.middleware");
 
 const app = express();
 // create application/json parser
@@ -84,7 +85,7 @@ app.use("/amazonclone", amazonRouter);
 //     count: pgRes.rowCount,
 //   });
 // });
-
+app.use(errorHandler);
 app.listen(process.env.PORT, process.env.HOST, () => {
   console.log(
     `Server running at http://${process.env.HOST}:${process.env.PORT}/`
