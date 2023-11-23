@@ -13,8 +13,11 @@ app.use(jsonParser);
 app.use(urlencodedParser);
 
 const Route = require("./routes/amazon.route");
+const { errorHandler } = require("./middlewares/errorhandler.middleware");
 
-app.use("/amazon", Route);
+app.use("/", Route);
+
+app.use(errorHandler);
 
 // app.post("/login", async function (req, res) {
 //   const queryText =
