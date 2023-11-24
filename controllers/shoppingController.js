@@ -80,15 +80,15 @@ async function listController(req, res) {
   try {
     //search by name
     if (req.query.search) {
-      queryText += ` AND items.item_name ILIKE '%${req.query.search}%'`;
+      queryText += ` AND items.item_name ILIKE '%${req.query.search}%' ORDER BY items.item_name `;
     }
 
     //sort by price
-    if (req.query.sortOrder) {
+    if (req.query.sortPrice) {
       //const sortOrder = req.query.sortOrder === "desc" ? "DESC" : "ASC";
-      const sortOrder = req.query.sortOrder;
-      queryText += ` ORDER BY purchases.item_price ${sortOrder}`;
-      console.log(sortOrder);
+      const sortPrice = req.query.sortPrice;
+      queryText += ` ORDER BY purchases.item_price ${sortPrice}`;
+      console.log(sortPrice);
       console.log(queryText);
     }
     //sort by date
