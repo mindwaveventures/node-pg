@@ -3,12 +3,12 @@ const pgClient = require("../pg-config");
 // To add a item
 const additemcontroller = async (req, res) => {
   const queryText =
-    "INSERT INTO items(item_name,item_content,price,status_of_item) VALUES($1,$2,$3,$4) RETURNING item_id,item_name";
+    "INSERT INTO items(item_name,item_content,price,item_count) VALUES($1,$2,$3,$4) RETURNING item_id,item_name";
   const pgRes = await pgClient.query(queryText, [
     req.body.item_name,
     req.body.item_content,
     req.body.price,
-    req.body.status_of_item,
+    req.body.item_count,
   ]);
   res.json({
     rows: pgRes.rows,
@@ -25,20 +25,6 @@ const updateitemcontentcontroller = async (req, res) => {
     req.body.item_id,
   ]);
 
-  res.json({
-    rows: pgRes.rows,
-    count: pgRes.rowCount,
-  });
-};
-
-// To add favourite
-const addfavouritecontroller = async (req, res) => {
-  const queryText =
-    "INSERT INTO favourites(item_id,user_id) VALUES($1,$2) RETURNING item_id,user_id";
-  const pgRes = await pgClient.query(queryText, [
-    req.body.item_id,
-    req.body.user_id,
-  ]);
   res.json({
     rows: pgRes.rows,
     count: pgRes.rowCount,
@@ -156,7 +142,6 @@ const searchController = async (req, res) => {
 module.exports = {
   additemcontroller,
   updateitemcontentcontroller,
-  addfavouritecontroller,
   getsingleitemcontroller,
   getlistofitemscontroller,
   sortpriceasccontroller,
