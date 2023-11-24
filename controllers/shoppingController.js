@@ -1,38 +1,49 @@
 const pgClient = require("../pg-config");
 
 async function addRatingController(req, res) {
-  const queryText =
-    "INSERT INTO rating(item_id,user_id,ratingvalue) VALUES($1,$2,$3) RETURNING item_id,user_id,ratingvalue";
-  console.log(req.body.item_id, req.body.user_id, req.xop.ratingValue);
-  const pgRes = await pgClient.query(queryText, [
-    req.body.item_id,
-    req.body.user_id,
-    req.xop.ratingValue,
-  ]);
-  res.json({
-    rows: pgRes.rows,
-    count: pgRes.rowCount,
-  });
+  try {
+    const queryText =
+      "INSERT INTO rating(item_id,user_id,ratingvalue) VALUES($1,$2,$3) RETURNING item_id,user_id,ratingvalue";
+    console.log(req.body.item_id, req.body.user_id, req.xop.ratingValue);
+    const pgRes = await pgClient.query(queryText, [
+      req.body.item_id,
+      req.body.user_id,
+      req.xop.ratingValue,
+    ]);
+    res.json({
+      rows: pgRes.rows,
+      count: pgRes.rowCount,
+    });
+  } catch (err) {
+    console.log("Unknown Error:", err);
+    res.status(500).json({ error: "Unknown Error" });
+  }
 }
+
 async function addToCartController(req, res) {
-  const CartqueryText =
-    "INSERT INTO cart (item_id,item_name,user_id,item_price) VALUES ($1,$2,$3,$4) RETURNING  *";
-  console.log(
-    req.xop.item_id,
-    req.xop.item_name,
-    req.xop.user_id,
-    req.xop.item_price
-  );
-  const cartRes = await pgClient.query(CartqueryText, [
-    req.xop.item_id,
-    req.xop.item_name,
-    req.xop.user_id,
-    req.xop.item_price,
-  ]);
-  res.json({
-    rows: cartRes.rows,
-    count: cartRes.rowCount,
-  });
+  try {
+    const CartqueryText =
+      "INSERT INTO cart (item_id,item_name,user_id,item_price) VALUES ($1,$2,$3,$4) RETURNING  *";
+    console.log(
+      req.xop.item_id,
+      req.xop.item_name,
+      req.xop.user_id,
+      req.xop.item_price
+    );
+    const cartRes = await pgClient.query(CartqueryText, [
+      req.xop.item_id,
+      req.xop.item_name,
+      req.xop.user_id,
+      req.xop.item_price,
+    ]);
+    res.json({
+      rows: cartRes.rows,
+      count: cartRes.rowCount,
+    });
+  } catch (err) {
+    console.log("Unknown Error:", err);
+    res.status(500).json({ error: "Unknown Error" });
+  }
 }
 
 async function buyItemController(req, res) {
@@ -69,18 +80,15 @@ async function listController(req, res) {
   try {
     //search by name
     if (req.query.search) {
-      queryText += ` AND items.item_name ILIKE '%${req.query.search}%'`;
+      queryText += ` AND items.item_name ILIKE '%${req.query.search}%' ORDER BY items.item_name `;
     }
-    // // sort by date
-    // if (req.query.sortbyDate) {
-    //   queryText += ` ORDER BY date_of_order desc`;
-    // }
+
     //sort by price
-    if (req.query.sortOrder) {
+    if (req.query.sortPrice) {
       //const sortOrder = req.query.sortOrder === "desc" ? "DESC" : "ASC";
-      const sortOrder = req.query.sortOrder;
-      queryText += ` ORDER BY purchases.item_price ${sortOrder}`;
-      console.log(sortOrder);
+      const sortPrice = req.query.sortPrice;
+      queryText += ` ORDER BY purchases.item_price ${sortPrice}`;
+      console.log(sortPrice);
       console.log(queryText);
     }
     //sort by date
