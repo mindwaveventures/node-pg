@@ -7,7 +7,7 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.use(express.json());
 app.use(jsonParser);
 app.use(urlencodedParser);
-const itemRouter = require("./routes/items.route");
+const itemRouter = require("../routes/items.route");
 const { errorHandler } = require("./middlewares/errorhandler.middleware");
 const { notfound } = require("./middlewares/notfound.middleware");
 

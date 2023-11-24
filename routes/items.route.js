@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const { validate } = require("../middlewares/validate.middleware");
+const { validate } = require("../app/middlewares/validate.middleware");
 const {
   itemaddSchema,
   updateitemSchema,
@@ -19,10 +19,10 @@ const {
   sortItemnameDecensingcontroller,
   filterItemPricecontroller,
   SearchItemNamecontroller,
-} = require("../controllers/items.controller");
+} = require("../app/controllers/items.controller");
 const {
   addfavoritescontroller,
-} = require("../controllers/favourites.controller");
+} = require("../app/controllers/favourites.controller");
 
 router.post("/add-items", validate(itemaddSchema), additemscontroller);
 router.patch(
