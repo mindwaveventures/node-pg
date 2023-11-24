@@ -13,7 +13,6 @@ const {
   updateitemController,
   getbysingleitemcontroller,
   getallitemcontroller,
-  addfavoritescontroller,
   sortPriceAscendingcontroller,
   sortPriceDecendingcontroller,
   sortItemnameAScensingcontroller,
@@ -21,6 +20,9 @@ const {
   filterItemPricecontroller,
   SearchItemNamecontroller,
 } = require("../controllers/items.controller");
+const {
+  addfavoritescontroller,
+} = require("../controllers/favourites.controller");
 
 router.post("/add-items", validate(itemaddSchema), additemscontroller);
 router.patch(
