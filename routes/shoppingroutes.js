@@ -5,12 +5,19 @@ const { buyItemSchema } = require("../validation/buyItemSchema");
 const { validate } = require("../middlewares/validate.middleware");
 // const pgClient = require("../pg-config");
 const router = express.Router();
+const { addRatingController } = require("../controllers/addRatingController");
+const { addToCartController } = require("../controllers/addToCartController");
 const {
-  addRatingController,
-  addToCartController,
   buyItemController,
-  listController,
-} = require("../controllers/shoppingController");
+  PurchaseslistController,
+} = require("../controllers/PurchasesController");
+
+// const {
+//   addRatingController,
+//   addToCartController,
+//   buyItemController,
+//   listController,
+// } = require("../controllers/shoppingController");
 
 // router.post("/addRating", async function (req, res) {
 //   const queryText =
@@ -30,5 +37,5 @@ const {
 router.post("/addRating", validate(ratingValueSchema), addRatingController);
 router.post("/addToCart", validate(addToCartSchema), addToCartController);
 router.post("/buyItem", validate(buyItemSchema), buyItemController);
-router.get("/listBoughtItems/:user_id", listController);
+router.get("/listBoughtItems/:user_id", PurchaseslistController);
 module.exports = router;
