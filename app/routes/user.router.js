@@ -24,6 +24,6 @@ router.post("/login", loginController);
 router.put("/user/:id", validate(updateUserSchema), updateUserController);
 
 //VIEW THE USER DATA
-router.get("/useraccount/:id", getAccountController);
+router.get("/user/:id", getAccountController);
 
 module.exports = router;
