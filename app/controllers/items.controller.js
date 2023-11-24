@@ -120,7 +120,6 @@ module.exports = {
   updateitemController,
   getbysingleitemcontroller,
   getallitemcontroller,
-  addfavoritescontroller,
   sortPriceAscendingcontroller,
   sortPriceDecendingcontroller,
   sortItemnameAScensingcontroller,
