@@ -1,0 +1,241 @@
+{
+	"info": {
+		"_postman_id": "39ba7c66-18ac-48db-a9f5-dfb9d32b8595",
+		"name": "amazonclone",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29296444",
+		"_collection_link": "https://bold-sunset-815859.postman.co/workspace/sample~b58f5d77-de74-43b0-b5a3-808b96c301a1/collection/29296444-39ba7c66-18ac-48db-a9f5-dfb9d32b8595?action=share&source=collection_link&creator=29296444"
+	},
+	"item": [
+		{
+			"name": "addRating",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"item_id\":7,\n    \"user_id\":5,\n    \"ratingValue\": 5\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5678/addRating",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5678",
+					"path": [
+						"addRating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddtoCart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"item_id\":2,\n   \"item_name\":\"DiaryMilk\",\n    \"user_id\":1,\n    \"item_price\":10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5678/addToCart",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5678",
+					"path": [
+						"addToCart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "buy item and update item_count",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"item_id\":1,\n    \"user_id\":3,\n    \"date_of_order\":\"2023-02-19\",\n    \"item_price\":50,\n    \"status\":\"Cancelled\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5678/buyItem",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5678",
+					"path": [
+						"buyItem"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Validate-buyitem",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n     \"item_id\":4,\n    \"user_id\":4,\n    \"item_price\":100,\n    \"date_of_order\":\"2023-03-17\",\n    \"status\":\"Progress\"\n   \n  \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5678/buyItem",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5678",
+					"path": [
+						"buyItem"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "listItems",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5678/listBoughtItems/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5678",
+					"path": [
+						"listBoughtItems",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search by itemName",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5678/listBoughtItems/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5678",
+					"path": [
+						"listBoughtItems",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sort by price",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5678/listBoughtItems/3?sortPrice=asc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5678",
+					"path": [
+						"listBoughtItems",
+						"3"
+					],
+					"query": [
+						{
+							"key": "sortPrice",
+							"value": "asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sort by DATE",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5678/listBoughtItems/3?sortDateOrder=asc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5678",
+					"path": [
+						"listBoughtItems",
+						"3"
+					],
+					"query": [
+						{
+							"key": "sortDateOrder",
+							"value": "asc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filter by price_range",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5678/listBoughtItems/3?priceRange=10-60",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5678",
+					"path": [
+						"listBoughtItems",
+						"3"
+					],
+					"query": [
+						{
+							"key": "priceRange",
+							"value": "10-60"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
