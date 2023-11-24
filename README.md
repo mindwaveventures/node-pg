@@ -32,3 +32,17 @@ createdAt TIMESTAMP default current_timestamp
 ## login
 
 - using email id and password
+# amazon-clone
+
+- Do items adding to site
+- Update item contents
+- then items list with filters, search, sorting
+- favourite item
+- view single item
+
+To run
+
+```
+npm start
+
+```
