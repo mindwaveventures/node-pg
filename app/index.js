@@ -7,6 +7,7 @@ const jsonParser = bodyParser.json();
 const { errorHandler } = require("./middlewares/errorHandler.middleware");
 const { notfound } = require("./middlewares/notfound.middleware");
 app.use(jsonParser);
+app.use(express.json());
 
 const userRouter = require("./routes/user.router");
 const itemRouter = require("./routes/items.route");
@@ -19,12 +20,6 @@ app.use(urlencodedParser);
 app.use("/", userRouter);
 app.use("/", itemRouter);
 
-app.use(notfound);
-app.use(errorHandler);
-require("dotenv").config();
-app.use(express.json());
-
-// items routes
 app.use(errorHandler);
 app.use(notfound);
 
