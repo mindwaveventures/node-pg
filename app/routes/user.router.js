@@ -2,13 +2,12 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  getUsers,
   addUserController,
   updateUserController,
   loginController,
   getAccountController,
 } = require("../controllers/user.controller");
-const { validate } = require("../middlewares/validate.midddleware");
+const { validate } = require("../middlewares/validate.middleware");
 const {
   signUpSchema,
   updateUserSchema,
@@ -18,7 +17,7 @@ const {
 router.post("/signup", validate(signUpSchema), addUserController);
 
 //LOGIN
-router.post("/login", loginController);
+router.get("/login", loginController);
 
 //UPDATE USER DATA
 router.put("/user/:id", validate(updateUserSchema), updateUserController);

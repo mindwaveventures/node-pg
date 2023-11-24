@@ -1,15 +1,11 @@
-CREATE TABLE "user" (
-    user_id SERIAL PRIMARY KEY,
-    user_name VARCHAR(255) NOT NULL
-);
-INSERT INTO "user" (user_name) VALUES
-    ('John Doe'),
-    ('Jane Smith'),
-    ('Alice Johnson'),
-    ('Bob Brown'),
-    ('Eva Davis'),
-    ('Michael Wilson'),
-    ('Olivia Miller'),
-    ('Daniel Lee'),
-    ('Sophia Turner'),
-    ('William Clark');
+
+create table users (
+	id SERIAL primary key,
+	first_name VARCHAR not null,
+	last_name VARCHAR ,
+	user_name VARCHAR not null unique,
+	email VARCHAR not null,
+	user_password VARCHAR not null,
+	phone_no VARCHAR,
+	created_at TIMESTAMP default current_timestamp
+) 
