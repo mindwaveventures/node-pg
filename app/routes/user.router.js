@@ -8,7 +8,7 @@ const {
   loginController,
   getAccountController,
 } = require("../controllers/user.controller");
-const { validate } = require("../middlewares/validate.midddleware");
+const { validate } = require("../middlewares/validate.middleware");
 const {
   signUpSchema,
   updateUserSchema,
