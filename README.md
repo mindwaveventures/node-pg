@@ -32,3 +32,5 @@ createdAt TIMESTAMP default current_timestamp
 ## login
 
 - using email id and password
+
+## Priya
