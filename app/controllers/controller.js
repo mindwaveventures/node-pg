@@ -1,5 +1,6 @@
 const pgClient = require("../pg-config");
 
+// update to cancel
 const updateStatusController = async function (req, res) {
   const queryText =
     "UPDATE purcharse SET status=$1 WHERE purchase_id=$2 RETURNING purchase_id, status";
@@ -14,41 +15,31 @@ const updateStatusController = async function (req, res) {
   });
 };
 
+// fav
 const getFavController = async (req, res) => {
   try {
-    let query;
+    if (!req.query.user_id) {
+      return res.status(400).json({ error: "Please provide a user_id" });
+    }
 
-    //http://localhost:5001/fav?user_id=2
+    let query =
+      "SELECT items.* FROM items JOIN favourites ON items.item_id = favourites.item_id";
 
     if (req.query.user_id) {
-      query =
-        "SELECT items.* FROM items JOIN favourites ON items.item_id = favourites.item_id";
       query += ` WHERE favourites.user_id = ${req.query.user_id}`;
     }
 
-    //http://localhost:5000/fav?user_id=1&search=al
-
     if (req.query.search) {
-      query =
-        "SELECT items.* FROM items JOIN favourites ON items.item_id = favourites.item_id";
       query += ` AND items.item_name ILIKE '%${req.query.search}%'`;
     }
 
-    // Adding sorting
-
     if (req.query.sortOrder) {
-      query =
-        "SELECT items.* FROM items JOIN favourites ON items.item_id = favourites.item_id";
-      const sortOrder = req.query.sortOrder === "desc" ? "DESC" : "ASC";
-      query += ` ORDER BY ${sortOrder}`;
+      const sortOrder =
+        req.query.sortOrder.toUpperCase() === "DESC" ? "DESC" : "ASC";
+      query += ` ORDER BY items.price ${sortOrder}`;
     }
 
-    // Adding sorting by price range
-    //http://localhost:5001/fav?priceRange=0-500
-
     if (req.query.priceRange) {
-      query =
-        "SELECT items.* FROM items JOIN favourites ON items.item_id = favourites.item_id";
       const priceRanges = req.query.priceRange.split("-");
       const minPrice = parseFloat(priceRanges[0]);
       const maxPrice = parseFloat(priceRanges[1]);
@@ -79,16 +70,36 @@ const overallRatingController = async (req, res) => {
   });
 };
 
+//cancel
 const cancelListController = async (req, res) => {
   try {
-    let query = "SELECT * FROM purcharse WHERE status = 'Cancelled'";
+    if (!req.query.user_id) {
+      return res.status(400).json({ error: "Please provide a user_id" });
+    }
+
+    let query =
+      "SELECT purcharse.*, items.item_name FROM purcharse JOIN items ON purcharse.item_id = items.item_id WHERE purcharse.status = 'Cancelled'";
+
+    if (req.query.user_id) {
+      query += ` AND purcharse.user_id = ${req.query.user_id}`;
+    }
+
+    if (req.query.search) {
+      query += ` AND items.item_name ILIKE '%${req.query.search}%'`;
+    }
+
+    if (req.query.sortOrder) {
+      const sortOrder =
+        req.query.sortOrder.toUpperCase() === "DESC" ? "DESC" : "ASC";
+      query += ` ORDER BY items.price ${sortOrder}`;
+    }
 
     if (req.query.priceRange) {
       const priceRanges = req.query.priceRange.split("-");
       const minPrice = parseFloat(priceRanges[0]);
       const maxPrice = parseFloat(priceRanges[1]);
 
-      query += " AND purcharse.price BETWEEN $1 AND $2";
+      query += ` AND purcharse.price BETWEEN $1 AND $2`;
 
       const pgRes = await pgClient.query(query, [minPrice, maxPrice]);
       res.json({
@@ -107,6 +118,7 @@ const cancelListController = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 module.exports = {
   updateStatusController,
   getFavController,
