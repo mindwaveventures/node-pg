@@ -49,15 +49,13 @@ async function addToCartController(req, res) {
 async function buyItemController(req, res) {
   try {
     const buyQueryText =
-      "INSERT INTO purchases(item_id,user_id,date_of_order,item_price,status) VALUES ($1,$2,$3,$4,$5) RETURNING *";
+      "INSERT INTO purchases(item_id,user_id,item_price,status) VALUES ($1,$2,$3,$4) RETURNING *";
     const buyRes = await pgClient.query(buyQueryText, [
-      req.body.item_id,
-      req.body.user_id,
-      req.body.date_of_order,
-      req.body.item_price,
-      req.body.status,
+      req.xop.item_id,
+      req.xop.user_id,
+      req.xop.item_price,
+      req.xop.status,
     ]);
-
     const itemCountQueryText =
       "UPDATE items SET item_count = item_count-1 WHERE item_id= $1 RETURNING *";
     const itemCountRes = await pgClient.query(itemCountQueryText, [
@@ -92,12 +90,12 @@ async function listController(req, res) {
       console.log(queryText);
     }
     //sort by date
-    // if (req.query.sortDateOrder) {
-    //   const sortOrder = req.query.sortDateOrder === "desc" ? "DESC" : "ASC";
-    //   queryText += ` ORDER BY purchases.date_of_order ${sortOrder}`;
-    //   console.log(sortOrder);
-    //   console.log(queryText);
-    // }
+    if (req.query.sortDateOrder) {
+      const sortOrder = req.query.sortDateOrder === "desc" ? "DESC" : "ASC";
+      queryText += ` ORDER BY purchases.date_of_order ${sortOrder}`;
+      console.log(sortOrder);
+      console.log(queryText);
+    }
 
     //filter by price range
 
