@@ -8,6 +8,7 @@ const { errorHandler } = require("./middlewares/errorHandler.middleware");
 const { notfound } = require("./middlewares/notFound.middleware");
 
 const userRouter = require("./routes/user.router");
+const PurchaseRouter = require("./routes/Purchases.router");
 
 // create application/json parser
 const jsonParser = bodyParser.json();
@@ -20,6 +21,7 @@ app.use(urlencodedParser);
 
 //routers
 app.use("/", userRouter);
+app.use("/", PurchaseRouter);
 
 app.use(notfound);
 app.use(errorHandler);

@@ -6,7 +6,7 @@ const signUpSchema = Joi.object({
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
     .required(),
-  username: Joi.string()
+  user_name: Joi.string()
     .pattern(new RegExp("^[a-zA-Z0-9^_-]{8,20}$"))
     .required(),
   user_password: Joi.string()
@@ -21,7 +21,7 @@ const updateUserSchema = Joi.object({
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
     .optional(),
-  username: Joi.string()
+  user_name: Joi.string()
     .pattern(new RegExp("^[a-zA-Z0-9^_-]{8,20}$"))
     .optional(),
   user_password: Joi.string()

@@ -1,3 +1,24 @@
+## To use node to connect to databse and query it
+
+### Use PgClient to config and query
+
+## Joi for validation
+
+## Add Rating to items
+
+## Add items to cart
+
+### For using Transactions
+
+    https://node-postgres.com/features/transactions
+
+## To run
+
+    npm i
+    npm run dev
+
+```
+
 # node-pg
 
 - Authentication, verify it account already exist
@@ -29,8 +50,12 @@ createdAt TIMESTAMP default current_timestamp
 - update the user_data with validation
 - username and email should not repeat in the database with joi validation
 
+```
+
 ## login
 
 - using email id and password
 
 ## Priya
+
+`

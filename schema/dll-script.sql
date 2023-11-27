@@ -1,7 +1,7 @@
 -- ddl script
 
 create table account_users (
-	id SERIAL primary key,
+	user_id SERIAL primary key,
 	first_name VARCHAR not null,
 	last_name VARCHAR ,
 	user_name VARCHAR not null unique,
