@@ -21,7 +21,7 @@ async function addRatingController(req, res) {
 }
 const overallRatingController = async (req, res) => {
   const pgRes = await pgClient.query(
-    "select item_id,AVG(rating) AS overall_rating from ratings GROUP by item_id;"
+    "select item_id,AVG(ratingvalue) AS overall_rating from rating GROUP by item_id;"
   );
 
   res.json({
@@ -128,4 +128,5 @@ module.exports = {
   addToCartController,
   buyItemController,
   listController,
+  overallRatingController,
 };

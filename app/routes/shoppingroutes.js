@@ -9,9 +9,12 @@ const {
   addToCartController,
   buyItemController,
   listController,
+  overallRatingController,
 } = require("../controllers/shoppingController");
 
 router.post("/addRating", validate(ratingValueSchema), addRatingController);
+router.post("/getRating", overallRatingController);
+
 router.post("/addToCart", validate(addToCartSchema), addToCartController);
 router.post("/buyItem", validate(buyItemSchema), buyItemController);
 router.get("/listBoughtItems/:user_id", listController);

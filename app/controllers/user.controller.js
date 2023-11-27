@@ -70,7 +70,7 @@ const updateUserController = async (req, res, next) => {
   } else {
     return next({
       status: 400,
-      message: "user already exits, check the email and username",
+      message: "user already exits, check the email and user_name",
     });
   }
 };
