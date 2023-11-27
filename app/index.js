@@ -20,7 +20,7 @@ app.use(urlencodedParser);
 
 //routers
 app.use("/", userRouter);
-app.use("/", itemRouter);
+app.use("/items", itemRouter);
 
 app.use(notfound);
 app.use(errorHandler);

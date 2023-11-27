@@ -1,9 +1,17 @@
 const pgClient = require("../pg-config");
 
+// To get list of items
+const getItemsController = async (req, res) => {
+  const pgRes = await pgClient.query("SELECT * from items");
+  res.json({
+    rows: pgRes.rows,
+  });
+};
+
 // To add a item
-const additemcontroller = async (req, res) => {
+const addItemController = async (req, res) => {
   const queryText =
-    "INSERT INTO items(item_name,item_content,price,item_count) VALUES($1,$2,$3,$4) RETURNING item_id,item_name";
+    "INSERT INTO items(item_name,item_content,price,item_count) VALUES($1,$2,$3,$4) RETURNING *";
   const pgRes = await pgClient.query(queryText, [
     req.body.item_name,
     req.body.item_content,
@@ -17,12 +25,13 @@ const additemcontroller = async (req, res) => {
 };
 
 // To update item content
-const updateitemcontentcontroller = async (req, res) => {
+const updateItemContentController = async (req, res) => {
+  const itemId = req.params.itemId;
   const queryText =
-    "UPDATE items set item_content=$1 where item_id=$2 RETURNING item_content,item_id";
+    "UPDATE items set item_content=$1 where item_id=$2 RETURNING *";
   const pgRes = await pgClient.query(queryText, [
     req.body.item_content,
-    req.body.item_id,
+    itemId,
   ]);
 
   res.json({
@@ -32,14 +41,14 @@ const updateitemcontentcontroller = async (req, res) => {
 };
 
 // To get single item
-const getsingleitemcontroller = async (req, res) => {
+const getSingleItemController = async (req, res) => {
   try {
     const itemId = req.params.itemId;
     const pgRes = await pgClient.query(
       "SELECT * FROM items WHERE item_id = $1",
       [itemId]
     );
-    if (pgRes.rowCount === 0) {
+    if (pgRes.rowCount == 0) {
       res.status(404).json({ error: "Item not found" });
     } else {
       res.json({
@@ -53,16 +62,8 @@ const getsingleitemcontroller = async (req, res) => {
   }
 };
 
-// To get list of items
-const getlistofitemscontroller = async (req, res) => {
-  const pgRes = await pgClient.query("SELECT * from items ");
-  res.json({
-    rows: pgRes.rows,
-  });
-};
-
 // Sort price in ascending order
-const sortpriceasccontroller = async (req, res) => {
+const sortPriceAscController = async (req, res) => {
   const pgRes = await pgClient.query("SELECT * from items ORDER BY price ASC");
   res.json({
     rows: pgRes.rows,
@@ -70,7 +71,7 @@ const sortpriceasccontroller = async (req, res) => {
 };
 
 // Sort price in descending order
-const sortpricedesccontroller = async (req, res) => {
+const sortPriceDescController = async (req, res) => {
   const pgRes = await pgClient.query("SELECT * from items ORDER BY price DESC");
   res.json({
     rows: pgRes.rows,
@@ -78,7 +79,7 @@ const sortpricedesccontroller = async (req, res) => {
 };
 
 //ascending by item name
-const sortitemnameasccontroller = async (req, res) => {
+const sortItemnameAscController = async (req, res) => {
   const pgRes = await pgClient.query(
     "SELECT * from items ORDER BY item_name ASC"
   );
@@ -140,13 +141,13 @@ const searchController = async (req, res) => {
 };
 
 module.exports = {
-  additemcontroller,
-  updateitemcontentcontroller,
-  getsingleitemcontroller,
-  getlistofitemscontroller,
-  sortpriceasccontroller,
-  sortpricedesccontroller,
-  sortitemnameasccontroller,
+  addItemController,
+  updateItemContentController,
+  getSingleItemController,
+  getItemsController,
+  sortPriceAscController,
+  sortPriceDescController,
+  sortItemnameAscController,
   sortItemnameDescController,
   filterPriceController,
   searchController,
