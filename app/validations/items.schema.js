@@ -7,6 +7,7 @@ const itemaddSchema = Joi.object({
   status_of_item: Joi.string().required(),
 });
 const updateitemSchema = Joi.object({
+  item_name: Joi.string().required(),
   item_content: Joi.string().required(),
   item_id: Joi.number().required(),
 });

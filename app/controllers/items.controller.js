@@ -19,8 +19,9 @@ const additemscontroller = async (req, res) => {
 // update item content
 const updateitemController = async (req, res) => {
   const queryText =
-    "UPDATE items set item_content=$1 where item_id=$2 RETURNING item_content,item_id";
+    "UPDATE items set item_name =$1 ,item_content=$2  where item_id=$3 RETURNING item_content,item_id";
   const pgRes = await pgClient.query(queryText, [
+    req.body.item_name,
     req.body.item_content,
     req.body.item_id,
   ]);
