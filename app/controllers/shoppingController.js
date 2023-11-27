@@ -19,6 +19,16 @@ async function addRatingController(req, res) {
     res.status(500).json({ error: "Unknown Error" });
   }
 }
+const overallRatingController = async (req, res) => {
+  const pgRes = await pgClient.query(
+    "select item_id,AVG(rating) AS overall_rating from ratings GROUP by item_id;"
+  );
+
+  res.json({
+    rows: pgRes.rows,
+    count: pgRes.rowCount,
+  });
+};
 
 async function addToCartController(req, res) {
   try {
@@ -114,6 +124,7 @@ async function listController(req, res) {
 }
 module.exports = {
   addRatingController,
+  overallRatingController,
   addToCartController,
   buyItemController,
   listController,
