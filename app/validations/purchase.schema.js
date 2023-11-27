@@ -5,7 +5,7 @@ const buyItemSchema = Joi.object({
   user_id: Joi.number().required(),
   date_of_order: Joi.date().allow(),
   item_price: Joi.number().precision(2).required(),
-  status: Joi.string().required(),
+  order_status: Joi.string().required(),
 });
 
 module.exports = { buyItemSchema };

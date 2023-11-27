@@ -36,7 +36,7 @@ async function PurchasesListController(req, res) {
     if (req.query.sortPrice) {
       //const sortOrder = req.query.sortOrder === "desc" ? "DESC" : "ASC";
       const sortPrice = req.query.sortPrice;
-      queryText += ` ORDER BY purchases.item_price ${sortPrice}`;
+      queryText += ` ORDER BY items.price ${sortPrice}`;
     }
     //sort by date
     if (req.query.sortDateOrder) {
@@ -51,7 +51,7 @@ async function PurchasesListController(req, res) {
       const minPrice = parseFloat(priceRanges[0]);
       const maxPrice = parseFloat(priceRanges[1]);
 
-      queryText += ` AND purchases.item_price BETWEEN ${minPrice} AND ${maxPrice}`;
+      queryText += ` AND items.price BETWEEN ${minPrice} AND ${maxPrice}`;
     }
 
     const listRes = await pgClient.query(queryText, [req.params.user_id]);
@@ -108,7 +108,7 @@ const cancelListController = async (req, res) => {
       const minPrice = parseFloat(priceRanges[0]);
       const maxPrice = parseFloat(priceRanges[1]);
 
-      query += ` AND purcharse.price BETWEEN $1 AND $2`;
+      query += ` AND items.price BETWEEN $1 AND $2`;
 
       const pgRes = await pgClient.query(query, [minPrice, maxPrice]);
       res.json({
