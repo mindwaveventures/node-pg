@@ -17,9 +17,10 @@ const { ratingValueSchema } = require("../validations/rating.schema");
 const { addToCartSchema } = require("../validations/carts.schema");
 const { buyItemSchema } = require("../validations/purchase.schema");
 const { validate } = require("../middlewares/validate.middleware");
+const { addFavSchema } = require("../validations/userfav.schema");
 
 //favourites
-router.post("/favourites", addfavouritecontroller);
+router.post("/favourites", validate(addFavSchema), addfavouritecontroller);
 router.get("/favourites", getFavController);
 
 //cart items
