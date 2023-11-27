@@ -8,17 +8,16 @@ const { errorHandler } = require("./middlewares/errorHandler.middleware");
 const { notfound } = require("./middlewares/notfound.middleware");
 app.use(jsonParser);
 app.use(express.json());
-
+const shoppingRouter = require("./routes/shoppingroutes");
 const userRouter = require("./routes/user.router");
 const itemRouter = require("./routes/items.route");
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
-
-// app.use(jsonParser);
 app.use(urlencodedParser);
 
 //routers
 app.use("/", userRouter);
 app.use("/", itemRouter);
+app.use("/", shoppingRouter);
 
 app.use(errorHandler);
 app.use(notfound);
