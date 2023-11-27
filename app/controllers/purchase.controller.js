@@ -3,11 +3,10 @@ const pgClient = require("../pg-config");
 async function buyItemController(req, res) {
   try {
     const buyQueryText =
-      "INSERT INTO purchases(item_id,user_id,item_price,order_status) VALUES ($1,$2,$3,$4) RETURNING *";
+      "INSERT INTO purchases(item_id,user_id,order_status) VALUES ($1,$2,$3) RETURNING *";
     const buyRes = await pgClient.query(buyQueryText, [
       req.xop.item_id,
       req.xop.user_id,
-      req.xop.item_price,
       req.xop.order_status,
     ]);
     const itemCountQueryText =
@@ -25,7 +24,7 @@ async function buyItemController(req, res) {
   } catch (err) {}
 }
 async function PurchasesListController(req, res) {
-  let queryText = `SELECT purchases.*,items.item_name FROM purchases JOIN items ON purchases.item_id = items.item_id WHERE purchases.user_id = $1`;
+  let queryText = `SELECT purchases.*,items.* FROM purchases JOIN items ON purchases.item_id = items.item_id WHERE purchases.user_id = $1`;
   try {
     //search by name
     if (req.query.search) {
@@ -34,7 +33,6 @@ async function PurchasesListController(req, res) {
 
     //sort by price
     if (req.query.sortPrice) {
-      //const sortOrder = req.query.sortOrder === "desc" ? "DESC" : "ASC";
       const sortPrice = req.query.sortPrice;
       queryText += ` ORDER BY items.price ${sortPrice}`;
     }
@@ -67,10 +65,10 @@ async function PurchasesListController(req, res) {
 // update to cancel
 const updateStatusController = async function (req, res) {
   const queryText =
-    "UPDATE purcharse SET order_status=$1 WHERE purchase_id=$2 RETURNING purchase_id, order_status";
+    "UPDATE purchases SET order_status=$1 WHERE purchase_id=$2 RETURNING *";
   const pgRes = await pgClient.query(queryText, [
     req.body.order_status,
-    req.body.purchaseid,
+    req.body.purchase_id,
   ]);
 
   res.json({
@@ -87,10 +85,10 @@ const cancelListController = async (req, res) => {
     }
 
     let query =
-      "SELECT purcharse.*, items.item_name FROM purcharse JOIN items ON purcharse.item_id = items.item_id WHERE purcharse.order_status = 'Cancelled'";
+      "SELECT purchases.*, items.item_name FROM purchases JOIN items ON purchases.item_id = items.item_id WHERE purchases.order_status = 'Cancelled'";
 
     if (req.query.user_id) {
-      query += ` AND purcharse.user_id = ${req.query.user_id}`;
+      query += ` AND purchases.user_id = ${req.query.user_id}`;
     }
 
     if (req.query.search) {
@@ -123,7 +121,6 @@ const cancelListController = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
