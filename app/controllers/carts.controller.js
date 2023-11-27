@@ -3,13 +3,11 @@ const pgClient = require("../pg-config");
 async function addToCartController(req, res) {
   try {
     const CartqueryText =
-      "INSERT INTO carts (item_id,item_name,user_id,item_price) VALUES ($1,$2,$3,$4) RETURNING  *";
+      "INSERT INTO carts (item_id,user_id) VALUES ($1,$2) RETURNING  *";
 
     const cartRes = await pgClient.query(CartqueryText, [
       req.xop.item_id,
-      req.xop.item_name,
       req.xop.user_id,
-      req.xop.item_price,
     ]);
     res.json({
       rows: cartRes.rows,

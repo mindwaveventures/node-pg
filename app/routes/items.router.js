@@ -20,6 +20,9 @@ const {
 } = require("../controllers/items.controller");
 const { overallRatingController } = require("../controllers/rating.controller");
 
+//overall rating
+router.get("/rating", overallRatingController);
+
 router.get("/", getItemsController);
 router.post("/add", validate(itemAddSchema), addItemController);
 router.patch(
@@ -35,8 +38,5 @@ router.get("/sort/asc-by-itemname", sortItemnameAscController);
 router.get("/sort/desc-by-itemname", sortItemnameDescController);
 router.get("/filter", filterPriceController);
 router.get("/search", searchController);
-
-//overall rating
-router.get("/rating", overallRatingController);
 
 module.exports = router;
