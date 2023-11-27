@@ -9,6 +9,7 @@ const { notfound } = require("./middlewares/notFound.middleware");
 
 const userRouter = require("./routes/user.router");
 const PurchaseRouter = require("./routes/Purchases.router");
+const ItemsRouter = require("./routes/items.routes");
 
 // create application/json parser
 const jsonParser = bodyParser.json();
@@ -22,6 +23,7 @@ app.use(urlencodedParser);
 //routers
 app.use("/", userRouter);
 app.use("/", PurchaseRouter);
+app.use("/", ItemsRouter);
 
 app.use(notfound);
 app.use(errorHandler);

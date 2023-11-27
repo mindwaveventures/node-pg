@@ -3,11 +3,11 @@ const pgClient = require("../pg-config");
 // To add a item
 const additemcontroller = async (req, res) => {
   const queryText =
-    "INSERT INTO items(item_name,item_content,price,item_count) VALUES($1,$2,$3,$4) RETURNING item_id,item_name";
+    "INSERT INTO items(item_name,item_content,item_price,item_count) VALUES($1,$2,$3,$4) RETURNING item_id,item_name";
   const pgRes = await pgClient.query(queryText, [
     req.body.item_name,
     req.body.item_content,
-    req.body.price,
+    req.body.item_price,
     req.body.item_count,
   ]);
   res.json({
@@ -63,7 +63,9 @@ const getlistofitemscontroller = async (req, res) => {
 
 // Sort price in ascending order
 const sortpriceasccontroller = async (req, res) => {
-  const pgRes = await pgClient.query("SELECT * from items ORDER BY price ASC");
+  const pgRes = await pgClient.query(
+    "SELECT * from items ORDER BY item_price ASC"
+  );
   res.json({
     rows: pgRes.rows,
   });
@@ -71,7 +73,9 @@ const sortpriceasccontroller = async (req, res) => {
 
 // Sort price in descending order
 const sortpricedesccontroller = async (req, res) => {
-  const pgRes = await pgClient.query("SELECT * from items ORDER BY price DESC");
+  const pgRes = await pgClient.query(
+    "SELECT * from items ORDER BY item_price DESC"
+  );
   res.json({
     rows: pgRes.rows,
   });
@@ -105,7 +109,7 @@ const filterPriceController = async (req, res) => {
       const minPrice = parseFloat(priceRanges[0]);
       const maxPrice = parseFloat(priceRanges[1]);
 
-      query = ` SELECT * FROM items WHERE items.price BETWEEN ${minPrice} AND ${maxPrice}`;
+      query = ` SELECT * FROM items WHERE items.item_price BETWEEN ${minPrice} AND ${maxPrice}`;
     }
 
     const pgRes = await pgClient.query(query);

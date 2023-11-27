@@ -17,11 +17,11 @@ const {
   sortItemnameDescController,
   filterPriceController,
   searchController,
-} = require("../controller/items.controller");
+} = require("../controllers/items.controller");
 
 const {
   addfavouritecontroller,
-} = require("../controller/favourites.controller");
+} = require("../controllers/favourites.controller");
 
 router.post("/add-items", validate(itemaddSchema), additemcontroller);
 router.get("/items", getlistofitemscontroller);
