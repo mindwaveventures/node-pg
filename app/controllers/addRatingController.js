@@ -1,4 +1,5 @@
 const pgClient = require("../pg-config");
+
 async function addRatingController(req, res) {
   try {
     const queryText =
@@ -18,3 +19,7 @@ async function addRatingController(req, res) {
     res.status(500).json({ error: "Unknown Error" });
   }
 }
+
+module.exports = {
+  addRatingController,
+};

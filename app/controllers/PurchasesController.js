@@ -1,51 +1,5 @@
 const pgClient = require("../pg-config");
 
-async function addRatingController(req, res) {
-  try {
-    const queryText =
-      "INSERT INTO rating(item_id,user_id,ratingvalue) VALUES($1,$2,$3) RETURNING item_id,user_id,ratingvalue";
-    console.log(req.body.item_id, req.body.user_id, req.xop.ratingValue);
-    const pgRes = await pgClient.query(queryText, [
-      req.body.item_id,
-      req.body.user_id,
-      req.xop.ratingValue,
-    ]);
-    res.json({
-      rows: pgRes.rows,
-      count: pgRes.rowCount,
-    });
-  } catch (err) {
-    console.log("Unknown Error:", err);
-    res.status(500).json({ error: "Unknown Error" });
-  }
-}
-
-async function addToCartController(req, res) {
-  try {
-    const CartqueryText =
-      "INSERT INTO cart (item_id,item_name,user_id,item_price) VALUES ($1,$2,$3,$4) RETURNING  *";
-    console.log(
-      req.xop.item_id,
-      req.xop.item_name,
-      req.xop.user_id,
-      req.xop.item_price
-    );
-    const cartRes = await pgClient.query(CartqueryText, [
-      req.xop.item_id,
-      req.xop.item_name,
-      req.xop.user_id,
-      req.xop.item_price,
-    ]);
-    res.json({
-      rows: cartRes.rows,
-      count: cartRes.rowCount,
-    });
-  } catch (err) {
-    console.log("Unknown Error:", err);
-    res.status(500).json({ error: "Unknown Error" });
-  }
-}
-
 async function buyItemController(req, res) {
   try {
     const buyQueryText =
@@ -73,7 +27,7 @@ async function buyItemController(req, res) {
     res.status(500).json({ error: "Unknown Error" });
   }
 }
-async function listController(req, res) {
+async function PurchaseslistController(req, res) {
   let queryText = `SELECT purchases.*,items.item_name FROM purchases JOIN items ON purchases.item_id = items.item_id WHERE purchases.user_id = $1`;
   try {
     //search by name
@@ -104,7 +58,7 @@ async function listController(req, res) {
       const minPrice = parseFloat(priceRanges[0]);
       const maxPrice = parseFloat(priceRanges[1]);
 
-      queryText += ` AND purchases.item_price BETWEEN ${minPrice} AND ${maxPrice}`;
+      queryText += ` AND purchases.item_price BETWEEN ${minPrice} AND ${maxPrice} ORDER BY purchases.item_price`;
     }
 
     const listRes = await pgClient.query(queryText, [req.params.user_id]);
@@ -118,8 +72,6 @@ async function listController(req, res) {
   }
 }
 module.exports = {
-  addRatingController,
-  addToCartController,
   buyItemController,
-  listController,
+  PurchaseslistController,
 };

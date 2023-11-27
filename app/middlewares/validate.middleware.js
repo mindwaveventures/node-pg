@@ -6,9 +6,7 @@ const validate = (schema) => (req, res, next) => {
       message: error.details.map((d) => d.message),
     });
   }
-  console.log("value", value);
   req.xop = value;
-  console.log("xop", req.xop);
   next();
 };
 
