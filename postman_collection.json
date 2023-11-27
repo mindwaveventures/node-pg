@@ -1,97 +1,886 @@
 {
-  "info": {
-    "_postman_id": "375877ed-1a4c-4117-aff1-2c41b1abf865",
-    "name": "amazon-clone",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "30742118"
-  },
-  "item": [
-    {
-      "name": "signup",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"first_name\": \"Kol\",\n    \"last_name\": \"Mickalson\",\n    \"email\": \"KolMickalson@gmail.com\",\n    \"username\": \"Kol3547\",\n    \"user_password\": \"kalus3Mick19\",\n    \"phone_no\": \"\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:8000/signup",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["signup"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "updating user data",
-      "request": {
-        "method": "PUT",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"username\": \"Eliajh3000\",\n    \"phone_no\": \"9875948126\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:8000/user/3",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["user", "3"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "login account",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n    \"email\": \"ElaijhMickalson@gmail.com\",\n    \"user_password\": \"kalus3Mic1\"\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "http://localhost:8000/login",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["login"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "view account",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8000/user/3",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8000",
-          "path": ["user", "3"]
-        }
-      },
-      "response": []
-    }
-  ]
+	"info": {
+		"_postman_id": "375877ed-1a4c-4117-aff1-2c41b1abf865",
+		"name": "amazon-clone",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30742118"
+	},
+	"item": [
+		{
+			"name": "items_list",
+			"item": [
+				{
+					"name": "get items ",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8000/items",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add items",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item_name\": \"bottle\",\n    \"item_content\": \"milton flask\",\n    \"price\": 250,\n    \"item_count\": 1000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/items/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"items",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update item content",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item_content\": \"smooth\",\n    \"price\": 10,\n    \"item_count\": 1000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/items/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"items",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get single items",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item_name\": \"pen\",\n    \"item_content\": \"smooth\",\n    \"price\": 10,\n    \"item_count\": 1000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/items/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"items",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sort items using price",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item_name\": \"pen\",\n    \"item_content\": \"smooth\",\n    \"price\": 10,\n    \"item_count\": 1000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/items/sort/asc-by-price",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"items",
+								"sort",
+								"asc-by-price"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sort items using item-name",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item_name\": \"pen\",\n    \"item_content\": \"smooth\",\n    \"price\": 10,\n    \"item_count\": 1000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/items/sort/asc-by-itemname",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"items",
+								"sort",
+								"asc-by-itemname"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search by item-name",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item_name\": \"pen\",\n    \"item_content\": \"smooth\",\n    \"price\": 10,\n    \"item_count\": 1000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/items/search?a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"items",
+								"search"
+							],
+							"query": [
+								{
+									"key": "a",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search by item-price depends on user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item_name\": \"pen\",\n    \"item_content\": \"smooth\",\n    \"price\": 10,\n    \"item_count\": 1000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/items?user_id=1&search=a&priceRange=0-250",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"items"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "1"
+								},
+								{
+									"key": "search",
+									"value": "a"
+								},
+								{
+									"key": "priceRange",
+									"value": "0-250"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get overall rating",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item_name\": \"pen\",\n    \"item_content\": \"smooth\",\n    \"price\": 10,\n    \"item_count\": 1000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/items/rating",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"items",
+								"rating"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "favourites",
+			"item": [
+				{
+					"name": "add favourite item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item_id\": 4,\n    \"user_id\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/u/favourites",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"u",
+								"favourites"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get favourite item",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/u/favourites?user_id=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"u",
+								"favourites"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get favourite item search query",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item_id\": 1,\n    \"user_id\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/u/favourites?user_id=1&search=a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"u",
+								"favourites"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "1"
+								},
+								{
+									"key": "search",
+									"value": "a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "favourite item, sort with price",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/u/favourites?user_id=3&sortOrder=asc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"u",
+								"favourites"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "3"
+								},
+								{
+									"key": "priceRange",
+									"value": "150-250",
+									"disabled": true
+								},
+								{
+									"key": "sortOrder",
+									"value": "asc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "favourite item, filter using price-range",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/u/favourites?user_id=3&priceRange=0-150",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"u",
+								"favourites"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "3"
+								},
+								{
+									"key": "priceRange",
+									"value": "0-150"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "purchases",
+			"item": [
+				{
+					"name": "querying with cancelList",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"purchase_id\": 2,\n    \"order_status\": \"Cancelled\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/u/cancelList?user_id=4&search=a&sortOrder=desc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"u",
+								"cancelList"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "4"
+								},
+								{
+									"key": "search",
+									"value": "a"
+								},
+								{
+									"key": "sortOrder",
+									"value": "desc"
+								},
+								{
+									"key": "priceRange",
+									"value": "1-50",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cancel the purchase",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"purchase_id\": 2,\n    \"order_status\": \"Cancelled\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/u/cancelOrder",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"u",
+								"cancelOrder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add rating to item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item_id\": 2,\n    \"user_id\": 4,\n    \"rating\": 5\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/u/addRating",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"u",
+								"addRating"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add to cart ",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item_id\": 2,\n    \"user_id\": 1\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/u/addToCart",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"u",
+								"addToCart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add item to purchase",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item_id\": 2,\n    \"user_id\": 1,\n    \"order_status\": \"pending\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/u/buyItem",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"u",
+								"buyItem"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "purchase list of user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8000/u/purchaselist/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"u",
+								"purchaselist",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Querying purchase list",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://localhost:8000/u/purchaselist/4?sortDateOrder=asc",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"u",
+								"purchaselist",
+								"4"
+							],
+							"query": [
+								{
+									"key": "sortPrice",
+									"value": "desc",
+									"disabled": true
+								},
+								{
+									"key": "sortDateOrder",
+									"value": "asc"
+								},
+								{
+									"key": "sortDateOrder",
+									"value": "desc",
+									"disabled": true
+								},
+								{
+									"key": "sortPrice",
+									"value": "asc",
+									"disabled": true
+								},
+								{
+									"key": "priceRange",
+									"value": "50-1500",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "c",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"first_name\": \"Kol\",\n    \"last_name\": \"Mickalson\",\n    \"email\": \"KolMickalson@gmail.com\",\n    \"username\": \"Kol3547\",\n    \"user_password\": \"kalus3Mick19\",\n    \"phone_no\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updating user data",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"Eliajh3000\",\n    \"phone_no\": \"9875948126\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/user/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login account",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"kalus@gmail.com\",\n    \"user_password\": \"kalus3Mic1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "view account",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/user/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"user",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
 }
