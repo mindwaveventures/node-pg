@@ -6,11 +6,10 @@ module.exports = {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        primaryKey: true,
         autoIncrement: true,
         unique: true,
       },
-      uuid: {
+      user_id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primarykey: true,
@@ -37,7 +36,7 @@ module.exports = {
         defaultValue: "",
       },
       phone_no: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         defaultValue: "",
       },
       createdAt: {
@@ -51,14 +50,3 @@ module.exports = {
     await queryInterface.dropTable("users");
   },
 };
-
-// create table account_users (
-// 	id SERIAL primary key,
-// 	first_name VARCHAR not null,
-// 	last_name VARCHAR ,
-// 	user_name VARCHAR not null unique,
-// 	email VARCHAR not null,
-// 	user_password VARCHAR not null,
-// 	phone_no VARCHAR,
-// 	created_at TIMESTAMP default current_timestamp
-// )
