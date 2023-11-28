@@ -1,14 +1,14 @@
-'use strict';
+"use strict";
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('users', {
+    await queryInterface.createTable("users", {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
-        unique: true
+        unique: true,
       },
       uuid: {
         type: Sequelize.UUID,
@@ -16,19 +16,31 @@ module.exports = {
         primarykey: true,
         unique: true,
       },
-      name: {
+      first_name: {
         type: Sequelize.STRING,
-        defaultValue: ''
+        defaultValue: "",
       },
-      status: {
+      last_name: {
         type: Sequelize.STRING,
-        defaultValue: 'Active'
+        defaultValue: "",
+      },
+      user_name: {
+        type: Sequelize.STRING,
+        defaultValue: "",
+      },
+      email: {
+        type: Sequelize.STRING,
+        defaultValue: "",
+      },
+      user_password: {
+        type: Sequelize.STRING,
+        defaultValue: "",
+      },
+      phone_no: {
+        type: Sequelize.INTEGER,
+        defaultValue: "",
       },
       createdAt: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
-      },
-      updatedAt: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
       },
@@ -36,6 +48,17 @@ module.exports = {
   },
 
   down: async (queryInterface) => {
-    await queryInterface.dropTable('users');
+    await queryInterface.dropTable("users");
   },
 };
+
+// create table account_users (
+// 	id SERIAL primary key,
+// 	first_name VARCHAR not null,
+// 	last_name VARCHAR ,
+// 	user_name VARCHAR not null unique,
+// 	email VARCHAR not null,
+// 	user_password VARCHAR not null,
+// 	phone_no VARCHAR,
+// 	created_at TIMESTAMP default current_timestamp
+// )
