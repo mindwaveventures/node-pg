@@ -1,10 +1,11 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-require('dotenv').config();
 
-const pgClient = require('./pg-config');
-
+const config = require('./config/config');
+// const pgClient = require('./pg-config');
+const { sequelize, models, Sequelize } = require('./config/sequelize-config');
+const Op = Sequelize.Op;
 
 // create application/json parser
 const jsonParser = bodyParser.json();
@@ -16,36 +17,61 @@ app.use(jsonParser);
 app.use(urlencodedParser);
 
 app.post('/save-user', async function (req, res) {
-    const queryText = 'INSERT INTO users(name) VALUES($1) RETURNING userid,name';
-    const pgRes = await pgClient.query(queryText, [req.body.name]);
-    
-    const postQueryText = 'INSERT INTO posts(postcontent,userid) VALUES($1,$2) RETURNING postid';
-    const postPgRes = await pgClient.query(postQueryText, [req.body.postcontent, pgRes.rows[0].userid]);
+    const usersCreate = await models.users.create({
+        name: req.body.name
+    });
 
     res.json({
-        rows: pgRes.rows,
-        count: pgRes.rowCount,
-        postInsert: postPgRes.rows
+        usersCreate
     });
 });
 
 app.patch('/update-user', async function (req, res) {
-    const queryText = 'UPDATE users set name=$1 where userid=$2 RETURNING userid,name';
-    const pgRes = await pgClient.query(queryText, [req.body.name, req.body.userid]);
+    const usersUpdate = await models.users.update({
+        name: req.body.name
+    }, {
+        where: {
+            uuid: req.body.userid
+        },
+        returning: true
+    });
 
     res.json({
-        rows: pgRes.rows,
-        count: pgRes.rowCount
+        usersUpdate
     });
 });
 
 app.get('/', async function (req, res) {
-    const pgRes = await pgClient.query('SELECT name from users LIMIT $1', [req.query.limit || 1]);
+    try {
+        const usersFind = await models.users.findAndCountAll({
+            attributes: ['name'],
+            where: {
+                name: {
+                    [Op.iLike]: `%${req.query.name}`
+                }
+            },
+            logging: true,
+            include: [
+                {
+                    model: models.posts,
+                    as: 'posts',
+                    required: false,
+                    where: {
+                        content: {
+                            [Op.not]: null
+                        }
+                    }
+                }
+            ]
+        });
+        return res.json({
+            usersFind
+        });
 
-    res.json({
-        rows: pgRes.rows,
-        count: pgRes.rowCount,
-    });
+    } catch (error) {
+        console.log('\n error...', error);
+        return res.send(error);
+    }
 });
 
 app.delete('/remove', async function (req, res) {
@@ -57,6 +83,6 @@ app.delete('/remove', async function (req, res) {
     });
 });
 
-app.listen(process.env.PORT, process.env.HOST, () => {
-    console.log(`Server running at http://${process.env.HOST}:${process.env.PORT}/`);
+app.listen(config.port, config.host, () => {
+    console.log(`Server running at http://${config.host}:${config.port}/`);
 });
