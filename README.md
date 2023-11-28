@@ -6,7 +6,7 @@
 - view, get the user_data account
 - update, change the user_date verify before changing.
 
-## schema
+## user schema
 
 create table account_users (
 id SERIAL primary key,
@@ -19,16 +19,20 @@ phone_no VARCHAR,
 createdAt TIMESTAMP default current_timestamp
 )
 
-## sign up
+### sign up
 
 - Creates the user data with first_name, last_name, unique username and email
 - joi validation
 
-## updating the user_data
+### updating the user_data
 
 - update the user_data with validation
 - username and email should not repeat in the database with joi validation
 
-## login
+### login
 
 - using email id and password
+
+## sequalize
+
+- [sequalize-website](https://sequelize.org/docs/v6/getting-started/#promises-and-asyncawait)
