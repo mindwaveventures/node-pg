@@ -14,6 +14,14 @@ module.exports = function model(sequelize, types) {
         type: types.STRING,
         allowNull: false,
       },
+      item_content: {
+        type: types.STRING,
+        allowNull: false,
+      },
+      item_price: {
+        type: types.DECIMAL(10, 2),
+        allowNull: false,
+      },
     },
 
     {
