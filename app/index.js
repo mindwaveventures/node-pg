@@ -1,8 +1,7 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const dotenv = require("dotenv");
-dotenv.config();
+const config = require("./config/config");
 
 const { errorHandler } = require("./middlewares/errorHandler.middleware");
 const { notfound } = require("./middlewares/notFound.middleware");
@@ -24,8 +23,6 @@ app.use("/", userRouter);
 app.use(notfound);
 app.use(errorHandler);
 
-app.listen(process.env.PORT, process.env.HOST, () => {
-  console.log(
-    `Server running at http://${process.env.HOST}:${process.env.PORT}/`
-  );
+app.listen(config.port, config.host, () => {
+  console.log(`Server running at http://${config.host}:${config.port}/`);
 });
