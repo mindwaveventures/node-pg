@@ -2,7 +2,7 @@ module.exports = function model(sequelize, types) {
   const Users = sequelize.define(
     "users",
     {
-      uuid: {
+      user_id: {
         type: types.UUID,
         defaultValue: types.UUIDV4,
         primarykey: true,
@@ -29,7 +29,7 @@ module.exports = function model(sequelize, types) {
         defaultValue: "",
       },
       phone_no: {
-        type: types.INTEGER,
+        type: types.STRING,
         defaultValue: "",
       },
     },
