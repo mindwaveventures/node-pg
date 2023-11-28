@@ -43,13 +43,5 @@ module.exports = function model(sequelize, types) {
     }
   );
 
-  // Users.associate = function (models) {
-  //     Users.hasMany(models.posts, {
-  //         as: 'posts',
-  //         foreignKey: 'userId',
-  //         sourceKey: 'uuid',
-  //     });
-  // };
-
   return Users;
 };

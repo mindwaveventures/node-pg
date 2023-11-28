@@ -36,33 +36,5 @@ module.exports = function model(sequelize, types) {
     }
   );
 
-  //   Items.associate = function (models) {
-  //     Items.belongsTo(models.users, {
-  //       as: "userData",
-  //       foreignKey: "userId",
-  //       targetKey: "uuid",
-  //     });
-  //   };
-
   return Items;
 };
-
-// CREATE TABLE items (
-//     item_id SERIAL PRIMARY KEY,
-//     item_name VARCHAR not null,
-//     item_content VARCHAR,
-//     price DECIMAL(10, 2) not null,
-//     item_count integer not null
-// );
-
-// userId: {
-//     type: types.UUID,
-//     references: {
-//       model: {
-//         tableName: "users",
-//       },
-//       key: "uuid",
-//     },
-//     allowNull: false,
-//     onDelete: "CASCADE",
-//   },
