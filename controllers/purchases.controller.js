@@ -34,47 +34,25 @@ const purchasesController = async (req, res) => {
     return res.send(error);
   }
 };
-module.exports = purchasesController;
-// const purchasesController = async (req, res) => {
-//   const { user_id, item_id, status, date_of_order } = req.body;
 
-//   const t = await models.sequelize.transaction();
+const listController = async (req, res) => {
+  try {
+    const boughtItems = await models.purchases.findAll({
+      where: {
+        user_id: req.params.user_id,
+      },
+    });
 
-//   try {
-//     // Step 1: Create a new purchase
-//     const purchase = await models.purchases.create(
-//       {
-//         user_id,
-//         item_id,
-//         status,
-//         date_of_order,
-//       },
-//       { transaction: t }
-//     );
+    return res.json({
+      items,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.send(error);
+  }
+};
 
-//     // Step 2: Update items_count in the items table
-//     const updatedItem = await models.items.decrement('items_count', {
-//       by: 1,
-//       where: { item_id },
-//       transaction: t
-//     });
-
-//     // Commit the transaction
-//     await t.commit();
-
-//     return res.json({
-//       purchase,
-//       updatedItem,
-//     });
-//   } catch (error) {
-//     // Rollback the transaction if an error occurs
-//     await t.rollback();
-
-//     console.error(error);
-//     return res.status(500).json({
-//       error: "Internal Server Error",
-//     });
-//   }
-// };
-
-// module.exports = purchasesController;
+module.exports = {
+  purchasesController,
+  listController,
+};
