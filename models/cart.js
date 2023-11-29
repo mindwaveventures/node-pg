@@ -1,5 +1,4 @@
 const { DataTypes } = require("sequelize");
-
 module.exports = function model(sequelize, types) {
   const Cart = sequelize.define(
     "cart",
@@ -36,6 +35,7 @@ module.exports = function model(sequelize, types) {
     },
     {
       tableName: "cart",
+      timestamps: false,
     }
   );
 

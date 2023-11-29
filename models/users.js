@@ -49,6 +49,10 @@ module.exports = function model(sequelize, types) {
         type: types.STRING,
         allowNull: false,
       },
+      user_password: {
+        type: types.STRING,
+        allowNull: false,
+      },
       phone_no: {
         type: types.STRING,
         allowNull: false,
@@ -60,6 +64,7 @@ module.exports = function model(sequelize, types) {
     },
     {
       tableName: "users",
+      timestamps: false,
     }
   );
 

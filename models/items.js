@@ -28,6 +28,7 @@ module.exports = function model(sequelize, types) {
 
     {
       tableName: "items",
+      timestamps: false,
     }
   );
 

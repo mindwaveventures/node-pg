@@ -44,6 +44,7 @@ module.exports = function model(sequelize, types) {
     },
     {
       tableName: "purchases",
+      timestamps: false,
     }
   );
 

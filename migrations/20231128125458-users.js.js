@@ -30,6 +30,10 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      user_password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       email: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -49,3 +53,4 @@ module.exports = {
     await queryInterface.dropTable("users");
   },
 };
+//20231128125458-users.js.js
