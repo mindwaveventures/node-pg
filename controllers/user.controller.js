@@ -36,44 +36,31 @@ const addUserController = async (req, res, next) => {
 
 //updating the userData
 const updateUserController = async (req, res, next) => {
-  const userData = "select * from account_users au where id = $1";
-  const idpgRes = await pgClient.query(userData, [req.params.id]);
+  try {
+    const updateUser = await models.users.update(
+      {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        user_name: req.body.user_name,
+        user_password: req.body.user_password,
+        phone_no: req.body.phone_no,
+      },
+      {
+        where: {
+          user_id: req.params.id,
+        },
+        returning: true,
+      }
+    );
 
-  const userToUpdate = idpgRes.rows[0];
-
-  if (!userToUpdate) {
-    return next({
-      status: 400,
-      message: "user not found",
-    });
-  }
-  const searchQuery =
-    "select * from account_users au where email = $1 or username = $2";
-  const searchPgRes = await pgClient.query(searchQuery, [
-    req.body.email,
-    req.body.username,
-  ]);
-
-  if (searchPgRes.rowCount == 0) {
-    const queryText =
-      "update account_users set first_name  = $1, last_name=$2, email=$3, username=$4, user_password=$5, phone_no=$6 where id = $7  returning *";
-    const pgRes = await pgClient.query(queryText, [
-      req.body.first_name || userToUpdate.first_name,
-      req.body.last_name || userToUpdate.last_name,
-      req.body.email || userToUpdate.email,
-      req.body.username || userToUpdate.username,
-      req.body.user_password || userToUpdate.user_password,
-      req.body.phone_no || userToUpdate.phone_no,
-      req.params.id,
-    ]);
     res.json({
-      rows: pgRes.rows,
-      count: pgRes.rowCount,
+      updateUser,
     });
-  } else {
-    return next({
+  } catch (error) {
+    return res.send({
       status: 400,
-      message: "user already exits, check the email and username",
+      message: error.errors.map((d) => d.message),
     });
   }
 };
