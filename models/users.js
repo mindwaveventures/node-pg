@@ -1,4 +1,4 @@
-// const { DataTypes } = require("sequelize");
+const { DataTypes } = require("sequelize");
 
 module.exports = function model(sequelize, types) {
   const Users = sequelize.define(
@@ -54,8 +54,8 @@ module.exports = function model(sequelize, types) {
         allowNull: false,
       },
       created_at: {
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
       },
     },
     {
@@ -63,13 +63,13 @@ module.exports = function model(sequelize, types) {
     }
   );
 
-  //   Users.associate = function (models) {
-  //     Users.hasMany(models.posts, {
-  //       as: "",
-  //       foreignKey: "userId",
-  //       sourceKey: "user_id",
-  //     });
-  //   };
+  Users.associate = function (models) {
+    Users.hasMany(models.rating, {
+      as: "rating",
+      foreignKey: "user_id",
+      sourceKey: "user_id",
+    });
+  };
 
   return Users;
 };

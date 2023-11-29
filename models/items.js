@@ -1,5 +1,7 @@
 // const { DataTypes } = require("sequelize");
 
+const rating = require("./rating");
+
 module.exports = function model(sequelize, types) {
   const Items = sequelize.define(
     "items",
@@ -29,13 +31,13 @@ module.exports = function model(sequelize, types) {
     }
   );
 
-  //   Users.associate = function (models) {
-  //     Users.hasMany(models.posts, {
-  //       as: "",
-  //       foreignKey: "userId",
-  //       sourceKey: "user_id",
-  //     });
-  //   };
+  rating.associate = function (models) {
+    Users.hasMany(models.rating, {
+      as: "rating",
+      foreignKey: "user_id",
+      sourceKey: "user_id",
+    });
+  };
 
   return Items;
 };
