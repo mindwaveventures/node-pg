@@ -8,7 +8,7 @@ const signUpSchema = Joi.object({
     .required(),
   user_name: Joi.string()
     .min(5)
-    .pattern(new RegExp("^[a-zA-Z0-9^_-]{,20}$"))
+    .pattern(new RegExp("^[a-zA-Z0-9^_-]"))
     .required(),
   user_password: Joi.string()
     .pattern(new RegExp("^[a-zA-Z0-9!@#$%^&*_=+-]{8,20}$"))

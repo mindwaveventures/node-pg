@@ -5,28 +5,26 @@ const Op = Sequelize.Op;
 
 //creating new user account
 const addUserController = async (req, res, next) => {
-  const searchUser = await models.users.findOne({
-    email: req.body.email,
-    user_name: req.body.user_name,
+  const searchUser = await models.users.findAndCountAll({
+    attributes: ["email", "user_name"],
+    where: {
+      email: req.body.email,
+      user_name: req.body.user_name,
+    },
+    returning: true,
   });
 
-  res.json({
-    searchUser,
-  });
-  if (searchPgRes.rowCount == 0) {
-    const queryText =
-      "INSERT INTO account_users(first_name, last_name, email, user_name, user_password, phone_no) VALUES($1,$2,$3,$4, $5, $6) returning *";
-    const pgRes = await pgClient.query(queryText, [
-      req.body.first_name,
-      req.body.last_name,
-      req.body.email,
-      req.body.user_name,
-      req.body.user_password,
-      req.body.phone_no,
-    ]);
+  if (searchUser.count == 0) {
+    const addUser = await models.users.create({
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
+      email: req.body.email,
+      user_name: req.body.user_name,
+      user_password: req.body.user_password,
+      phone_no: req.body.phone_no,
+    });
     res.json({
-      rows: pgRes.rows,
-      count: pgRes.rowCount,
+      addUser,
     });
   } else {
     return next({
