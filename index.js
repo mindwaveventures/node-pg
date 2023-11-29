@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 
 const config = require("./config/config");
 // const pgClient = require('./pg-config');
-const { sequelize, models, Sequelize } = require("./config/sequelize-config");
+const { models, Sequelize } = require("./config/sequelize-config");
 const Op = Sequelize.Op;
 
 // create application/json parser
@@ -12,19 +12,21 @@ const jsonParser = bodyParser.json();
 
 // create application/x-www-form-urlencoded parser
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
+const {
+  addUserController,
+  loginController,
+} = require("./controllers/user.controller");
+const { notfound } = require("./middlewares/notFound.middleware");
+const { errorHandler } = require("./middlewares/errorHandler.middleware");
+const { validate } = require("./middlewares/validate.middleware");
+const { signUpSchema } = require("./validation/authentication.schema");
 
 app.use(jsonParser);
 app.use(urlencodedParser);
 
-app.post("/user", async function (req, res) {
-  const usersCreate = await models.users.create({
-    name: req.body.name,
-  });
+app.post("/signup", validate(signUpSchema), addUserController);
 
-  res.json({
-    usersCreate,
-  });
-});
+app.post("/login", validate(loginSchema), loginController);
 
 app.patch("/update-user", async function (req, res) {
   const usersUpdate = await models.users.update(
@@ -87,7 +89,8 @@ app.delete("/remove", async function (req, res) {
     count: pgRes.rowCount,
   });
 });
-
+app.use(notfound);
+app.use(errorHandler);
 app.listen(config.port, config.host, () => {
   console.log(`Server running at http://${config.host}:${config.port}/`);
 });
