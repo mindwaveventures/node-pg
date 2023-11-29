@@ -110,36 +110,35 @@ const sortPriceDecendingcontroller = async (req, res) => {
 
 // sort  item name ascending order
 const sortItemnameAScensingcontroller = async (req, res) => {
-  const pgRes = await pgClient.query(
-    "SELECT * from items ORDER BY item_name ASC"
-  );
-  res.json({
-    rows: pgRes.rows,
-  });
+  try {
+    const items = await models.items.findAll({
+      order: [["item_name", "ASC"]],
+    });
+
+    return res.json({
+      items,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.send(error);
+  }
 };
 //Descending by item name
 const sortItemnameDecensingcontroller = async (req, res) => {
-  const pgRes = await pgClient.query(
-    "SELECT * from items ORDER BY item_name DESC"
-  );
-  res.json({
-    rows: pgRes.rows,
-  });
+  try {
+    const items = await models.items.findAll({
+      order: [["item_name", "DESC"]],
+    });
+
+    return res.json({
+      items,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.send(error);
+  }
 };
 // filter by price
-const filterItemcontroller = async (req, res) => {
-  if (req.query.priceRange) {
-    const priceRanges = req.query.priceRange.split("-");
-    const minPrice = parseFloat(priceRanges[0]);
-    const maxPrice = parseFloat(priceRanges[1]);
-    query = `SELECT * FROM items  WHERE items.price BETWEEN ${minPrice} AND ${maxPrice}`;
-  }
-  const pgRes = await pgClient.query(query);
-  res.json({
-    rows: pgRes.rows,
-    count: pgRes.rowCount,
-  });
-};
 
 const filterItemPricecontroller = async (req, res) => {
   try {
@@ -165,17 +164,21 @@ const filterItemPricecontroller = async (req, res) => {
 
 //  search by item name
 const SearchItemNamecontroller = async (req, res) => {
-  if (req.query.search) {
-    query = `  SELECT * FROM items WHERE item_name ILIKE '%${req.query.search}%'`;
-  }
-  const pgRes = await pgClient.query(query);
-  if (pgRes.rowCount === 0) {
-    res.status(404).json({ error: "Item not found" });
-  } else {
-    res.json({
-      rows: pgRes.rows,
-      count: pgRes.rowCount,
+  try {
+    const itemsFind = await models.items.findAndCountAll({
+      attributes: ["item_name"],
+      where: {
+        item_name: {
+          [Op.iLike]: `%${req.query.item_name}`,
+        },
+      },
     });
+    return res.json({
+      itemsFind,
+    });
+  } catch (error) {
+    console.log("\n error...", error);
+    return res.send(error);
   }
 };
 module.exports = {
@@ -186,4 +189,7 @@ module.exports = {
   sortPriceAscendingcontroller,
   sortPriceDecendingcontroller,
   filterItemPricecontroller,
+  sortItemnameAScensingcontroller,
+  sortItemnameDecensingcontroller,
+  SearchItemNamecontroller,
 };
