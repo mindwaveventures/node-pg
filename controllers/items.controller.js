@@ -1,19 +1,22 @@
 const config = require("../config/config");
 // const pgClient = require('./pg-config');
 const { sequelize, models, Sequelize } = require("../config/sequelize-config");
-const Op = Sequelize.Op;
+// const Op = Sequelize.Op;
 
 const addItemController = async (req, res) => {
   try {
-    const usersCreate = await models.users.create({
-      name: req.body.name,
+    const itemsCreate = await models.items.create({
+      item_name: req.body.item_name,
+      item_content: req.body.item_content,
+      price: req.body.price,
+      item_count: req.body.item_count,
     });
     return res.json({
-      usersCreate,
+      itemsCreate,
     });
   } catch {
-    console.log("\n error...", error);
-    return res.send(error);
+    console.log("\n error...");
+    return res.send("error");
   }
 };
 module.exports = {
