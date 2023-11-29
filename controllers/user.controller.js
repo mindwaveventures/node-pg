@@ -35,7 +35,7 @@ const addUserController = async (req, res, next) => {
 };
 
 //updating the userData
-const updateUserController = async (req, res, next) => {
+const updateUserController = async (req, res) => {
   try {
     const updateUser = await models.users.update(
       {
@@ -65,7 +65,7 @@ const updateUserController = async (req, res, next) => {
 };
 
 // login
-const loginController = async (req, res) => {
+const loginController = async (req, res, next) => {
   try {
     const searchUser = await models.users.findAndCountAll({
       //attributes: ["email", "user_name"],
@@ -75,6 +75,7 @@ const loginController = async (req, res) => {
       },
       returning: true,
     });
+
     if (searchUser.count == 0) {
       return next({
         status: 400,
@@ -86,9 +87,7 @@ const loginController = async (req, res) => {
       });
     }
   } catch (error) {
-    return res.send({
-      message: error,
-    });
+    return res.send(error);
   }
 };
 
