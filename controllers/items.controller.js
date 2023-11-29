@@ -46,24 +46,33 @@ const updateitemController = async (req, res) => {
 };
 // get all items
 const getallitemcontroller = async (req, res) => {
-  const pgRes = await pgClient.query("SELECT * from items");
-  res.json({
-    rows: pgRes.rows,
-  });
+  try {
+    const items = await models.items.findAll();
+
+    return res.json({
+      items,
+    });
+  } catch {
+    console.log("\n error...");
+    return res.send("error");
+  }
 };
+
 // get single item by id
 const getbysingleitemcontroller = async (req, res) => {
-  const itemId = req.params.itemId;
-  const pgRes = await pgClient.query("SELECT * FROM items WHERE item_id = $1", [
-    itemId,
-  ]);
-  if (pgRes.rowCount === 0) {
-    res.status(404).json({ error: "Item not found" });
-  } else {
-    res.json({
-      rows: pgRes.rows,
-      count: pgRes.rowCount,
+  try {
+    const items = await models.items.findAll({
+      where: {
+        item_id: req.query.item_id,
+      },
     });
+
+    return res.json({
+      items,
+    });
+  } catch {
+    console.log("\n error...");
+    return res.send("error");
   }
 };
 
@@ -132,4 +141,6 @@ const SearchItemNamecontroller = async (req, res) => {
 module.exports = {
   addItemController,
   updateitemController,
+  getallitemcontroller,
+  getbysingleitemcontroller,
 };
