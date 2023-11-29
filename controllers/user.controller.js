@@ -103,21 +103,24 @@ const loginController = async (req, res, next) => {
 
 // view the account details
 const getAccountController = async (req, res, next) => {
-  const queryText = "select * from account_users au where id = $1";
-  const pgRes = await pgClient.query(queryText, [req.params.id]);
-  const idpgRes = pgRes.rows[0];
+  //"select * from account_users au where id = $1";
+  try {
+    const getUserController = await models.users.findOne({
+      where: {
+        user_id: req.params.id,
+      },
+      returning: true,
+    });
 
-  if (!idpgRes) {
+    res.json({
+      getUserController,
+    });
+  } catch (error) {
     return next({
       status: 400,
-      message: "user not found",
+      message: "unknown user id",
     });
   }
-
-  res.json({
-    rows: pgRes.rows,
-    count: pgRes.rowCount,
-  });
 };
 
 module.exports = {
