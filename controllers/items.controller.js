@@ -1,7 +1,7 @@
 const config = require("../config/config");
 // const pgClient = require('./pg-config');
 const { sequelize, models, Sequelize } = require("../config/sequelize-config");
-// const Op = Sequelize.Op;
+const Op = Sequelize.Op;
 
 const addItemController = async (req, res) => {
   try {
@@ -14,9 +14,9 @@ const addItemController = async (req, res) => {
     return res.json({
       itemsCreate,
     });
-  } catch {
-    console.log("\n error...");
-    return res.send("error");
+  } catch (error) {
+    console.log(error);
+    return res.send(error);
   }
 };
 // update item content
@@ -40,8 +40,8 @@ const updateitemController = async (req, res) => {
       itemsUpdate,
     });
   } catch {
-    console.log("\n error...");
-    return res.send("error");
+    console.log(error);
+    return res.send(error);
   }
 };
 // get all items
@@ -52,9 +52,9 @@ const getallitemcontroller = async (req, res) => {
     return res.json({
       items,
     });
-  } catch {
-    console.log("\n error...");
-    return res.send("error");
+  } catch (error) {
+    console.log(error);
+    return res.send(error);
   }
 };
 
@@ -70,26 +70,44 @@ const getbysingleitemcontroller = async (req, res) => {
     return res.json({
       items,
     });
-  } catch {
-    console.log("\n error...");
-    return res.send("error");
+  } catch (error) {
+    console.log(error);
+    return res.send(error);
   }
 };
 
 // sort by price ascending
 const sortPriceAscendingcontroller = async (req, res) => {
-  const pgRes = await pgClient.query("SELECT * from items ORDER BY price ASC");
-  res.json({
-    rows: pgRes.rows,
-  });
+  try {
+    const items = await models.items.findAll({
+      order: [["price", "ASC"]],
+    });
+
+    return res.json({
+      items,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.send(error);
+  }
 };
+
 // Sort price in descending order
 const sortPriceDecendingcontroller = async (req, res) => {
-  const pgRes = await pgClient.query("SELECT * from items ORDER BY price DESC");
-  res.json({
-    rows: pgRes.rows,
-  });
+  try {
+    const items = await models.items.findAll({
+      order: [["price", "DESC"]],
+    });
+
+    return res.json({
+      items,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.send(error);
+  }
 };
+
 // sort  item name ascending order
 const sortItemnameAScensingcontroller = async (req, res) => {
   const pgRes = await pgClient.query(
@@ -109,7 +127,7 @@ const sortItemnameDecensingcontroller = async (req, res) => {
   });
 };
 // filter by price
-const filterItemPricecontroller = async (req, res) => {
+const filterItemcontroller = async (req, res) => {
   if (req.query.priceRange) {
     const priceRanges = req.query.priceRange.split("-");
     const minPrice = parseFloat(priceRanges[0]);
@@ -121,6 +139,28 @@ const filterItemPricecontroller = async (req, res) => {
     rows: pgRes.rows,
     count: pgRes.rowCount,
   });
+};
+
+const filterItemPricecontroller = async (req, res) => {
+  try {
+    const { minPrice, maxPrice } = req.query;
+
+    const items = await models.items.findAll({
+      where: {
+        price: {
+          [Op.between]: [minPrice, maxPrice],
+        },
+      },
+      order: [["price", "ASC"]],
+    });
+
+    return res.json({
+      items,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.send(error);
+  }
 };
 
 //  search by item name
@@ -143,4 +183,7 @@ module.exports = {
   updateitemController,
   getallitemcontroller,
   getbysingleitemcontroller,
+  sortPriceAscendingcontroller,
+  sortPriceDecendingcontroller,
+  filterItemPricecontroller,
 };
