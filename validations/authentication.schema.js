@@ -17,11 +17,8 @@ const signUpSchema = Joi.object({
 });
 
 const loginSchema = Joi.object({
-  email: Joi.string().required(),
-  user_name: Joi.string()
-    .min(5)
-    //.pattern(new RegExp("^[a-zA-Z0-9^_-]"))
-    .required(),
+  user_name: Joi.string().min(5).required(),
+  user_password: Joi.string().required(),
 });
 
 const updateUserSchema = Joi.object({

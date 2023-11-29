@@ -24,6 +24,7 @@ module.exports = function model(sequelize, types) {
       email: {
         type: types.STRING,
         allowNull: false,
+        unique: true,
       },
       user_password: {
         type: types.STRING,

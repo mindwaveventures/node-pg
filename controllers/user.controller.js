@@ -59,33 +59,37 @@ const updateUserController = async (req, res, next) => {
     });
   } catch (error) {
     return res.send({
-      status: 400,
       message: error.errors.map((d) => d.message),
     });
   }
 };
 
 // login
-const loginController = async (req, res, next) => {
-  const searchUser = await models.users.findOne({
-    //attributes: ["email", "user_name"],
-    where: {
-      email: req.body.email,
-      user_name: req.body.user_name,
-    },
-    returning: true,
-  });
-
-  if (!searchUser) {
-    return next({
-      status: 400,
-      message: "user not found",
+const loginController = async (req, res) => {
+  try {
+    const searchUser = await models.users.findAndCountAll({
+      //attributes: ["email", "user_name"],
+      where: {
+        user_name: req.body.user_name,
+        user_password: req.body.user_password,
+      },
+      returning: true,
+    });
+    if (searchUser.count == 0) {
+      return next({
+        status: 400,
+        message: "user not found, check the email and username",
+      });
+    } else {
+      res.json({
+        searchUser,
+      });
+    }
+  } catch (error) {
+    return res.send({
+      message: error,
     });
   }
-
-  res.json({
-    searchUser,
-  });
 };
 
 // view the account details
