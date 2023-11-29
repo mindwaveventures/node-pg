@@ -1,5 +1,5 @@
 module.exports = function model(sequelize, types) {
-  const Items = sequelize.define(
+  const items = sequelize.define(
     "items",
     {
       item_id: {
@@ -36,5 +36,5 @@ module.exports = function model(sequelize, types) {
     }
   );
 
-  return Items;
+  return items;
 };
