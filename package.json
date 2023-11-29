@@ -2,10 +2,12 @@
   "name": "node-pg",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon"
+
   },
   "repository": {
     "type": "git",
@@ -28,6 +30,11 @@
     "sequelize": "^6.35.1"
   },
   "devDependencies": {
-    "sequelize-cli": "^6.6.2"
+    "sequelize-cli": "^6.6.2",
+    "joi": "^17.11.0",
+    "nodemon": "^3.0.1",
+    "pg": "^8.11.3"
+
   }
+  
 }

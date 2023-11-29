@@ -1,48 +1,35 @@
-const config = require("../config/config");
-// const pgClient = require('./pg-config');
-const { sequelize, models, Sequelize } = require("../config/sequelize-config");
-// const Op = Sequelize.Op;
+const pgClient = require("../pg-config");
 
-const addItemController = async (req, res) => {
-  try {
-    const itemsCreate = await models.items.create({
-      item_name: req.body.item_name,
-      item_content: req.body.item_content,
-      price: req.body.price,
-      item_count: req.body.item_count,
-    });
-    return res.json({
-      itemsCreate,
-    });
-  } catch {
-    console.log("\n error...");
-    return res.send("error");
-  }
+// add items
+const additemscontroller = async (req, res) => {
+  const queryText =
+    "INSERT INTO items(item_name,item_content,price,status_of_item) VALUES($1,$2,$3,$4) RETURNING item_id,item_name";
+  const pgRes = await pgClient.query(queryText, [
+    req.body.item_name,
+    req.body.item_content,
+    req.body.price,
+    req.body.status_of_item,
+  ]);
+
+  res.json({
+    rows: pgRes.rows,
+    count: pgRes.rowCount,
+  });
 };
 // update item content
 const updateitemController = async (req, res) => {
-  try {
-    const itemsUpdate = await models.items.update(
-      {
-        item_name: req.body.item_name,
-        item_content: req.body.item_content,
-        price: req.body.price,
-        item_count: req.body.item_count,
-      },
-      {
-        where: {
-          item_id: req.query.item_id,
-        },
-        returning: true,
-      }
-    );
-    return res.json({
-      itemsUpdate,
-    });
-  } catch {
-    console.log("\n error...");
-    return res.send("error");
-  }
+  const queryText =
+    "UPDATE items set item_name =$1 ,item_content=$2  where item_id=$3 RETURNING item_content,item_id";
+  const pgRes = await pgClient.query(queryText, [
+    req.body.item_name,
+    req.body.item_content,
+    req.body.item_id,
+  ]);
+
+  res.json({
+    rows: pgRes.rows,
+    count: pgRes.rowCount,
+  });
 };
 // get all items
 const getallitemcontroller = async (req, res) => {
@@ -130,6 +117,14 @@ const SearchItemNamecontroller = async (req, res) => {
   }
 };
 module.exports = {
-  addItemController,
+  additemscontroller,
   updateitemController,
+  getbysingleitemcontroller,
+  getallitemcontroller,
+  sortPriceAscendingcontroller,
+  sortPriceDecendingcontroller,
+  sortItemnameAScensingcontroller,
+  sortItemnameDecensingcontroller,
+  filterItemPricecontroller,
+  SearchItemNamecontroller,
 };
