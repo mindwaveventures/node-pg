@@ -33,6 +33,8 @@ module.exports = function model(sequelize, types) {
     },
     {
       tableName: "favourites",
+      timestamps: false,
+
       // defaultScope: {
       //     where: {
       //         status: 'Active'

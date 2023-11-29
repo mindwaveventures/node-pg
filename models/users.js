@@ -35,6 +35,7 @@ module.exports = function model(sequelize, types) {
     },
     {
       tableName: "users",
+      timestamps: false,
       // defaultScope: {
       //     where: {
       //         status: 'Active'

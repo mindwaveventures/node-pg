@@ -17,7 +17,10 @@ app.use(jsonParser);
 app.use(urlencodedParser);
 
 const itemRouter = require("./routes/items.routes");
+const userRouter = require("./routes/user.routes");
+
 app.use("/", itemRouter);
+app.use("/", userRouter);
 
 // app.post("/add-items", async function (req, res) {
 //   const itemsCreate = await models.items.create({
