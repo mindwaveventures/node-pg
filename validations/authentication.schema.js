@@ -16,6 +16,14 @@ const signUpSchema = Joi.object({
   phone_no: Joi.string().allow("").pattern(new RegExp("^[0-9]{7,15}$")),
 });
 
+const loginSchema = Joi.object({
+  email: Joi.string().required(),
+  user_name: Joi.string()
+    .min(5)
+    //.pattern(new RegExp("^[a-zA-Z0-9^_-]"))
+    .required(),
+});
+
 const updateUserSchema = Joi.object({
   first_name: Joi.string().optional(),
   last_name: Joi.string().optional(),
@@ -38,4 +46,5 @@ const updateUserSchema = Joi.object({
 module.exports = {
   signUpSchema,
   updateUserSchema,
+  loginSchema,
 };

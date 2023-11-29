@@ -38,6 +38,7 @@ const addUserController = async (req, res, next) => {
 const updateUserController = async (req, res, next) => {
   const userData = "select * from account_users au where id = $1";
   const idpgRes = await pgClient.query(userData, [req.params.id]);
+
   const userToUpdate = idpgRes.rows[0];
 
   if (!userToUpdate) {
@@ -79,14 +80,16 @@ const updateUserController = async (req, res, next) => {
 
 // login
 const loginController = async (req, res, next) => {
-  const queryText =
-    "select * from account_users au where email = $1 and user_password =$2";
-  const pgRes = await pgClient.query(queryText, [
-    req.body.email,
-    req.body.user_password,
-  ]);
+  const searchUser = await models.users.findOne({
+    //attributes: ["email", "user_name"],
+    where: {
+      email: req.body.email,
+      user_name: req.body.user_name,
+    },
+    returning: true,
+  });
 
-  if (pgRes.rowCount == 0) {
+  if (!searchUser) {
     return next({
       status: 400,
       message: "user not found",
@@ -94,8 +97,7 @@ const loginController = async (req, res, next) => {
   }
 
   res.json({
-    rows: pgRes.rows,
-    count: pgRes.rowCount,
+    searchUser,
   });
 };
 
