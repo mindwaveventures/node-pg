@@ -1,24 +1,33 @@
 module.exports = function model(sequelize, types) {
-  const Users = sequelize.define(
-    "users",
+  const items = sequelize.define(
+    "items",
     {
-      uuid: {
+      item_id: {
         type: types.UUID,
         defaultValue: types.UUIDV4,
         primarykey: true,
         unique: true,
       },
-      name: {
+      item_name: {
         type: types.STRING,
         defaultValue: "",
       },
-      status: {
+      item_content: {
         type: types.STRING,
-        defaultValue: "Active",
+        defaultValue: "",
+      },
+      price: {
+        type: types.DECIMAL(10, 2),
+        defaultValue: 0,
+      },
+      item_count: {
+        type: types.INTEGER,
+        defaultValue: 0,
       },
     },
+
     {
-      tableName: "users",
+      tableName: "items",
       // defaultScope: {
       //     where: {
       //         status: 'Active'
@@ -27,13 +36,5 @@ module.exports = function model(sequelize, types) {
     }
   );
 
-  //   Users.associate = function (models) {
-  //     Users.hasMany(models.posts, {
-  //       as: "posts",
-  //       foreignKey: "userId",
-  //       sourceKey: "uuid",
-  //     });
-  //   };
-
-  return Users;
+  return items;
 };

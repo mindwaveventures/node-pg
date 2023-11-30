@@ -1,28 +1,35 @@
-'use strict';
+"use strict";
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('users', {
+    await queryInterface.createTable("items", {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        primaryKey: true,
         autoIncrement: true,
-        unique: true
+        unique: true,
       },
-      uuid: {
+      item_id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primarykey: true,
         unique: true,
       },
-      name: {
+      item_name: {
         type: Sequelize.STRING,
-        defaultValue: ''
+        defaultValue: "",
       },
-      status: {
+      item_content: {
         type: Sequelize.STRING,
-        defaultValue: 'Active'
+        defaultValue: "",
+      },
+      price: {
+        type: Sequelize.DECIMAL(10, 2),
+        defaultValue: 0,
+      },
+      item_count: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -36,6 +43,6 @@ module.exports = {
   },
 
   down: async (queryInterface) => {
-    await queryInterface.dropTable('users');
+    await queryInterface.dropTable("items");
   },
 };
