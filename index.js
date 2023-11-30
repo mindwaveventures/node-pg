@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const config = require("./config/config");
 // const pgClient = require('./pg-config');
@@ -15,6 +16,7 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(jsonParser);
 app.use(urlencodedParser);
+app.use(cors());
 
 const itemRouter = require("./routes/items.routes");
 const userRouter = require("./routes/user.routes");
