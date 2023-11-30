@@ -138,6 +138,33 @@ const sortItemnameDecensingcontroller = async (req, res) => {
     return res.send(error);
   }
 };
+
+const sortItemNameController = async (req, res) => {
+  try {
+    const { sortOrder } = req.query;
+
+    if (
+      sortOrder &&
+      (sortOrder.toLowerCase() === "asc" || sortOrder.toLowerCase() === "desc")
+    ) {
+      const items = await models.items.findAll({
+        order: [["item_name", sortOrder.toUpperCase()]],
+      });
+
+      return res.json({
+        items,
+      });
+    } else {
+      return res.status(400).json({
+        error: 'Invalid sortOrder parameter. Use "asc" or "desc".',
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.send(error);
+  }
+};
+
 // filter by price
 
 const filterItemPricecontroller = async (req, res) => {
@@ -169,9 +196,10 @@ const SearchItemNamecontroller = async (req, res) => {
       attributes: ["item_name"],
       where: {
         item_name: {
-          [Op.iLike]: `%${req.query.item_name}`,
+          [Op.iLike]: `%${req.query.item_name}%`,
         },
       },
+      logging: true,
     });
     return res.json({
       itemsFind,
@@ -192,4 +220,5 @@ module.exports = {
   sortItemnameAScensingcontroller,
   sortItemnameDecensingcontroller,
   SearchItemNamecontroller,
+  sortItemNameController,
 };
