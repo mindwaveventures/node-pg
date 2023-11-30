@@ -48,12 +48,12 @@ module.exports = function model(sequelize, types) {
     Rating.belongsTo(models.users, {
       as: "users",
       foreignKey: "user_id",
-      sourceKey: "user_id",
+      targetKey: "user_id",
     }),
       Rating.belongsTo(models.items, {
         as: "items",
         foreignKey: "item_id",
-        sourceKey: "item_id",
+        targetKey: "item_id",
       });
   };
 

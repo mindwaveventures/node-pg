@@ -52,13 +52,13 @@ module.exports = function model(sequelize, types) {
     Purchases.belongsTo(models.users, {
       as: "users",
       foreignKey: "user_id",
-      sourceKey: "user_id",
-    }),
-      Purchases.belongsTo(models.items, {
-        as: "items",
-        foreignKey: "item_id",
-        sourceKey: "item_id",
-      });
+      targetKey: "user_id",
+    });
+    Purchases.belongsTo(models.items, {
+      as: "items",
+      foreignKey: "item_id",
+      targetKey: "item_id",
+    });
   };
 
   return Purchases;
