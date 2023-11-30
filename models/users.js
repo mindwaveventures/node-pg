@@ -40,28 +40,28 @@ module.exports = function model(sequelize, types) {
     }
   );
 
-  //Users.associate = function (models) {
-  // Users.hasMany(models.carts, {
-  //   as: "carts",
-  //   foreignKey: "user_id",
-  //   sourceKey: "uuid",
-  // });
-  // Users.hasMany(models.purchases, {
-  //   as: "purchases",
-  //   foreignKey: "user_id",
-  //   sourceKey: "uuid",
-  // });
-  // Users.hasMany(models.favourites, {
-  //   as: "favourites",
-  //   foreignKey: "user_id",
-  //   sourceKey: "uuid",
-  // });
-  // Users.hasMany(models.ratings, {
-  //   as: "ratings",
-  //   foreignKey: "user_id",
-  //   sourceKey: "uuid",
-  // });
-  //};
+  Users.associate = function (models) {
+    // Users.hasMany(models.carts, {
+    //   as: "carts",
+    //   foreignKey: "user_id",
+    //   sourceKey: "uuid",
+    // });
+    // Users.hasMany(models.purchases, {
+    //   as: "purchases",
+    //   foreignKey: "user_id",
+    //   sourceKey: "uuid",
+    // });
+    Users.hasMany(models.favourites, {
+      as: "favourites",
+      foreignKey: "user_id",
+      sourceKey: "uuid",
+    });
+    // Users.hasMany(models.ratings, {
+    //   as: "ratings",
+    //   foreignKey: "user_id",
+    //   sourceKey: "uuid",
+    // });
+  };
 
   return Users;
 };
