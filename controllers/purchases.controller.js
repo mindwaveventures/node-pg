@@ -38,8 +38,10 @@ const purchasesController = async (req, res) => {
 
 const listController = async (req, res) => {
   try {
+    let sortPrice;
     const userId = req.params.user_id;
-    const whereQuery = {};
+    let whereQuery = {};
+    let orderQuery = [];
 
     // whereQuery.user_id = {
     //   user_id: req.params.user_id,
@@ -47,21 +49,23 @@ const listController = async (req, res) => {
 
     //search by item_name
     if (req.query.search) {
+      console.log("search");
       whereQuery.item_name = {
         [Op.iLike]: `%${req.query.search}%`,
       };
     }
 
     if (req.query.sortPrice) {
-      const sortPrice = req.query.sortPrice;
+      sortPrice = req.query.sortPrice;
       console.log("sortPrice", sortPrice);
-      whereQuery.item_price = {
-        order: [["item_price", `${sortPrice}`]],
-      };
+      // orderQuery = {
+      //   order: [["item_price", `${sortPrice}`]],
+      // };
+      orderQuery.push(["item_price", sortPrice]);
     }
 
     if (req.query.priceRange) {
-      const priceRanges = req.query.priceRange;
+      const priceRanges = req.query.priceRange.split("-");
       const minPrice = parseFloat(priceRanges[0]);
       const maxPrice = parseFloat(priceRanges[1]);
       whereQuery.item_price = {
@@ -72,15 +76,17 @@ const listController = async (req, res) => {
       where: {
         user_id: req.params.user_id,
       },
+      order: [[models.items, "item_price", sortPrice ? sortPrice : "DESC"]],
       logging: true,
       include: [
         {
           as: "items",
           model: models.items,
+          right: true,
+          where: whereQuery,
+          //order: ["item_price", "DESC"],
         },
       ],
-
-      order: [["purchases_id", "ASC"]],
     });
 
     return res.json({
