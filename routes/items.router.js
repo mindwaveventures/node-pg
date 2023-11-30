@@ -25,12 +25,8 @@ router.get("/rating", overallRatingController);
 
 router.get("/", getItemsController);
 router.post("/add", validate(itemAddSchema), addItemController);
-router.patch(
-  "/:itemId",
-  validate(updateItemSchema),
-  updateItemContentController
-);
-router.get("/:itemId", getSingleItemController);
+router.put("/:id", validate(updateItemSchema), updateItemContentController);
+router.get("/:id", getSingleItemController);
 
 router.get("/sort/asc-by-price", sortPriceAscController);
 router.get("/sort/desc-by-price", sortPriceDescController);

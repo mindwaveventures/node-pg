@@ -35,117 +35,147 @@ const addItemController = async (req, res) => {
 
 // To update item content
 const updateItemContentController = async (req, res) => {
-  const itemId = req.params.itemId;
-  const queryText =
-    "UPDATE items set item_content=$1 where item_id=$2 RETURNING *";
-  const pgRes = await pgClient.query(queryText, [
-    req.body.item_content,
-    itemId,
-  ]);
+  try {
+    const updateItem = await models.items.update(
+      {
+        item_name: req.body.item_name,
+        item_content: req.body.item_content,
+        item_price: req.body.item_price,
+        item_count: req.body.item_count,
+      },
+      {
+        where: {
+          item_id: req.params.id,
+        },
+        returning: true,
+      }
+    );
 
-  res.json({
-    rows: pgRes.rows,
-    count: pgRes.rowCount,
-  });
+    res.json({
+      updateItem,
+    });
+  } catch (error) {
+    return res.send({
+      message: error.errors.map((d) => d.message),
+    });
+  }
 };
 
 // To get single item
 const getSingleItemController = async (req, res) => {
   try {
-    const itemId = req.params.itemId;
-    const pgRes = await pgClient.query(
-      "SELECT * FROM items WHERE item_id = $1",
-      [itemId]
-    );
-    if (pgRes.rowCount == 0) {
-      res.status(404).json({ error: "Item not found" });
-    } else {
-      res.json({
-        rows: pgRes.rows,
-        count: pgRes.rowCount,
-      });
-    }
+    const getSingleItem = await models.items.findAll({
+      where: {
+        item_id: req.query.item_id,
+      },
+    });
+
+    return res.json({
+      getSingleItem,
+    });
   } catch (error) {
-    console.error("Error in handling request:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    return res.send({ message: error.errors.map((d) => d.message) });
   }
 };
 
 // Sort price in ascending order
 const sortPriceAscController = async (req, res) => {
-  const pgRes = await pgClient.query("SELECT * from items ORDER BY price ASC");
-  res.json({
-    rows: pgRes.rows,
-  });
+  try {
+    const sortItem = await models.items.findAll({
+      order: [["item_price", "ASC"]],
+    });
+
+    return res.json({
+      sortItem,
+    });
+  } catch (error) {
+    return res.send(error);
+  }
 };
 
 // Sort price in descending order
 const sortPriceDescController = async (req, res) => {
-  const pgRes = await pgClient.query("SELECT * from items ORDER BY price DESC");
-  res.json({
-    rows: pgRes.rows,
-  });
+  try {
+    const sortItem = await models.items.findAll({
+      order: [["item_price", "DESC"]],
+    });
+
+    return res.json({
+      sortItem,
+    });
+  } catch (error) {
+    return res.send(error);
+  }
 };
 
 //ascending by item name
 const sortItemnameAscController = async (req, res) => {
-  const pgRes = await pgClient.query(
-    "SELECT * from items ORDER BY item_name ASC"
-  );
-  res.json({
-    rows: pgRes.rows,
-  });
+  try {
+    const sortItem = await models.items.findAll({
+      order: [["item_name", "ASC"]],
+    });
+
+    return res.json({
+      sortItem,
+    });
+  } catch (error) {
+    return res.send(error);
+  }
 };
 
 //Descending by item name
 const sortItemnameDescController = async (req, res) => {
-  const pgRes = await pgClient.query(
-    "SELECT * from items ORDER BY item_name DESC"
-  );
-  res.json({
-    rows: pgRes.rows,
-  });
+  try {
+    const sortItem = await models.items.findAll({
+      order: [["item_name", "DESC"]],
+    });
+
+    return res.json({
+      sortItem,
+    });
+  } catch (error) {
+    return res.send(error);
+  }
 };
 
 // to filter the price range
 const filterPriceController = async (req, res) => {
   try {
-    if (req.query.priceRange) {
-      const priceRanges = req.query.priceRange.split("-");
-      const minPrice = parseFloat(priceRanges[0]);
-      const maxPrice = parseFloat(priceRanges[1]);
+    const { minPrice, maxPrice } = req.query;
 
-      query = ` SELECT * FROM items WHERE items.price BETWEEN ${minPrice} AND ${maxPrice}`;
-    }
+    const items = await models.items.findAll({
+      where: {
+        price: {
+          [Op.between]: [minPrice, maxPrice],
+        },
+      },
+      order: [["price", "ASC"]],
+    });
 
-    const pgRes = await pgClient.query(query);
-
-    res.json({
-      rows: pgRes.rows,
-      count: pgRes.rowCount,
+    return res.json({
+      items,
     });
   } catch (error) {
-    console.error("Error fetching items:", error);
+    return res.send(error);
   }
 };
 
 // To search
 const searchController = async (req, res) => {
   try {
-    if (req.query.search) {
-      query = `  SELECT * FROM items WHERE item_name ILIKE '%${req.query.search}%'`;
-    }
-    const pgRes = await pgClient.query(query);
-    if (pgRes.rowCount === 0) {
-      res.status(404).json({ error: "Item not found" });
-    } else {
-      res.json({
-        rows: pgRes.rows,
-        count: pgRes.rowCount,
-      });
-    }
+    const itemsFind = await models.items.findAndCountAll({
+      attributes: ["item_name"],
+      where: {
+        item_name: {
+          [Op.iLike]: `%${req.query.item_name}`,
+        },
+      },
+    });
+    return res.json({
+      itemsFind,
+    });
   } catch (error) {
-    console.error("Error fetching items:", error);
+    return res.send(error);
   }
 };
 

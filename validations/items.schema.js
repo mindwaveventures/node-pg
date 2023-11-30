@@ -8,7 +8,10 @@ const itemAddSchema = Joi.object({
 });
 
 const updateItemSchema = Joi.object({
-  item_content: Joi.string().required(),
+  item_name: Joi.string().optional(),
+  item_content: Joi.string().optional(),
+  item_price: Joi.number().optional(),
+  item_count: Joi.number().optional(),
 });
 module.exports = {
   itemAddSchema,
