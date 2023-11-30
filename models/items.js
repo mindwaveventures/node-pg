@@ -24,6 +24,10 @@ module.exports = function model(sequelize, types) {
         type: types.DECIMAL(10, 2),
         allowNull: false,
       },
+      item_count: {
+        type: types.INTEGER,
+        allowNull: false,
+      },
     },
 
     {

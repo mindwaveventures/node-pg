@@ -1,5 +1,7 @@
 "use strict";
 
+const { sequelize } = require("../config/sequelize-config");
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -27,6 +29,10 @@ module.exports = {
       },
       item_price: {
         type: Sequelize.DECIMAL(10, 2),
+        allowNull: false,
+      },
+      item_count: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
     });
