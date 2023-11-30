@@ -14,7 +14,7 @@ const {
 } = require("../validations/authentication.schema");
 
 //CREATE USER ACCOUNT
-router.post("/signup", validate(signUpSchema), addUserController);
+router.post("/signup", addUserController);
 
 // //LOGIN
 router.get("/login", loginController);

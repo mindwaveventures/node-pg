@@ -29,6 +29,8 @@ const addUserController = async (req, res) => {
       console.log(error);
       return res.send(error);
     }
+  } else {
+    return res.send("user already found");
   }
 };
 

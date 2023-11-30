@@ -1,5 +1,3 @@
-const config = require("../config/config");
-// const pgClient = require('./pg-config');
 const { sequelize, models, Sequelize } = require("../config/sequelize-config");
 const Op = Sequelize.Op;
 
