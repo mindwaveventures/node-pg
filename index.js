@@ -15,11 +15,17 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false });
 const {
   addUserController,
   loginController,
+  accountViewController,
+  updateController,
 } = require("./controllers/user.controller");
 const { notfound } = require("./middlewares/notFound.middleware");
 const { errorHandler } = require("./middlewares/errorHandler.middleware");
 const { validate } = require("./middlewares/validate.middleware");
-const { signUpSchema } = require("./validation/authentication.schema");
+const {
+  signUpSchema,
+  loginSchema,
+  updateSchema,
+} = require("./validation/authentication.schema");
 
 app.use(jsonParser);
 app.use(urlencodedParser);
@@ -27,6 +33,10 @@ app.use(urlencodedParser);
 app.post("/signup", validate(signUpSchema), addUserController);
 
 app.post("/login", validate(loginSchema), loginController);
+
+app.get("/user/:id", accountViewController);
+
+app.patch("/user/:id", validate(updateSchema), updateController);
 
 app.patch("/update-user", async function (req, res) {
   const usersUpdate = await models.users.update(
