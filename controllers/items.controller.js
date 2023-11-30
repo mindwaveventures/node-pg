@@ -76,69 +76,31 @@ const getbysingleitemcontroller = async (req, res) => {
   }
 };
 
-// sort by price ascending
-const sortPriceAscendingcontroller = async (req, res) => {
+// Sort price
+const sortItemPriceController = async (req, res) => {
   try {
-    const items = await models.items.findAll({
-      order: [["price", "ASC"]],
-    });
+    const { sortOrder } = req.query;
 
-    return res.json({
-      items,
-    });
+    if (sortOrder && (sortOrder === "asc" || sortOrder === "desc")) {
+      const items = await models.items.findAll({
+        order: [["price", sortOrder]],
+      });
+
+      return res.json({
+        items,
+      });
+    } else {
+      return res.status(400).json({
+        error: 'Invalid sortOrder parameter. Use "asc" or "desc".',
+      });
+    }
   } catch (error) {
     console.error(error);
     return res.send(error);
   }
 };
 
-// Sort price in descending order
-const sortPriceDecendingcontroller = async (req, res) => {
-  try {
-    const items = await models.items.findAll({
-      order: [["price", "DESC"]],
-    });
-
-    return res.json({
-      items,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.send(error);
-  }
-};
-
-// sort  item name ascending order
-const sortItemnameAScensingcontroller = async (req, res) => {
-  try {
-    const items = await models.items.findAll({
-      order: [["item_name", "ASC"]],
-    });
-
-    return res.json({
-      items,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.send(error);
-  }
-};
-//Descending by item name
-const sortItemnameDecensingcontroller = async (req, res) => {
-  try {
-    const items = await models.items.findAll({
-      order: [["item_name", "DESC"]],
-    });
-
-    return res.json({
-      items,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.send(error);
-  }
-};
-
+// sort  item name
 const sortItemNameController = async (req, res) => {
   try {
     const { sortOrder } = req.query;
@@ -214,11 +176,8 @@ module.exports = {
   updateitemController,
   getallitemcontroller,
   getbysingleitemcontroller,
-  sortPriceAscendingcontroller,
-  sortPriceDecendingcontroller,
   filterItemPricecontroller,
-  sortItemnameAScensingcontroller,
-  sortItemnameDecensingcontroller,
   SearchItemNamecontroller,
   sortItemNameController,
+  sortItemPriceController,
 };
