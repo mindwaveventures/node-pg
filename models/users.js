@@ -41,11 +41,11 @@ module.exports = function model(sequelize, types) {
   );
 
   Users.associate = function (models) {
-    // Users.hasMany(models.carts, {
-    //   as: "carts",
-    //   foreignKey: "user_id",
-    //   sourceKey: "uuid",
-    // });
+    Users.hasMany(models.carts, {
+      as: "carts",
+      foreignKey: "user_id",
+      sourceKey: "user_id",
+    });
     // Users.hasMany(models.purchases, {
     //   as: "purchases",
     //   foreignKey: "user_id",
@@ -54,13 +54,13 @@ module.exports = function model(sequelize, types) {
     Users.hasMany(models.favourites, {
       as: "favourites",
       foreignKey: "user_id",
-      sourceKey: "uuid",
+      sourceKey: "user_id",
     });
-    // Users.hasMany(models.ratings, {
-    //   as: "ratings",
-    //   foreignKey: "user_id",
-    //   sourceKey: "uuid",
-    // });
+    Users.hasMany(models.ratings, {
+      as: "ratings",
+      foreignKey: "user_id",
+      sourceKey: "user_id",
+    });
   };
 
   return Users;

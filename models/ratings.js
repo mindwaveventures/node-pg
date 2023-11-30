@@ -1,12 +1,16 @@
 module.exports = function model(sequelize, types) {
-  const favourites = sequelize.define(
-    "favourites",
+  const ratings = sequelize.define(
+    "ratings",
     {
-      fav_id: {
+      rating_id: {
         type: types.UUID,
         defaultValue: types.UUIDV4,
         primarykey: true,
         unique: true,
+      },
+      rating: {
+        type: types.STRING,
+        defaultValue: 0,
       },
       user_id: {
         type: types.UUID,
@@ -14,7 +18,7 @@ module.exports = function model(sequelize, types) {
           model: {
             tableName: "users",
           },
-          key: "user_id",
+          key: "uuid",
         },
         allowNull: false,
         onDelete: "CASCADE",
@@ -26,7 +30,7 @@ module.exports = function model(sequelize, types) {
           model: {
             tableName: "items",
           },
-          key: "item_id",
+          key: "uuid",
         },
         allowNull: false,
         onDelete: "CASCADE",
@@ -35,22 +39,21 @@ module.exports = function model(sequelize, types) {
     },
 
     {
-      tableName: "favourites",
-      timestamps: false,
+      tableName: "ratings",
     }
   );
 
-  favourites.associate = function (models) {
-    favourites.belongsTo(models.users, {
+  ratings.associate = function (models) {
+    ratings.belongsTo(models.users, {
       as: "user",
       foreignKey: "user_id",
       targetKey: "user_id",
     });
-    favourites.belongsTo(models.items, {
+    ratings.belongsTo(models.items, {
       as: "item",
       foreignKey: "item_id",
       targetKey: "item_id",
     });
   };
-  return favourites;
+  return ratings;
 };

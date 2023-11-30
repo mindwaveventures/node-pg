@@ -31,11 +31,21 @@ module.exports = function model(sequelize, types) {
     }
   );
 
-  Users.associate = function (models) {
-    Users.hasMany(models.favourites, {
+  items.associate = function (models) {
+    items.hasMany(models.favourites, {
       as: "favourites",
-      foreignKey: "user_id",
-      sourceKey: "uuid",
+      foreignKey: "item_id",
+      sourceKey: "item_id",
+    });
+    items.hasMany(models.ratings, {
+      as: "ratings",
+      foreignKey: "item_id",
+      sourceKey: "item_id",
+    });
+    items.hasMany(models.carts, {
+      as: "carts",
+      foreignKey: "item_id",
+      sourceKey: "item_id",
     });
   };
 

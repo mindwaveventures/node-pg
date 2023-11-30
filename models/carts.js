@@ -1,8 +1,8 @@
 module.exports = function model(sequelize, types) {
-  const favourites = sequelize.define(
-    "favourites",
+  const carts = sequelize.define(
+    "carts",
     {
-      fav_id: {
+      cart_id: {
         type: types.UUID,
         defaultValue: types.UUIDV4,
         primarykey: true,
@@ -35,22 +35,22 @@ module.exports = function model(sequelize, types) {
     },
 
     {
-      tableName: "favourites",
-      timestamps: false,
+      tableName: "carts",
     }
   );
 
-  favourites.associate = function (models) {
-    favourites.belongsTo(models.users, {
+  carts.associate = function (models) {
+    carts.belongsTo(models.users, {
       as: "user",
       foreignKey: "user_id",
       targetKey: "user_id",
     });
-    favourites.belongsTo(models.items, {
+    carts.belongsTo(models.items, {
       as: "item",
       foreignKey: "item_id",
       targetKey: "item_id",
     });
   };
-  return favourites;
+
+  return carts;
 };
