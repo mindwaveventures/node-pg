@@ -1,11 +1,13 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
 
 const config = require('./config/config');
 // const pgClient = require('./pg-config');
 const { sequelize, models, Sequelize } = require('./config/sequelize-config');
 const helper = require('./services/helper');
+const { isAuthorised } = require('./middleware/middleware');
 const Op = Sequelize.Op;
 
 // create application/json parser
@@ -56,8 +58,14 @@ app.post('/login', async function (req, res) {
         const passwordMatch = await helper.comparePassword(req.body.password, usersFind.password);
 
         if (passwordMatch) {
+            const payload = {
+                uuid: usersFind.uuid,
+                name: usersFind.name,
+                username: usersFind.username,
+            };
+            const token = jwt.sign(payload, config.jwtSecret, { expiresIn: '1h' });
             return res.json({
-                usersFind
+                token
             });
         }
         return res.status(403).send('Not valid');
@@ -68,7 +76,26 @@ app.post('/login', async function (req, res) {
     }
 });
 
-app.get('/', async function (req, res) {
+app.get('/get-account', isAuthorised, async function (req, res) {
+    try {
+        const usersFind = await models.users.findOne({
+            attributes: ['name', 'username'],
+            where: {
+                uuid: req.query.userId || req.decoded.uuid
+            },
+            logging: true,
+        });
+        return res.json({
+            usersFind
+        });
+
+    } catch (error) {
+        console.log('\n error...', error);
+        return res.send(error);
+    }
+});
+
+app.get('/', isAuthorised, async function (req, res) {
     try {
         const usersFind = await models.users.findAndCountAll({
             attributes: ['name'],
