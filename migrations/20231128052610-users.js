@@ -20,6 +20,14 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue: ''
       },
+      username: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       status: {
         type: Sequelize.STRING,
         defaultValue: 'Active'

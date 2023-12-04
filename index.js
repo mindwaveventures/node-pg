@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const config = require('./config/config');
 // const pgClient = require('./pg-config');
 const { sequelize, models, Sequelize } = require('./config/sequelize-config');
+const helper = require('./services/helper');
 const Op = Sequelize.Op;
 
 // create application/json parser
@@ -18,7 +19,9 @@ app.use(urlencodedParser);
 
 app.post('/save-user', async function (req, res) {
     const usersCreate = await models.users.create({
-        name: req.body.name
+        name: req.body.name,
+        username: req.body.username,
+        password: req.body.password,
     });
 
     res.json({
@@ -39,6 +42,30 @@ app.patch('/update-user', async function (req, res) {
     res.json({
         usersUpdate
     });
+});
+
+app.post('/login', async function (req, res) {
+    try {
+        const usersFind = await models.users.findOne({
+            where: {
+                username: req.body.username
+            },
+            logging: true,
+        });
+
+        const passwordMatch = await helper.comparePassword(req.body.password, usersFind.password);
+
+        if (passwordMatch) {
+            return res.json({
+                usersFind
+            });
+        }
+        return res.status(403).send('Not valid');
+
+    } catch (error) {
+        console.log('\n error...', error);
+        return res.send(error);
+    }
 });
 
 app.get('/', async function (req, res) {
