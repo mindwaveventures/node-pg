@@ -58,17 +58,29 @@ const loginController = async (req, res) => {
     if (passwordMatch) {
       const payload = {
         user_id: searchUser.user_id,
-        first_name: searchUser.first_name,
         user_name: searchUser.user_name,
       };
-      const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "1h" });
+      const generated_token = jwt.sign(payload, config.jwtSecret, {
+        expiresIn: "1h",
+      });
+      const updateUser = await models.users.update(
+        {
+          token: generated_token,
+        },
+        {
+          where: {
+            id: searchUser.id,
+          },
+          returning: true,
+        }
+      );
       return res.json({
-        token,
+        updateUser,
       });
     }
     return res.status(403).json({ message: "Not valid" });
   } catch (error) {
-    return res.send(error);
+    return res.json({ message: error.message });
   }
 };
 
