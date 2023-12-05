@@ -1,86 +1,32 @@
-const { models, Sequelize } = require("../config/sequelize-config");
-
-const Op = Sequelize.Op;
+const jwt = require("jsonwebtoken");
+const { models } = require("../config/sequelize-config");
+const helper = require("../services/helper");
+const config = require("../config/config");
 
 const addUserController = async (req, res, next) => {
-  //   try {
-  //     console.log(
-  //       req.body.first_name,
-  //       req.body.last_name,
-  //       req.body.email,
-  //       req.body.user_name,
-  //       req.body.user_password,
-  //       req.body.phone_no
-  //     );
-  //     const addUser = await models.users.create({
-  //       first_name: req.body.first_name,
-  //       last_name: req.body.last_name,
-  //       email: req.body.email,
-  //       user_name: req.body.user_name,
-  //       user_password: req.body.user_password,
-  //       phone_no: req.body.phone_no,
-  //     });
-  //     if (addUser) {
-  //       res.json({
-  //         addUser,
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  const searchUser = await models.users.findAndCountAll({
-    attributes: ["email", "user_name"],
-    where: {
-      email: req.body.email,
-      user_name: req.body.user_name,
-    },
-    returning: true,
-  });
-
-  if (searchUser.count == 0) {
-    const addUser = await models.users.create({
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      email: req.body.email,
-      user_name: req.body.user_name,
-      user_password: req.body.user_password,
-      phone_no: req.body.phone_no,
-    });
-    res.json({
-      addUser,
-    });
-  } else {
-    return next({
-      status: 400,
-      message: "user already exits, check the email and username",
-    });
-  }
-};
-
-const updateUserController = async (req, res) => {
   try {
-    const updateUser = await models.users.update(
-      {
+    const searchUser = await models.users.findAll({
+      attributes: ["email", "user_name"],
+      where: { email: req.body.email, user_name: req.body.user_name },
+    });
+    if (searchUser.length == 0) {
+      const usersCreate = await models.users.create({
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         email: req.body.email,
         user_name: req.body.user_name,
         user_password: req.body.user_password,
         phone_no: req.body.phone_no,
-      },
-      {
-        where: {
-          user_id: req.params.id,
-        },
-        returning: true,
-      }
-    );
-
-    res.json({
-      updateUser,
-    });
+      });
+      res.json({
+        usersCreate,
+      });
+    } else {
+      return next({
+        status: 400,
+        message: "user already exits, check the email and username",
+      });
+    }
   } catch (error) {
     return res.send({
       message: error.errors.map((d) => d.message),
@@ -88,58 +34,104 @@ const updateUserController = async (req, res) => {
   }
 };
 
-// login
 const loginController = async (req, res, next) => {
   try {
-    const searchUser = await models.users.findAndCountAll({
-      //attributes: ["email", "user_name"],
+    const searchUser = await models.users.findOne({
       where: {
-        user_name: req.body.user_name,
-        user_password: req.body.user_password,
+        email: req.body.email,
+        //  user_password: req.body.user_password
       },
-      returning: true,
     });
-
-    if (searchUser.count == 0) {
+    if (searchUser === null) {
       return next({
         status: 400,
-        message: "user not found, check the email and username",
+        message: "invalid email and username",
       });
     } else {
-      res.json({
-        searchUser,
-      });
+      const passwordMatch = await helper.comparePassword(
+        req.body.user_password,
+        searchUser.user_password
+      );
+
+      if (passwordMatch) {
+        const payload = {
+          uuid: searchUser.uuid,
+          first_name: searchUser.first_name,
+          second_name: searchUser.second_name,
+          username: searchUser.username,
+        };
+        const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "1h" });
+        return res.json({
+          token,
+        });
+      }
+      return res.status(403).send("Not valid");
     }
   } catch (error) {
+    console.log("\n error...", error);
     return res.send(error);
   }
 };
 
-// view the account details
-const getAccountController = async (req, res, next) => {
-  //"select * from account_users au where id = $1";
+const accountViewController = async (req, res) => {
   try {
-    const getUserController = await models.users.findOne({
+    const searchUser = await models.users.findOne({
+      attributes: ["email", "user_name"],
       where: {
-        user_id: req.params.id,
+        id: req.params.id || req.decoded.id,
       },
-      returning: true,
+      logging: true,
     });
-
-    res.json({
-      getUserController,
+    return res.json({
+      searchUser,
     });
   } catch (error) {
-    return next({
-      status: 400,
-      message: "unknown user id",
-    });
+    console.log("\n error...", error);
+    return res.send(error);
   }
 };
 
+const updateController = async (req, res, next) => {
+  try {
+    const searchUser = await models.users.findOne({
+      where: { id: req.params.id },
+    });
+    if (searchUser === null) {
+      return next({
+        status: 400,
+        message: "user not found",
+      });
+    } else {
+      const updateUser = await models.users.update(
+        {
+          first_name: req.body.first_name,
+          last_name: req.body.last_name,
+          email: req.body.email,
+          user_name: req.body.user_name,
+          user_password: req.body.user_password,
+          phone_no: req.body.phone_no,
+        },
+        {
+          where: {
+            id: req.params.id,
+          },
+          returning: true,
+        }
+      );
+
+      res.json({
+        updateUser,
+      });
+    }
+  } catch (error) {
+    return res.send({
+      message: error.errors.map((d) => d.message),
+    });
+  }
+};
 module.exports = {
   addUserController,
-  updateUserController,
   loginController,
-  getAccountController,
+  accountViewController,
+  updateController,
 };
