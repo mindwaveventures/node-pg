@@ -9,5 +9,6 @@ router.use("/get-account", isAuthorised, getRouter);
 
 // //VIEW THE USER DATA
 getRouter.get("/account-details", getAccountController);
+getRouter.get("/user_id", getAccountController);
 
 module.exports = router;
