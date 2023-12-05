@@ -1,5 +1,5 @@
 const Joi = require("joi");
-
+const helper = require("../services/helper");
 const { models, Sequelize } = require("../config/sequelize-config");
 const Op = Sequelize.Op;
 
@@ -71,11 +71,14 @@ const loginController = async (req, res, next) => {
       //attributes: ["email", "user_name"],
       where: {
         user_name: req.body.user_name,
-        user_password: req.body.user_password,
       },
       returning: true,
     });
 
+    const passwordMatch = await helper.comparePassword(
+      req.body.user_password,
+      searchUser.user_password
+    );
     if (searchUser.count == 0) {
       return next({
         status: 400,
@@ -85,6 +88,9 @@ const loginController = async (req, res, next) => {
       res.json({
         searchUser,
       });
+    }
+    if (!passwordMatch) {
+      return res.status(403).send("Not valid");
     }
   } catch (error) {
     return res.send(error);
