@@ -56,9 +56,7 @@ module.exports = function model(sequelize, types) {
   Users.addHook("beforeUpdate", async (user) => {
     try {
       if (user.changed("user_password") && user.user_password) {
-        user.user_password = await commonService.hashPassword(
-          user.user_password
-        );
+        user.user_password = await helper.hashPassword(user.user_password);
       }
     } catch (error) {
       console.log("\n hash error on update password..", error);
