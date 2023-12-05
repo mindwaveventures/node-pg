@@ -1,5 +1,7 @@
 const Joi = require("joi");
 const helper = require("../services/helper");
+const jwt = require("jsonwebtoken");
+const config = require("../config/config");
 const { models, Sequelize } = require("../config/sequelize-config");
 const Op = Sequelize.Op;
 
@@ -65,9 +67,9 @@ const updateUserController = async (req, res) => {
 };
 
 // login
-const loginController = async (req, res, next) => {
+const loginController = async (req, res) => {
   try {
-    const searchUser = await models.users.findAndCountAll({
+    const searchUser = await models.users.findOne({
       //attributes: ["email", "user_name"],
       where: {
         user_name: req.body.user_name,
@@ -79,19 +81,18 @@ const loginController = async (req, res, next) => {
       req.body.user_password,
       searchUser.user_password
     );
-    if (searchUser.count == 0) {
-      return next({
-        status: 400,
-        message: "user not found, check the email and username",
-      });
-    } else {
-      res.json({
-        searchUser,
+    if (passwordMatch) {
+      const payload = {
+        user_id: searchUser.user_id,
+        first_name: searchUser.first_name,
+        user_name: searchUser.user_name,
+      };
+      const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "1h" });
+      return res.json({
+        token,
       });
     }
-    if (!passwordMatch) {
-      return res.status(403).send("Not valid");
-    }
+    return res.status(403).json({ message: "Not valid" });
   } catch (error) {
     return res.send(error);
   }

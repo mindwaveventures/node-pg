@@ -36,3 +36,15 @@ createdAt TIMESTAMP default current_timestamp
 ## sequalize
 
 - [sequalize-website](https://sequelize.org/docs/v6/getting-started/#promises-and-asyncawait)
+
+# JSON WEB TOKEN
+
+- dependent libraries to generate token.
+
+````
+npm install jsonwebtoken --save
+npm install bcryptjs --save
+```
+- bcryptjs - hashing method
+- jsonwebtoken The jwt.sign() method takes a payload and the secret key defined in config.js as parameters. It creates a unique string of characters representing the payload.
+````
