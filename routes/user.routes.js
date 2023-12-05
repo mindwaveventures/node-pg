@@ -6,7 +6,6 @@ const {
   addUserController,
   updateUserController,
   loginController,
-  getAccountController,
 } = require("../controllers/user.controller");
 const { validate } = require("../middlewares/validate.middleware");
 const {
@@ -18,12 +17,9 @@ const {
 router.post("/signup", validate(signUpSchema), addUserController);
 
 // //LOGIN
-router.get("/login", loginController);
+router.post("/login", loginController);
 
 // //UPDATE USER DATA
 router.put("/user/:id", validate(updateUserSchema), updateUserController);
-
-// //VIEW THE USER DATA
-router.get("/get-account", isAuthorised, getAccountController);
 
 module.exports = router;
