@@ -54,10 +54,10 @@ const loginController = async (req, res, next) => {
 
       if (passwordMatch) {
         const payload = {
-          uuid: searchUser.uuid,
+          id: searchUser.id,
           first_name: searchUser.first_name,
-          second_name: searchUser.second_name,
-          username: searchUser.username,
+          last_name: searchUser.last_name,
+          user_name: searchUser.user_name,
         };
         const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "1h" });
         return res.json({

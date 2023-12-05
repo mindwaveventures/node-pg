@@ -1,3 +1,21 @@
+const { models, Sequelize } = require("../config/sequelize-config");
+const Op = Sequelize.Op;
+
+const addfavoritescontroller = async (req, res) => {
+  try {
+    const favouriteCreate = await models.favourites.create({
+      user_id: req.body.user_id,
+      item_id: req.body.item_id,
+    });
+    return res.json({
+      favouriteCreate,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.send(error);
+  }
+};
+
 const getFavController = async (req, res) => {
   try {
     if (!req.query.user_id) {
@@ -35,4 +53,8 @@ const getFavController = async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
+};
+module.exports = {
+  getFavController,
+  addfavoritescontroller,
 };

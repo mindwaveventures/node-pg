@@ -1,17 +1,16 @@
 const { models, Sequelize } = require("../config/sequelize-config");
 
 const overallRatingController = async (req, res) => {
-  const ratings = await models.rating.findAndCountAll({
+  const ratings = await models.rating.findAll({
     attributes: [
-      "item_id",
       [Sequelize.fn("AVG", Sequelize.col("ratingValue")), "overall_rating"],
     ],
     group: ["item_id"],
   });
 
   res.json({
-    rows: ratings,
-    count: ratings.length,
+    ratings,
+    // count: ratings.length,
   });
 };
 

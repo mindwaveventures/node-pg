@@ -10,6 +10,9 @@ const ratingRouter = require("./routes/rating.routes");
 const config = require("./config/config");
 // const pgClient = require('./pg-config');
 const { sequelize, models, Sequelize } = require("./config/sequelize-config");
+const { errorHandler } = require("./middlewares/errorHandler.middleware");
+const favRouter = require("./routes/favourites.routes");
+const purcharseRouter = require("./routes/purchase.routes");
 const Op = Sequelize.Op;
 
 // create application/json parser
@@ -23,6 +26,8 @@ app.use(urlencodedParser);
 app.use("/", Router);
 app.use("/", itemRouter);
 app.use("/", ratingRouter);
+app.use("/", favRouter);
+app.use("/", purcharseRouter);
 
 app.post("/save-user", async function (req, res) {
   const usersCreate = await models.users.create({
@@ -95,6 +100,7 @@ app.get("/", async function (req, res) {
 //     count: pgRes.rowCount,
 //   });
 // });
+app.use(errorHandler);
 
 app.listen(config.port, config.host, () => {
   console.log(`Server running at http://${config.host}:${config.port}/`);
