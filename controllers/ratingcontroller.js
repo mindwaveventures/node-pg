@@ -1,13 +1,17 @@
 const { models, Sequelize } = require("../config/sequelize-config");
 
 const overallRatingController = async (req, res) => {
-  const pgRes = await pgClient.query(
-    "select item_id,AVG(rating) AS overall_rating from ratings GROUP by item_id;"
-  );
+  const ratings = await models.rating.findAndCountAll({
+    attributes: [
+      "item_id",
+      [Sequelize.fn("AVG", Sequelize.col("ratingValue")), "overall_rating"],
+    ],
+    group: ["item_id"],
+  });
 
   res.json({
-    rows: pgRes.rows,
-    count: pgRes.rowCount,
+    rows: ratings,
+    count: ratings.length,
   });
 };
 

@@ -1,4 +1,7 @@
-const { models, Sequelize } = require("../config/sequelize-config");
+const jwt = require("jsonwebtoken");
+const { models } = require("../config/sequelize-config");
+const helper = require("../services/helper");
+const config = require("../config/config");
 
 const addUserController = async (req, res, next) => {
   try {
@@ -34,7 +37,9 @@ const addUserController = async (req, res, next) => {
 const loginController = async (req, res, next) => {
   try {
     const searchUser = await models.users.findOne({
-      where: { email: req.body.email, user_password: req.body.user_password },
+      where: {
+        email: req.body.email,
+      },
     });
     if (searchUser === null) {
       return next({
@@ -43,8 +48,8 @@ const loginController = async (req, res, next) => {
       });
     } else {
       const passwordMatch = await helper.comparePassword(
-        req.body.password,
-        usersFind.password
+        req.body.user_password,
+        searchUser.user_password
       );
 
       if (passwordMatch) {
@@ -62,31 +67,25 @@ const loginController = async (req, res, next) => {
       return res.status(403).send("Not valid");
     }
   } catch (error) {
-    return res.send({
-      message: error.errors.map((d) => d.message),
-    });
+    console.log("\n error...", error);
+    return res.send(error);
   }
 };
 
-const accountViewController = async (req, res, next) => {
+const accountViewController = async (req, res) => {
   try {
     const searchUser = await models.users.findOne({
-      where: { id: req.params.id },
+      where: {
+        id: req.params.id || req.decoded.id,
+      },
+      logging: true,
     });
-    if (searchUser === null) {
-      return next({
-        status: 400,
-        message: "user not found",
-      });
-    } else {
-      res.json({
-        searchUser,
-      });
-    }
+    return res.json({
+      searchUser,
+    });
   } catch (error) {
-    return res.send({
-      message: error.errors.map((d) => d.message),
-    });
+    console.log("\n error...", error);
+    return res.send(error);
   }
 };
 
