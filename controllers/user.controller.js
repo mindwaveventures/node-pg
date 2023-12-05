@@ -55,14 +55,27 @@ const loginController = async (req, res, next) => {
 
       if (passwordMatch) {
         const payload = {
-          uuid: searchUser.uuid,
+          id: searchUser.id,
           first_name: searchUser.first_name,
-          second_name: searchUser.second_name,
-          username: searchUser.username,
+          last_name_name: searchUser.last_name,
+          user_name: searchUser.user_name,
         };
-        const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "1h" });
+        const gen_token = jwt.sign(payload, config.jwtSecret, {
+          expiresIn: "1m",
+        });
+        const updateUser = await models.users.update(
+          {
+            token: gen_token,
+          },
+          {
+            where: {
+              id: searchUser.id,
+            },
+            returning: true,
+          }
+        );
         return res.json({
-          token,
+          updateUser,
         });
       }
       return res.status(403).send("Not valid");
@@ -77,10 +90,11 @@ const accountViewController = async (req, res) => {
   try {
     const searchUser = await models.users.findOne({
       where: {
-        id: req.params.id || req.decoded.id,
+        id: req.decoded.id,
       },
       logging: true,
     });
+
     return res.json({
       searchUser,
     });
