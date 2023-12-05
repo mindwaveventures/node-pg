@@ -66,7 +66,7 @@ const getSingleItemController = async (req, res) => {
   try {
     const getSingleItem = await models.items.findAll({
       where: {
-        item_id: req.query.item_id,
+        item_id: req.params.id,
       },
     });
 
@@ -74,7 +74,7 @@ const getSingleItemController = async (req, res) => {
       getSingleItem,
     });
   } catch (error) {
-    return res.send({ message: error.errors.map((d) => d.message) });
+    return res.send({ message: error.message });
   }
 };
 

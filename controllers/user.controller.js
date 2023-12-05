@@ -8,12 +8,11 @@ const Op = Sequelize.Op;
 const addUserController = async (req, res, next) => {
   try {
     const searchUser = await models.users.findAndCountAll({
-      attributes: ["email", "user_name"],
       where: {
         email: req.body.email,
         user_name: req.body.user_name,
       },
-      returning: true,
+      logging: true,
     });
 
     if (searchUser.count == 0) {
