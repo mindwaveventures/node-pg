@@ -1,4 +1,7 @@
-const { models, Sequelize } = require("../config/sequelize-config");
+const jwt = require("jsonwebtoken");
+const { models } = require("../config/sequelize-config");
+const helper = require("../services/helper");
+const config = require("../config/config");
 
 const addUserController = async (req, res, next) => {
   try {
@@ -34,7 +37,10 @@ const addUserController = async (req, res, next) => {
 const loginController = async (req, res, next) => {
   try {
     const searchUser = await models.users.findOne({
-      where: { email: req.body.email, user_password: req.body.user_password },
+      where: {
+        email: req.body.email,
+        //  user_password: req.body.user_password
+      },
     });
     if (searchUser === null) {
       return next({
@@ -42,36 +48,45 @@ const loginController = async (req, res, next) => {
         message: "invalid email and username",
       });
     } else {
-      res.json({
-        searchUser,
-      });
+      const passwordMatch = await helper.comparePassword(
+        req.body.user_password,
+        searchUser.user_password
+      );
+
+      if (passwordMatch) {
+        const payload = {
+          uuid: searchUser.uuid,
+          first_name: searchUser.first_name,
+          second_name: searchUser.second_name,
+          username: searchUser.username,
+        };
+        const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "1h" });
+        return res.json({
+          token,
+        });
+      }
+      return res.status(403).send("Not valid");
     }
   } catch (error) {
-    return res.send({
-      message: error.errors.map((d) => d.message),
-    });
+    console.log("\n error...", error);
+    return res.send(error);
   }
 };
 
-const accountViewController = async (req, res, next) => {
+const accountViewController = async (req, res) => {
   try {
     const searchUser = await models.users.findOne({
-      where: { id: req.params.id },
+      where: {
+        id: req.params.id || req.decoded.id,
+      },
+      logging: true,
     });
-    if (searchUser === null) {
-      return next({
-        status: 400,
-        message: "user not found",
-      });
-    } else {
-      res.json({
-        searchUser,
-      });
-    }
+    return res.json({
+      searchUser,
+    });
   } catch (error) {
-    return res.send({
-      message: error.errors.map((d) => d.message),
-    });
+    console.log("\n error...", error);
+    return res.send(error);
   }
 };
 
