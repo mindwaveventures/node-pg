@@ -1,7 +1,5 @@
 "use strict";
 
-const { sequelize } = require("../config/sequelize-config");
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("purchases", {
@@ -43,11 +41,11 @@ module.exports = {
         onUpdate: "CASCADE",
       },
       date_of_order: {
-        type: sequelize.DATE,
-        defaultValue: sequelize.NOW,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
       },
       order_status: {
-        type: sequelize.STRING,
+        type: Sequelize.STRING,
         allowNull: false,
       },
     });

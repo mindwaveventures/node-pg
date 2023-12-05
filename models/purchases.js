@@ -1,3 +1,5 @@
+const { DataTypes } = require("sequelize");
+
 module.exports = function model(sequelize, types) {
   const purchases = sequelize.define(
     "purchases",
@@ -33,8 +35,8 @@ module.exports = function model(sequelize, types) {
         onUpdate: "CASCADE",
       },
       date_of_order: {
-        type: types.DATE,
-        defaultValue: types.NOW,
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
       },
       order_status: {
         type: types.STRING,

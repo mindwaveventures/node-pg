@@ -37,6 +37,10 @@ module.exports = function model(sequelize, types) {
         type: types.STRING,
         defaultValue: "",
       },
+      token: {
+        type: types.STRING,
+        defaultValue: "",
+      },
     },
     {
       tableName: "users",
