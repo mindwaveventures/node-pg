@@ -163,7 +163,34 @@ app.post("/login", async function (req, res) {
     return res.send(error);
   }
 });
+//updating the userData
+app.put("/user/:id", async function (req, res) {
+  try {
+    const updateUser = await models.users.update(
+      {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        user_name: req.body.user_name,
+        user_password: req.body.user_password,
+        phone_no: req.body.phone_no,
+      },
+      {
+        where: {
+          user_id: req.params.id,
+        },
+        returning: true,
+      }
+    );
 
+    res.json({
+      updateUser,
+    });
+  } catch (error) {
+    console.log("\n error...", error);
+    return res.send(error);
+  }
+});
 app.get("/get-account", isAuthorised, async function (req, res) {
   try {
     const usersFind = await models.users.findOne({
