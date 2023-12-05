@@ -1,7 +1,7 @@
 const validate = (schema) => (req, res, next) => {
   const { value, error } = schema.validate(req.body);
-  console.log(req.body);
-  console.log("value", value);
+  // console.log(req.body);
+  // console.log("value", value);
   if (error) {
     return next({
       status: 400,
@@ -9,7 +9,7 @@ const validate = (schema) => (req, res, next) => {
     });
   }
   req.xop = value;
-  console.log("req.xop", req.xop);
+  //console.log("req.xop", req.xop);
   next();
 };
 

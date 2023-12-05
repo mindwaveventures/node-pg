@@ -8,7 +8,7 @@ const {
   addUserController,
   loginController,
   accountViewController,
-  updateController,
+  updateUserController,
 } = require("../controllers/users.controller");
 const { validate } = require("../middlewares/validate.middleware");
 const { isAuthorised } = require("../middlewares/authorisation.middleware");
@@ -20,6 +20,6 @@ router.post("/login", validate(loginSchema), loginController);
 
 router.get("/user/:id", isAuthorised, accountViewController);
 
-router.patch("/user/:id", validate(updateSchema), updateController);
+router.patch("/user/:id", validate(updateSchema), updateUserController);
 
 module.exports = router;

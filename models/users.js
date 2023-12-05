@@ -77,15 +77,28 @@ module.exports = function model(sequelize, types) {
       console.log("\n save password hash error...", error);
     }
   });
+  // Users.addHook("beforeUpdate", async (user) => {
+  //   try {
+  //     if (user.changed("user.user_password") && user.user_password) {
+  //       // user.user_password = await commonService.hashPassword(
+  //       //   user.user_password
+  //       // );
+  //       user.user_password = await helper.hashPassword(user.user_password);
+  //     }
+  //   } catch (error) {
+  //     console.log("\n update password hash error...", error);
+  //   }
+  // });
+
   Users.addHook("beforeUpdate", async (user) => {
+    console.log("Update user", user);
     try {
-      if (user.changed("password") && user.user_password) {
-        user.user_password = await commonService.hashPassword(
-          user.user_password
-        );
+      if (user.changed("user_password") && user.user_password) {
+        user.user_password = await helper.hashPassword(user.user_password);
+        console.log("Update user password", user.user_password);
       }
     } catch (error) {
-      console.log("\n update password hash error...", error);
+      console.log("\n Update user_password hash error:", error);
     }
   });
 

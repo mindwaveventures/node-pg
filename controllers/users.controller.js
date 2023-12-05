@@ -55,10 +55,11 @@ const loginController = async (req, res, next) => {
 
       if (passwordMatch) {
         const payload = {
-          uuid: searchUser.uuid,
+          id: searchUser.id,
+          user_id: searchUser.user_id,
           first_name: searchUser.first_name,
-          second_name: searchUser.second_name,
-          username: searchUser.username,
+          last_name: searchUser.last_name,
+          user_name: searchUser.user_name,
         };
         const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "1h" });
         return res.json({
@@ -73,12 +74,30 @@ const loginController = async (req, res, next) => {
   }
 };
 
+// const accountViewController = async (req, res) => {
+//   try {
+//     const searchUser = await models.users.findOne({
+//       attributes: ["email", "user_name"],
+//       where: {
+//         id: req.params.id || req.decoded.id,
+//       },
+//       logging: true,
+//     });
+//     return res.json({
+//       searchUser,
+//     });
+//   } catch (error) {
+//     console.log("\n error...", error);
+//     return res.send(error);
+//   }
+// };
+
 const accountViewController = async (req, res) => {
   try {
     const searchUser = await models.users.findOne({
       attributes: ["email", "user_name"],
       where: {
-        id: req.params.id || req.decoded.id,
+        id: req.decoded.id,
       },
       logging: true,
     });
@@ -91,7 +110,7 @@ const accountViewController = async (req, res) => {
   }
 };
 
-const updateController = async (req, res, next) => {
+const updateUserController = async (req, res, next) => {
   try {
     const searchUser = await models.users.findOne({
       where: { id: req.params.id },
@@ -102,7 +121,7 @@ const updateController = async (req, res, next) => {
         message: "user not found",
       });
     } else {
-      const updateUser = await models.users.update(
+      const [rowsUpdated, [updatedUser]] = await models.users.update(
         {
           first_name: req.body.first_name,
           last_name: req.body.last_name,
@@ -120,18 +139,38 @@ const updateController = async (req, res, next) => {
       );
 
       res.json({
-        updateUser,
+        updatedUser,
       });
     }
   } catch (error) {
-    return res.send({
-      message: error.errors.map((d) => d.message),
-    });
+    console.log("\n error...", error);
+    return res.send(error);
   }
 };
 module.exports = {
   addUserController,
   loginController,
   accountViewController,
-  updateController,
+  updateUserController,
 };
+
+// Inside updateController
+// const updateUser = async (req, res) => {
+//   const userId = req.params.id;
+//   const updatedUserData = req.body;
+
+//   try {
+//     // Assuming User is your Sequelize model
+//     const [rowsUpdated, [updatedUser]] = await User.update(updatedUserData, {
+//       where: { id: userId },
+//       returning: true,
+//     });
+
+//     // Handle the response or send it back to the client
+//     res.json(updatedUser);
+//   } catch (error) {
+//     // Handle errors
+//     console.error("Update error:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
