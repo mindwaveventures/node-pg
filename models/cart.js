@@ -1,13 +1,15 @@
+const { DataTypes } = require("sequelize");
 module.exports = function model(sequelize, types) {
-  const favourites = sequelize.define(
-    "favourites",
+  const Cart = sequelize.define(
+    "cart",
     {
-      fav_id: {
+      cart_items_id: {
         type: types.UUID,
         defaultValue: types.UUIDV4,
         primarykey: true,
         unique: true,
       },
+
       user_id: {
         type: types.UUID,
         references: {
@@ -32,23 +34,23 @@ module.exports = function model(sequelize, types) {
       },
     },
     {
-      tableName: "favourites",
+      tableName: "cart",
       timestamps: false,
     }
   );
 
-  favourites.associate = function (models) {
-    favourites.belongsTo(models.items, {
-      as: "favourite_items",
-      foreignKey: "item_id",
-      sourceKey: "item_id",
+  Cart.associate = function (models) {
+    Cart.belongsTo(models.users, {
+      as: "users",
+      foreignKey: "user_id",
+      targetKey: "user_id",
     }),
-      favourites.belongsTo(models.users, {
-        as: "favourite_items_user",
-        foreignKey: "user_id",
-        sourceKey: "user_id",
+      Cart.belongsTo(models.items, {
+        as: "items",
+        foreignKey: "item_id",
+        targetKey: "item_id",
       });
   };
 
-  return favourites;
+  return Cart;
 };

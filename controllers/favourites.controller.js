@@ -1,5 +1,5 @@
 const config = require("../config/config");
-const { sequelize, models, Sequelize } = require("../config/sequelize-config");
+const { models, Sequelize } = require("../config/sequelize-config");
 const Op = Sequelize.Op;
 
 const addfavoritescontroller = async (req, res) => {

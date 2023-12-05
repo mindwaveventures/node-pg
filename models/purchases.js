@@ -1,13 +1,16 @@
+const { DataTypes } = require("sequelize");
+
 module.exports = function model(sequelize, types) {
-  const favourites = sequelize.define(
-    "favourites",
+  const Purchases = sequelize.define(
+    "purchases",
     {
-      fav_id: {
+      purchases_id: {
         type: types.UUID,
         defaultValue: types.UUIDV4,
         primarykey: true,
         unique: true,
       },
+
       user_id: {
         type: types.UUID,
         references: {
@@ -30,25 +33,33 @@ module.exports = function model(sequelize, types) {
         allowNull: false,
         onDelete: "CASCADE",
       },
+      status: {
+        type: types.STRING,
+        allowNull: false,
+      },
+      date_of_order: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
     },
     {
-      tableName: "favourites",
+      tableName: "purchases",
       timestamps: false,
     }
   );
 
-  favourites.associate = function (models) {
-    favourites.belongsTo(models.items, {
-      as: "favourite_items",
+  Purchases.associate = function (models) {
+    Purchases.belongsTo(models.users, {
+      as: "users",
+      foreignKey: "user_id",
+      targetKey: "user_id",
+    });
+    Purchases.belongsTo(models.items, {
+      as: "items",
       foreignKey: "item_id",
-      sourceKey: "item_id",
-    }),
-      favourites.belongsTo(models.users, {
-        as: "favourite_items_user",
-        foreignKey: "user_id",
-        sourceKey: "user_id",
-      });
+      targetKey: "item_id",
+    });
   };
 
-  return favourites;
+  return Purchases;
 };

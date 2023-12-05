@@ -28,11 +28,6 @@ module.exports = function model(sequelize, types) {
 
     {
       tableName: "items",
-      // defaultScope: {
-      //     where: {
-      //         status: 'Active'
-      //     }
-      // }
     }
   );
 

@@ -1,6 +1,7 @@
 const config = require("../config/config");
-const { sequelize, models, Sequelize } = require("../config/sequelize-config");
-const Op = Sequelize.Op;
+const { models } = require("../config/sequelize-config");
+const helper = require("../services/helper");
+const jwt = require("jsonwebtoken");
 
 const addUserController = async (req, res) => {
   const searchUser = await models.users.findAndCountAll({
@@ -68,11 +69,9 @@ const updateUserController = async (req, res) => {
 // login
 const loginController = async (req, res, next) => {
   try {
-    const searchUser = await models.users.findAndCountAll({
-      //attributes: ["email", "user_name"],
+    const searchUser = await models.users.findOne({
       where: {
         user_name: req.body.user_name,
-        user_password: req.body.user_password,
       },
       returning: true,
     });
@@ -83,9 +82,23 @@ const loginController = async (req, res, next) => {
         message: "user not found, check the email and username",
       });
     } else {
-      res.json({
-        searchUser,
-      });
+      const passwordMatch = await helper.comparePassword(
+        req.body.user_password,
+        searchUser.user_password
+      );
+
+      if (passwordMatch) {
+        const payload = {
+          user_id: searchUser.user_id,
+          first_name: searchUser.first_name,
+          user_name: searchUser.user_name,
+        };
+        const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "1h" });
+        return res.json({
+          token,
+        });
+      }
+      return res.status(403).send("Not valid");
     }
   } catch (error) {
     return res.send(error);
@@ -94,23 +107,20 @@ const loginController = async (req, res, next) => {
 
 // view the account details
 const getAccountController = async (req, res, next) => {
-  //"select * from account_users au where id = $1";
   try {
-    const getUserController = await models.users.findOne({
+    const usersFind = await models.users.findOne({
+      attributes: ["email", "user_name"],
       where: {
-        user_id: req.params.id,
+        user_id: req.query.user_id || req.decoded.user_id,
       },
-      returning: true,
+      logging: true,
     });
-
-    res.json({
-      getUserController,
+    return res.json({
+      usersFind,
     });
   } catch (error) {
-    return next({
-      status: 400,
-      message: "unknown user id",
-    });
+    console.log("\n error...", error);
+    return res.send(error);
   }
 };
 

@@ -30,8 +30,6 @@ Then execute whatever command you need
 
 - To downgrade the specific db
 
-  `npx sequelize-cli db:migrate:undo --name <file name>`
-
 - To downgrade the migration untill specific file
 
   `npx sequelize-cli db:migrate:undo:all --to <file name>`
@@ -73,3 +71,10 @@ for more info visit [Documentation](http://docs.sequelizejs.com/manual/tutorial/
 ## Start
 
 `npm start`
+
+## On delete Cascade
+
+`
+drop table if exists table_name cascade
+
+`

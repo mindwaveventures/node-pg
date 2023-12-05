@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { isAuthorised } = require("../middlewares/authorisation.middleware");
 
 const {
   addUserController,
@@ -14,7 +15,7 @@ const {
 } = require("../validations/authentication.schema");
 
 //CREATE USER ACCOUNT
-router.post("/signup", addUserController);
+router.post("/signup", validate(signUpSchema), addUserController);
 
 // //LOGIN
 router.get("/login", loginController);
@@ -23,6 +24,6 @@ router.get("/login", loginController);
 router.put("/user/:id", validate(updateUserSchema), updateUserController);
 
 // //VIEW THE USER DATA
-router.get("/user/:id", getAccountController);
+router.get("/get-account", isAuthorised, getAccountController);
 
 module.exports = router;

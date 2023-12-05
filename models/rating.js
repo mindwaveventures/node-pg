@@ -37,12 +37,6 @@ module.exports = function model(sequelize, types) {
     {
       tableName: "rating",
       timestamps: false,
-
-      // defaultScope: {
-      //     where: {
-      //         status: 'Active'
-      //     }
-      // }
     }
   );
 
