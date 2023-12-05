@@ -129,7 +129,61 @@ const SearchItemNamecontroller = async (req, res) => {
     });
   }
 };
+const sortItemPriceController = async (req, res) => {
+  try {
+    const { sortOrder } = req.query;
+
+    if (sortOrder && (sortOrder === "asc" || sortOrder === "desc")) {
+      const items = await models.items.findAll({
+        order: [["price", sortOrder]],
+      });
+
+      return res.json({
+        items,
+      });
+    } else {
+      return res.status(400).json({
+        error: 'Invalid sortOrder parameter. Use "asc" or "desc".',
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.send(error);
+  }
+};
+const sortItemNameController = async (req, res) => {
+  try {
+    const { sortOrder } = req.query;
+
+    if (
+      sortOrder &&
+      (sortOrder.toLowerCase() === "asc" || sortOrder.toLowerCase() === "desc")
+    ) {
+      const items = await models.items.findAll({
+        order: [["item_name", sortOrder.toUpperCase()]],
+      });
+
+      return res.json({
+        items,
+      });
+    } else {
+      return res.status(400).json({
+        error: 'Invalid sortOrder parameter. Use "asc" or "desc".',
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.send(error);
+  }
+};
+
 module.exports = {
   addItemController,
   updateitemController,
+  getallitemcontroller,
+  getbysingleitemcontroller,
+  filterItemPricecontroller,
+  SearchItemNamecontroller,
+  sortItemNameController,
+  sortItemPriceController,
 };
