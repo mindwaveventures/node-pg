@@ -2,6 +2,11 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 
+// router
+const Router = require("./routes/users.routes");
+const itemRouter = require("./routes/items.routes");
+const ratingRouter = require("./routes/rating.routes");
+
 const config = require("./config/config");
 // const pgClient = require('./pg-config');
 const { sequelize, models, Sequelize } = require("./config/sequelize-config");
@@ -15,6 +20,9 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(jsonParser);
 app.use(urlencodedParser);
+app.use("/", Router);
+app.use("/", itemRouter);
+app.use("/", ratingRouter);
 
 app.post("/save-user", async function (req, res) {
   const usersCreate = await models.users.create({
@@ -76,28 +84,17 @@ app.get("/", async function (req, res) {
   }
 });
 
-app.delete("/remove", async function (req, res) {
-  const pgRes = await pgClient.query(
-    "DELETE from users where userid=$1 RETURNING userid",
-    [req.query.userid]
-  );
+// app.delete("/remove", async function (req, res) {
+//   const pgRes = await pgClient.query(
+//     "DELETE from users where userid=$1 RETURNING userid",
+//     [req.query.userid]
+//   );
 
-  res.json({
-    rows: pgRes.rows,
-    count: pgRes.rowCount,
-  });
-});
-
-const overallRatingController = async (req, res) => {
-  const pgRes = await pgClient.query(
-    "select item_id,AVG(rating) AS overall_rating from ratings GROUP by item_id;"
-  );
-
-  res.json({
-    rows: pgRes.rows,
-    count: pgRes.rowCount,
-  });
-};
+//   res.json({
+//     rows: pgRes.rows,
+//     count: pgRes.rowCount,
+//   });
+// });
 
 app.listen(config.port, config.host, () => {
   console.log(`Server running at http://${config.host}:${config.port}/`);
