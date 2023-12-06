@@ -10,6 +10,6 @@ const { listController } = require("../controllers/purchases.controller");
 
 router.post("/add-Purchases", validate(buyItemSchema), purchasesController);
 router.get("/listBoughtItems/:user_id", listController);
-router.post("/status", updateStatusController);
+router.patch("/status", updateStatusController);
 
 module.exports = router;

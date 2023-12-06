@@ -6,35 +6,58 @@ const cancelListController = async (req, res) => {
     if (!req.query.user_id) {
       return res.status(400).json({ error: "Please provide a user_id" });
     }
+    let sortPrice;
+    let whereQuery = {};
+    let orderQuery = [];
 
-    const purchases = await models.purchases.findAll({
+    //search by item_name
+    if (req.query.search) {
+      console.log("search");
+      whereQuery.item_name = {
+        [Op.iLike]: `%${req.query.search}%`,
+      };
+    }
+    // sort by price
+    if (req.query.sortPrice) {
+      sortPrice = req.query.sortPrice;
+      console.log("sortPrice", sortPrice);
+      orderQuery.push(["price", sortPrice]);
+    }
+    // filter price
+    if (req.query.priceRange) {
+      const priceRanges = req.query.priceRange.split("-");
+      const minPrice = parseFloat(priceRanges[0]);
+      const maxPrice = parseFloat(priceRanges[1]);
+      whereQuery.item_price = {
+        [Op.between]: [minPrice, maxPrice],
+      };
+    }
+    const list = await models.purchases.findAll({
+      where: {
+        user_id: req.query.user_id,
+        status: "Cancelled",
+      },
+      order: [
+        [models.items, "price", sortPrice ? sortPrice : "DESC"],
+        [models.items, "price", sortPrice ? sortPrice : "ASC"],
+      ],
+      logging: true,
       include: [
         {
           as: "items",
-
           model: models.items,
-          where: { item_id: Sequelize.col("purcharses.item_id") },
-          attributes: ["item_name"],
+          right: true,
+          where: whereQuery,
         },
       ],
-      where: {
-        status: "Cancelled",
-        user_id: req.query.user_id,
-        "$items.item_name$": {
-          [Op.iLike]: `%${req.query.search || ""}%`,
-        },
-      },
-      order: [["items.price", req.query.sortOrder ? "DESC" : "ASC"]],
-      attributes: ["purchases_id", "status"],
     });
 
-    res.json({
-      rows: purchases,
-      count: purchases.length,
+    return res.json({
+      list,
     });
   } catch (error) {
     console.log(error);
-    res.send(error);
+    return res.send(error);
   }
 };
 module.exports = { cancelListController };
