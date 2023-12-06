@@ -16,6 +16,7 @@ const ratingRouter = require("./routes/rating.routes");
 const userRouter = require("./routes/users.routes");
 const itemRoutes = require("./routes/items.routes");
 const cartRoutes = require("./routes/cart.routes");
+const favsRoutes = require("./routes/favs.routes");
 app.use(jsonParser);
 app.use(urlencodedParser);
 
@@ -81,6 +82,7 @@ app.use("/", itemRoutes);
 app.use("/", ratingRouter);
 app.use("/", cartRoutes);
 app.use("/", purchasesRouter);
+app.use("/", favsRoutes);
 app.use(notfound);
 app.use(errorHandler);
 app.listen(config.port, config.host, () => {

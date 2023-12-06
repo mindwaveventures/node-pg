@@ -24,7 +24,7 @@ const itemaddSchema = Joi.object({
 const updateitemSchema = Joi.object({
   item_name: Joi.string().required(),
   item_content: Joi.string().required(),
-  item_id: Joi.number().required(),
+  item_id: Joi.string().required(),
 });
 
 module.exports = {

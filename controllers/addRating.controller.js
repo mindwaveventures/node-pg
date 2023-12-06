@@ -1,5 +1,6 @@
 const config = require("../config/config");
 const { sequelize, models, Sequelize } = require("../config/sequelize-config");
+const rating = require("../models/rating");
 
 const addRatingController = async (req, res) => {
   try {
@@ -16,4 +17,20 @@ const addRatingController = async (req, res) => {
     return res.send(error);
   }
 };
-module.exports = { addRatingController };
+
+const overallRatingController = async (req, res) => {
+  const ratings = await models.rating.findAll({
+    attributes: [
+      [Sequelize.fn("AVG", Sequelize.col("ratingValue")), "overall_rating"],
+      "item_id",
+    ],
+    group: ["item_id"],
+  });
+
+  res.json({
+    ratings,
+    // count: ratings.length,
+  });
+};
+
+module.exports = { addRatingController, overallRatingController };
