@@ -1,8 +1,8 @@
 module.exports = function model(sequelize, types) {
   const favourites = sequelize.define(
-    "rating",
+    "favourites",
     {
-      rating_id: {
+      fav_id: {
         type: types.UUID,
         defaultValue: types.UUIDV4,
         primarykey: true,
@@ -30,12 +30,9 @@ module.exports = function model(sequelize, types) {
         allowNull: false,
         onDelete: "CASCADE",
       },
-      rating: {
-        type: types.INTEGER,
-      },
     },
     {
-      tableName: "rating",
+      tableName: "favourites",
       timestamps: false,
     }
   );

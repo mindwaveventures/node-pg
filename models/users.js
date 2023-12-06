@@ -1,14 +1,21 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 const helper = require("../services/helper");
 
 =======
 const { DataTypes } = require("sequelize");
 const helper = require("../services/helper");
 >>>>>>> origin/priyavarshini-sequelize
+=======
+const helper = require("../services/helper");
+const bcrypt = require("bcryptjs");
+
+>>>>>>> origin/karthickeyan-node-sequalize
 module.exports = function model(sequelize, types) {
   const Users = sequelize.define(
     "users",
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
       //         uuid: {
@@ -34,6 +41,8 @@ module.exports = function model(sequelize, types) {
       //         // }
 
 >>>>>>> origin/priyavarshini-sequelize
+=======
+>>>>>>> origin/karthickeyan-node-sequalize
       user_id: {
         type: types.UUID,
         defaultValue: types.UUIDV4,
@@ -43,10 +52,14 @@ module.exports = function model(sequelize, types) {
       first_name: {
         type: types.STRING,
 <<<<<<< HEAD
+<<<<<<< HEAD
         defaultValue: "",
 =======
         allowNull: false,
 >>>>>>> origin/priyavarshini-sequelize
+=======
+        defaultValue: "",
+>>>>>>> origin/karthickeyan-node-sequalize
       },
       last_name: {
         type: types.STRING,
@@ -54,19 +67,19 @@ module.exports = function model(sequelize, types) {
       },
       user_name: {
         type: types.STRING,
-        allowNull: false,
-        unique: true,
+        defaultValue: "",
       },
       email: {
         type: types.STRING,
-        allowNull: false,
+        defaultValue: "",
       },
       user_password: {
         type: types.STRING,
-        allowNull: false,
+        defaultValue: "",
       },
       phone_no: {
         type: types.STRING,
+<<<<<<< HEAD
 <<<<<<< HEAD
         defaultValue: "",
       },
@@ -78,6 +91,9 @@ module.exports = function model(sequelize, types) {
       created_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
+=======
+        defaultValue: "",
+>>>>>>> origin/karthickeyan-node-sequalize
       },
       token: {
         type: DataTypes.TEXT,
@@ -98,6 +114,11 @@ module.exports = function model(sequelize, types) {
   );
 =======
       timestamps: false,
+      // defaultScope: {
+      //     where: {
+      //         status: 'Active'
+      //     }
+      // }
     }
   );
 
@@ -114,7 +135,11 @@ module.exports = function model(sequelize, types) {
 <<<<<<< HEAD
   Users.addHook("beforeUpdate", async (user) => {
     try {
+<<<<<<< HEAD
       if (user.changed("user_password") && user.user_password) {
+=======
+      if (user.user_password) {
+>>>>>>> origin/karthickeyan-node-sequalize
         user.user_password = await helper.hashPassword(user.user_password);
       }
     } catch (error) {
@@ -122,6 +147,7 @@ module.exports = function model(sequelize, types) {
     }
   });
 
+<<<<<<< HEAD
   // Users.associate = function (models) {
   //   Users.hasMany(models.posts, {
   //     as: "posts",
@@ -165,5 +191,7 @@ module.exports = function model(sequelize, types) {
   };
 
 >>>>>>> origin/priyavarshini-sequelize
+=======
+>>>>>>> origin/karthickeyan-node-sequalize
   return Users;
 };
