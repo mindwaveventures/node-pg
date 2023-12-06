@@ -32,10 +32,21 @@ const cancelListController = async (req, res) => {
 
     let minPrice;
     let maxPrice;
+    let whereQuery;
     if (req.query.priceRange) {
       const priceRanges = req.query.priceRange.split("-");
       minPrice = parseFloat(priceRanges[0]);
       maxPrice = parseFloat(priceRanges[1]);
+      whereQuery = {
+        item_price: { [Sequelize.Op.between]: [minPrice, maxPrice] },
+      };
+    }
+    if (req.query.search) {
+      whereQuery = {
+        item_name: {
+          [Sequelize.Op.iLike]: `%${req.query.search || ""}%`,
+        },
+      };
     }
     const getCancelOrder = await models.items.findAll({
       where: {
@@ -50,14 +61,15 @@ const cancelListController = async (req, res) => {
       ],
       where: {
         [Op.and]: [
-          {
-            item_name: {
-              [Sequelize.Op.iLike]: `%${req.query.search || ""}%`,
-            },
-          },
-          {
-            item_price: { [Sequelize.Op.between]: [minPrice, maxPrice] },
-          },
+          //   {
+          //     item_name: {
+          //       [Sequelize.Op.iLike]: `%${req.query.search || ""}%`,
+          //     },
+          //   },
+          //   {
+          //     item_price: { [Sequelize.Op.between]: [minPrice, maxPrice] },
+          //   },
+          whereQuery,
         ],
       },
       order: [
@@ -68,6 +80,7 @@ const cancelListController = async (req, res) => {
             : "ASC",
         ],
       ],
+      logging: true,
     });
     res.json({
       getCancelOrder,
