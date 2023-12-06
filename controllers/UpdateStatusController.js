@@ -1,9 +1,12 @@
+const { sequelize, models, Sequelize } = require("../config/sequelize-config");
+const Op = Sequelize.Op;
+
 const updateStatusController = async function (req, res) {
   try {
-    const updatedPurchase = await models.purcharse.update(
+    const updatedPurchase = await models.purchases.update(
       { status: req.body.status },
       {
-        where: { purchase_id: req.body.purchaseid },
+        where: { id: req.body.id },
         returning: true,
       }
     );

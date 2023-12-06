@@ -7,7 +7,7 @@ const cancelListController = async (req, res) => {
       return res.status(400).json({ error: "Please provide a user_id" });
     }
 
-    const purchases = await models.purcharse.findAll({
+    const purchases = await models.purchases.findAll({
       include: [
         {
           model: models.items,
