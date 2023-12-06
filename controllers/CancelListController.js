@@ -1,3 +1,6 @@
+const { models, Sequelize } = require("../config/sequelize-config");
+const Op = Sequelize.Op;
+
 const cancelListController = async (req, res) => {
   try {
     if (!req.query.user_id) {

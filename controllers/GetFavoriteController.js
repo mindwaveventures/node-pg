@@ -43,6 +43,7 @@ const getFavController = async (req, res) => {
         ],
       ],
       attributes: ["item_name", "price"],
+      logging: true,
     });
 
     res.json({
