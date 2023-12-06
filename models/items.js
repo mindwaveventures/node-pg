@@ -36,5 +36,12 @@ module.exports = function model(sequelize, types) {
     }
   );
 
+  items.associate = function (models) {
+    items.hasMany(models.favourites, {
+      foreignKey: "item_id",
+      sourceKey: "item_id",
+    });
+  };
+
   return items;
 };
