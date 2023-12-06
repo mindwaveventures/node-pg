@@ -1,7 +1,8 @@
-const { models } = require("../config/sequelize-config");
-
+const { models, Sequelize } = require("../config/sequelize-config");
+const favourites = require("../models/favourites");
+const Op = Sequelize.Op;
 // To add favourite
-const addfavouritecontroller = async (req, res, next) => {
+const addfavouritecontroller = async (req, res) => {
   try {
     const favouriteCreate = await models.favourites.create({
       user_id: req.body.user_id,
@@ -11,50 +12,41 @@ const addfavouritecontroller = async (req, res, next) => {
       favouriteCreate,
     });
   } catch (error) {
-    return res.json({ message: error });
+    return res.json({ message: error.message });
   }
 };
 
 const getFavController = async (req, res) => {
   try {
-    if (!req.query.user_id) {
-      return res.status(400).json({ error: "Please provide a user_id" });
-    }
-
-    let query =
-      "SELECT items.* FROM items JOIN favourites ON items.item_id = favourites.item_id";
-
-    if (req.query.user_id) {
-      query += ` WHERE favourites.user_id = ${req.query.user_id}`;
-    }
-
-    if (req.query.search) {
-      query += ` AND items.item_name ILIKE '%${req.query.search}%'`;
-    }
-
-    if (req.query.sortOrder) {
-      const sortOrder =
-        req.query.sortOrder.toUpperCase() === "DESC" ? "DESC" : "ASC";
-      query += ` ORDER BY items.price ${sortOrder}`;
-    }
-
-    if (req.query.priceRange) {
-      const priceRanges = req.query.priceRange.split("-");
-      const minPrice = parseFloat(priceRanges[0]);
-      const maxPrice = parseFloat(priceRanges[1]);
-
-      query += ` AND items.price BETWEEN ${minPrice} AND ${maxPrice}`;
-    }
-
-    const pgRes = await pgClient.query(query);
+    const getFavourites = await models.items.findAll({
+      include: [
+        {
+          model: models.favourites,
+          // as: favourites,
+          where: { user_id: req.query.user },
+        },
+      ],
+      where: {
+        item_name: {
+          [Sequelize.Op.iLike]: `%${req.query.search || ""}%`,
+        },
+      },
+      order: [
+        [
+          "item_price",
+          req.query.sortOrder && req.query.sortOrder.toUpperCase() === "DESC"
+            ? "DESC"
+            : "ASC",
+        ],
+      ],
+      attributes: ["item_name", "item_price"],
+    });
 
     res.json({
-      rows: pgRes.rows,
-      count: pgRes.rowCount,
+      getFavourites,
     });
   } catch (error) {
-    console.error("Error fetching items:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(400).json({ error: error.message });
   }
 };
 
