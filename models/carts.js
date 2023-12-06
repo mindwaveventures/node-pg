@@ -36,6 +36,7 @@ module.exports = function model(sequelize, types) {
 
     {
       tableName: "carts",
+      timestamps: false,
     }
   );
 

@@ -16,6 +16,10 @@ module.exports = {
         primarykey: true,
         unique: true,
       },
+      rating: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+      },
       user_id: {
         type: Sequelize.UUID,
         references: {

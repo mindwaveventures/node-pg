@@ -9,7 +9,7 @@ module.exports = function model(sequelize, types) {
         unique: true,
       },
       rating: {
-        type: types.STRING,
+        type: types.INTEGER,
         defaultValue: 0,
       },
       user_id: {
@@ -40,6 +40,7 @@ module.exports = function model(sequelize, types) {
 
     {
       tableName: "ratings",
+      timestamps: false,
     }
   );
 

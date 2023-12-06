@@ -53,13 +53,13 @@ const PurchasesListController = async (req, res) => {
     }
     const list = await models.purchases.findAll({
       where: {
-        user_id: req.params.user_id,
+        user_id: req.query.user_id,
       },
       order: [[models.items, "item_price", sortPrice ? sortPrice : "DESC"]],
       logging: true,
       include: [
         {
-          as: "items",
+          as: "purchases",
           model: models.items,
           right: true,
           where: whereQuery,
@@ -71,7 +71,7 @@ const PurchasesListController = async (req, res) => {
       list,
     });
   } catch (error) {
-    return res.status(400).res.json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 
