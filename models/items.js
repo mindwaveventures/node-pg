@@ -48,7 +48,7 @@ module.exports = function model(sequelize, types) {
       sourceKey: "item_id",
     });
     items.hasMany(models.purchases, {
-      as: "purchases",
+      // as: "purchases",
       foreignKey: "item_id",
       sourceKey: "item_id",
     });

@@ -8,7 +8,7 @@ const {
 const { addRatingController } = require("../controllers/rating.controller");
 const { addToCartController } = require("../controllers/carts.controller");
 const {
-  buyItemController,
+  addPurchaseController,
   PurchasesListController,
   updateStatusController,
   cancelListController,
@@ -31,8 +31,8 @@ router.post("/addRating", validate(ratingValueSchema), addRatingController);
 
 //purchases
 router.get("/purchaselist/:user_id", PurchasesListController);
-router.post("/buyItem", validate(buyItemSchema), buyItemController);
-router.put("/cancelOrder", updateStatusController);
+router.post("/add-purchase", validate(buyItemSchema), addPurchaseController);
+router.patch("/cancelOrder", updateStatusController);
 router.get("/cancelList", cancelListController);
 
 module.exports = router;

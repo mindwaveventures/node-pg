@@ -1,9 +1,9 @@
-const { models } = require("../config/sequelize-config");
-const purchases = require("../models/purchases");
+const { models, Sequelize } = require("../config/sequelize-config");
+const Op = Sequelize.Op;
 
-const buyItemController = async (req, res) => {
+const addPurchaseController = async (req, res) => {
   try {
-    const purchase = await models.purchases.crate({
+    const purchase = await models.purchases.create({
       item_id: req.xop.item_id,
       user_id: req.xop.user_id,
       order_status: req.xop.order_status,
@@ -20,7 +20,8 @@ const buyItemController = async (req, res) => {
       updatedItem,
     });
   } catch (error) {
-    return res.status(400).res.json({ message: error });
+    console.log(error);
+    return res.status(400).json({ message: error.message });
   }
 };
 const PurchasesListController = async (req, res) => {
@@ -77,7 +78,7 @@ const PurchasesListController = async (req, res) => {
 // update to cancel
 const updateStatusController = async function (req, res) {
   try {
-    const updateStatus = await purchases.models.update(
+    const updateStatus = await models.purchases.update(
       {
         order_status: req.body.order_status,
       },
@@ -102,49 +103,90 @@ const cancelListController = async (req, res) => {
       return res.status(400).json({ error: "Please provide a user_id" });
     }
 
-    let query =
-      "SELECT purchases.*, items.item_name FROM purchases JOIN items ON purchases.item_id = items.item_id WHERE purchases.order_status = 'Cancelled'";
-
-    if (req.query.user_id) {
-      query += ` AND purchases.user_id = ${req.query.user_id}`;
-    }
-
-    if (req.query.search) {
-      query += ` AND items.item_name ILIKE '%${req.query.search}%'`;
-    }
-
-    if (req.query.sortOrder) {
-      const sortOrder =
-        req.query.sortOrder.toUpperCase() === "DESC" ? "DESC" : "ASC";
-      query += ` ORDER BY items.price ${sortOrder}`;
-    }
-
+    let minPrice;
+    let maxPrice;
     if (req.query.priceRange) {
       const priceRanges = req.query.priceRange.split("-");
-      const minPrice = parseFloat(priceRanges[0]);
-      const maxPrice = parseFloat(priceRanges[1]);
-
-      query += ` AND items.price BETWEEN $1 AND $2`;
-
-      const pgRes = await pgClient.query(query, [minPrice, maxPrice]);
-      res.json({
-        rows: pgRes.rows,
-        count: pgRes.rowCount,
-      });
-    } else {
-      const pgRes = await pgClient.query(query);
-      res.json({
-        rows: pgRes.rows,
-        count: pgRes.rowCount,
-      });
+      minPrice = parseFloat(priceRanges[0]);
+      maxPrice = parseFloat(priceRanges[1]);
     }
+    const getCancelOrder = await models.items.findAll({
+      include: [
+        {
+          model: models.purchases,
+          where: { user_id: req.query.user_id },
+          where: {
+            order_status: "Cancelled",
+          },
+        },
+      ],
+      where: {
+        [Op.and]: [
+          {
+            item_name: {
+              [Sequelize.Op.iLike]: `%${req.query.search || ""}%`,
+            },
+          },
+          {
+            item_price: { [Sequelize.Op.between]: [minPrice, maxPrice] },
+          },
+        ],
+      },
+      order: [
+        [
+          "item_price",
+          req.query.sortOrder && req.query.sortOrder.toUpperCase() === "DESC"
+            ? "DESC"
+            : "ASC",
+        ],
+      ],
+    });
+    // let query =
+    //   "SELECT purchases.*, items.item_name FROM purchases JOIN items ON purchases.item_id = items.item_id WHERE purchases.order_status = 'Cancelled'";
+
+    // if (req.query.user_id) {
+    //   query += ` AND purchases.user_id = ${req.query.user_id}`;
+    // }
+
+    // if (req.query.search) {
+    //   query += ` AND items.item_name ILIKE '%${req.query.search}%'`;
+    // }
+
+    // if (req.query.sortOrder) {
+    //   const sortOrder =
+    //     req.query.sortOrder.toUpperCase() === "DESC" ? "DESC" : "ASC";
+    //   query += ` ORDER BY items.price ${sortOrder}`;
+    // }
+
+    // if (req.query.priceRange) {
+    //   const priceRanges = req.query.priceRange.split("-");
+    //   const minPrice = parseFloat(priceRanges[0]);
+    //   const maxPrice = parseFloat(priceRanges[1]);
+
+    //   query += ` AND items.price BETWEEN $1 AND $2`;
+
+    //   const pgRes = await pgClient.query(query, [minPrice, maxPrice]);
+    //   res.json({
+    //     rows: pgRes.rows,
+    //     count: pgRes.rowCount,
+    //   });
+    // } else {
+    //   const pgRes = await pgClient.query(query);
+    //   res.json({
+    //     rows: pgRes.rows,
+    //     count: pgRes.rowCount,
+    //   });
+    // }
+    res.json({
+      getCancelOrder,
+    });
   } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ error: error.message });
   }
 };
 
 module.exports = {
-  buyItemController,
+  addPurchaseController,
   PurchasesListController,
   updateStatusController,
   cancelListController,

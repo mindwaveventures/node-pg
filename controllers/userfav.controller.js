@@ -1,6 +1,6 @@
 const { models, Sequelize } = require("../config/sequelize-config");
-const favourites = require("../models/favourites");
 const Op = Sequelize.Op;
+
 // To add favourite
 const addfavouritecontroller = async (req, res) => {
   try {
@@ -18,6 +18,14 @@ const addfavouritecontroller = async (req, res) => {
 
 const getFavController = async (req, res) => {
   try {
+    let minPrice;
+    let maxPrice;
+
+    if (req.query.priceRange) {
+      const priceRanges = req.query.priceRange.split("-");
+      minPrice = parseFloat(priceRanges[0]);
+      maxPrice = parseFloat(priceRanges[1]);
+    }
     const getFavourites = await models.items.findAll({
       include: [
         {
@@ -29,6 +37,9 @@ const getFavController = async (req, res) => {
       where: {
         item_name: {
           [Sequelize.Op.iLike]: `%${req.query.search || ""}%`,
+        },
+        item_price: {
+          [Sequelize.Op.between]: [minPrice, maxPrice],
         },
       },
       order: [

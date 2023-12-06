@@ -51,12 +51,12 @@ module.exports = function model(sequelize, types) {
 
   purchases.associate = function (models) {
     purchases.belongsTo(models.users, {
-      as: "user",
+      // as: "user",
       foreignKey: "user_id",
       targetKey: "user_id",
     });
     purchases.belongsTo(models.items, {
-      as: "item",
+      // as: "item",
       foreignKey: "item_id",
       targetKey: "item_id",
     });

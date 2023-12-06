@@ -1,7 +1,8 @@
 const { models } = require("../config/sequelize-config");
+
 async function addToCartController(req, res) {
   try {
-    const addCart = await models.cart.create({
+    const addCart = await models.carts.create({
       user_id: req.body.user_id,
       item_id: req.body.item_id,
     });
@@ -9,7 +10,8 @@ async function addToCartController(req, res) {
       addCart,
     });
   } catch (error) {
-    return res.json({ message: error });
+    console.log(error);
+    return res.json({ message: error.message });
   }
 }
 
