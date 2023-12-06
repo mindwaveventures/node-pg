@@ -18,8 +18,16 @@ const addfavoritescontroller = async (req, res) => {
 
 const getFavController = async (req, res) => {
   try {
+    let minPrice;
+    let maxPrice;
     if (!req.query.user_id) {
       return res.status(400).json({ error: "Please provide a user_id" });
+    }
+
+    if (req.query.priceRange) {
+      const priceRanges = req.query.priceRange.split("-");
+      minPrice = parseFloat(priceRanges[0]);
+      maxPrice = parseFloat(priceRanges[1]);
     }
 
     const items = await models.items.findAll({
@@ -30,9 +38,16 @@ const getFavController = async (req, res) => {
         },
       ],
       where: {
-        item_name: {
-          [Sequelize.Op.iLike]: `%${req.query.search || ""}%`,
-        },
+        [Op.and]: [
+          {
+            item_name: {
+              [Sequelize.Op.iLike]: `%${req.query.search || ""}%`,
+            },
+          },
+          {
+            price: { [Sequelize.Op.between]: [minPrice, maxPrice] },
+          },
+        ],
       },
       order: [
         [
@@ -55,6 +70,7 @@ const getFavController = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 module.exports = {
   getFavController,
   addfavoritescontroller,

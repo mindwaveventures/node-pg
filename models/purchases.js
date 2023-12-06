@@ -7,7 +7,7 @@ module.exports = function model(sequelize, types) {
       purchases_id: {
         type: types.UUID,
         defaultValue: types.UUIDV4,
-        primarykey: true,
+        primaryKey: true,
         unique: true,
       },
 
@@ -50,14 +50,12 @@ module.exports = function model(sequelize, types) {
 
   Purchases.associate = function (models) {
     Purchases.belongsTo(models.users, {
-      as: "users",
       foreignKey: "user_id",
-      sourceKey: "user_id",
+      targetKey: "user_id",
     }),
       Purchases.belongsTo(models.items, {
-        as: "items",
         foreignKey: "item_id",
-        sourceKey: "item_id",
+        targetKey: "item_id",
       });
   };
 

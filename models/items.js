@@ -41,6 +41,10 @@ module.exports = function model(sequelize, types) {
       foreignKey: "item_id",
       sourceKey: "item_id",
     });
+    items.hasMany(models.purchases, {
+      foreignKey: "item_id",
+      sourceKey: "item_id",
+    });
   };
 
   return items;
