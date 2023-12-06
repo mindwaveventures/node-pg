@@ -60,9 +60,8 @@ const updateUserController = async (req, res) => {
       updateUser,
     });
   } catch (error) {
-    return res.send({
-      message: error.errors.map((d) => d.message),
-    });
+    console.log(error);
+    return res.send(error);
   }
 };
 

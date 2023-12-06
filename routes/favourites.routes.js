@@ -8,7 +8,5 @@ const {
 
 router.post("/favourites", addfavoritescontroller);
 router.get("/get-favourites", getFavController);
-router.get("/sort-price", getFavController);
-router.get("/search-name", getFavController);
 
 module.exports = router;

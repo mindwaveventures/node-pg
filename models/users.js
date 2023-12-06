@@ -37,6 +37,32 @@ module.exports = function model(sequelize, types) {
       },
     },
     {
+      hooks: {
+        beforeCreate: async (user) => {
+          try {
+            if (user.user_password) {
+              user.user_password = await helper.hashPassword(
+                user.user_password
+              );
+            }
+          } catch (error) {
+            console.log("\n save password hash error...", error);
+          }
+        },
+        beforeUpdate: async (user) => {
+          try {
+            if (user.user_password) {
+              user.user_password = await helper.hashPassword(
+                user.user_password
+              );
+            }
+          } catch (error) {
+            console.log("\n update password hash error...", error);
+          }
+        },
+      },
+    },
+    {
       tableName: "users",
       timestamps: false,
       // defaultScope: {
@@ -46,25 +72,6 @@ module.exports = function model(sequelize, types) {
       // }
     }
   );
-
-  Users.beforeCreate(async (user) => {
-    try {
-      if (user.user_password) {
-        user.user_password = await helper.hashPassword(user.user_password);
-      }
-    } catch (error) {
-      console.log("\n save password hash error...", error);
-    }
-  });
-  Users.addHook("beforeUpdate", async (user) => {
-    try {
-      if (user.user_password) {
-        user.user_password = await helper.hashPassword(user.user_password);
-      }
-    } catch (error) {
-      console.log("\n update password hash error...", error);
-    }
-  });
 
   return Users;
 };
