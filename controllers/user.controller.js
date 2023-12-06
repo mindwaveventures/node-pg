@@ -90,7 +90,7 @@ const getAccountController = async (req, res, next) => {
   try {
     const getUserController = await models.users.findOne({
       where: {
-        user_id: req.params.id || req.decoded.id,
+        user_id: req.decoded.id,
       },
       returning: true,
     });
