@@ -93,8 +93,19 @@ const loginController = async (req, res, next) => {
           user_name: searchUser.user_name,
         };
         const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "1h" });
+        const updateUser = await searchUser.update(
+          {
+            jwt_token: token,
+          },
+          {
+            where: {
+              user_name: req.body.user_name,
+            },
+          }
+        );
         return res.json({
           token,
+          updateUser,
         });
       }
       return res.status(403).send("Not valid");

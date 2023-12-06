@@ -35,6 +35,9 @@ module.exports = function model(sequelize, types) {
         type: types.STRING,
         defaultValue: "",
       },
+      jwt_token: {
+        type: types.STRING,
+      },
     },
     {
       hooks: {
