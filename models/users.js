@@ -61,6 +61,11 @@ module.exports = function model(sequelize, types) {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
       },
+      token: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        defaultValue: "",
+      },
     },
     {
       tableName: "users",

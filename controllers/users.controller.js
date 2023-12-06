@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const { models } = require("../config/sequelize-config");
 const helper = require("../services/helper");
 const config = require("../config/config");
+const { where } = require("sequelize");
 
 const addUserController = async (req, res, next) => {
   try {
@@ -48,11 +49,13 @@ const loginController = async (req, res, next) => {
         message: "invalid email and username",
       });
     } else {
+      console.log(searchUser.user_password);
+      console.log("req.pass", req.body.user_password);
       const passwordMatch = await helper.comparePassword(
         req.body.user_password,
         searchUser.user_password
       );
-
+      console.log(passwordMatch);
       if (passwordMatch) {
         const payload = {
           id: searchUser.id,
@@ -61,12 +64,26 @@ const loginController = async (req, res, next) => {
           last_name: searchUser.last_name,
           user_name: searchUser.user_name,
         };
-        const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "1h" });
+        const created_token = jwt.sign(payload, config.jwtSecret, {
+          expiresIn: "1h",
+        });
+        const updateToken = await models.users.update(
+          {
+            token: created_token,
+          },
+          {
+            where: {
+              id: searchUser.id,
+            },
+            returning: true,
+          }
+        );
+
         return res.json({
-          token,
+          updateToken,
         });
       }
-      return res.status(403).send("Not valid");
+      return res.status(403).send("Username or Password doesnot match");
     }
   } catch (error) {
     console.log("\n error...", error);
@@ -174,3 +191,21 @@ module.exports = {
 //     res.status(500).json({ error: "Internal Server Error" });
 //   }
 // };
+
+// const updateUser = await models.users.update(
+//   {
+//     token: gen_token,
+//   },
+//   {
+//     where: {
+//       id: searchUser.id,
+//     },
+//     returning: true,
+//   }
+// );
+// return res.json({
+//   updateUser,
+// });
+// }
+// return res.status(403).send("Not valid");
+// }
