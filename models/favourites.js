@@ -39,14 +39,14 @@ module.exports = function model(sequelize, types) {
 
   favourites.associate = function (models) {
     favourites.belongsTo(models.items, {
-      as: "favourite_items",
+      as: "favourites",
       foreignKey: "item_id",
-      sourceKey: "item_id",
+      targetKey: "item_id",
     }),
       favourites.belongsTo(models.users, {
         as: "favourite_items_user",
         foreignKey: "user_id",
-        sourceKey: "user_id",
+        targetKey: "user_id",
       });
   };
 

@@ -18,6 +18,7 @@ const cartRoutes = require("./routes/cart.routes");
 const itemRouter = require("./routes/items.routes");
 const userRouter = require("./routes/user.routes");
 const getaccount = require("./routes/get-account.routes");
+const favRoute = require("./routes/favourites.routes");
 
 app.use("/", itemRouter);
 app.use("/", userRouter);
@@ -25,6 +26,7 @@ app.use("/", ratingRouter);
 app.use("/", cartRoutes);
 app.use("/", purchasesRouter);
 app.use("/", getaccount);
+app.use("/", favRoute);
 
 app.use(notfound);
 app.use(errorHandler);
