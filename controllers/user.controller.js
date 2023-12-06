@@ -34,14 +34,15 @@ const addUserController = async (req, res, next) => {
       });
     }
   } catch (error) {
-    return res.json({
-      message: error.errors.map((d) => d.message),
+    return next({
+      status: 400,
+      message: error.message,
     });
   }
 };
 
 // login
-const loginController = async (req, res) => {
+const loginController = async (req, res, next) => {
   try {
     const searchUser = await models.users.findOne({
       //attributes: ["email", "user_name"],
@@ -60,9 +61,7 @@ const loginController = async (req, res) => {
         user_id: searchUser.user_id,
         user_name: searchUser.user_name,
       };
-      const generated_token = jwt.sign(payload, config.jwtSecret, {
-        expiresIn: "1h",
-      });
+      const generated_token = jwt.sign(payload, config.jwtSecret);
       const updateUser = await models.users.update(
         {
           token: generated_token,
@@ -80,7 +79,10 @@ const loginController = async (req, res) => {
     }
     return res.status(403).json({ message: "Not valid" });
   } catch (error) {
-    return res.json({ message: error.message });
+    return next({
+      status: 400,
+      message: error.message,
+    });
   }
 };
 
@@ -90,7 +92,7 @@ const getAccountController = async (req, res, next) => {
   try {
     const getUserController = await models.users.findOne({
       where: {
-        user_id: req.decoded.id,
+        user_id: req.decoded.user_id,
       },
       returning: true,
     });
@@ -101,13 +103,13 @@ const getAccountController = async (req, res, next) => {
   } catch (error) {
     return next({
       status: 400,
-      message: "unknown user id",
+      message: error.message,
     });
   }
 };
 
 //updating the userData
-const updateUserController = async (req, res) => {
+const updateUserController = async (req, res, next) => {
   try {
     const updateUser = await models.users.update(
       {
@@ -120,7 +122,7 @@ const updateUserController = async (req, res) => {
       },
       {
         where: {
-          user_id: req.params.id,
+          user_id: req.decoded.user_id,
         },
         returning: true,
       }
@@ -130,8 +132,9 @@ const updateUserController = async (req, res) => {
       updateUser,
     });
   } catch (error) {
-    return res.send({
-      message: error.errors.map((d) => d.message),
+    return next({
+      status: 400,
+      message: error.message,
     });
   }
 };

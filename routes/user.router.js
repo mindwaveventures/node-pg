@@ -22,7 +22,12 @@ router.post("/signup", validate(signUpSchema), addUserController);
 router.post("/login", validate(loginSchema), loginController);
 
 //UPDATE USER DATA
-router.put("/user/:id", validate(updateUserSchema), updateUserController);
+router.put(
+  "/user/:id",
+  isAuthorised,
+  validate(updateUserSchema),
+  updateUserController
+);
 
 //VIEW THE USER DATA
 router.get("/user/:id", isAuthorised, getAccountController);
