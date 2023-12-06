@@ -83,8 +83,29 @@ const listController = async (req, res) => {
     return res.send(error);
   }
 };
+// update status
+const updateStatusController = async function (req, res) {
+  try {
+    const updatedPurchase = await models.purchases.update(
+      { status: req.body.status },
+      {
+        where: { item_id: req.body.item_id },
+        returning: true,
+      }
+    );
+
+    res.json({
+      rows: updatedPurchase[1],
+      count: updatedPurchase[0],
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 module.exports = {
   purchasesController,
   listController,
+  updateStatusController,
 };
