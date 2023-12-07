@@ -108,7 +108,7 @@ const loginController = async (req, res, next) => {
           updateUser,
         });
       }
-      return res.status(403).send("Not valid");
+      return res.send(error);
     }
   } catch (error) {
     return res.send(error);
@@ -133,28 +133,10 @@ const getAccountController = async (req, res, next) => {
     return res.send(error);
   }
 };
-const getAccountByIdController = async (req, res, next) => {
-  try {
-    const usersFind = await models.users.findOne({
-      attributes: ["email", "user_name"],
-      where: {
-        user_id: req.query.user_id,
-      },
-      logging: true,
-    });
-    return res.json({
-      usersFind,
-    });
-  } catch (error) {
-    console.log("\n error...", error);
-    return res.send(error);
-  }
-};
 
 module.exports = {
   addUserController,
   updateUserController,
   loginController,
   getAccountController,
-  getAccountByIdController,
 };

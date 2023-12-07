@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const { isAuthorised } = require("../middlewares/authorisation.middleware");
 
 const {
   addUserController,
