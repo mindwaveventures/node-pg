@@ -88,48 +88,40 @@ const accountViewController = async (req, res) => {
     return res.send(error);
   }
 };
-
-const updateController = async (req, res, next) => {
+const updateUserController = async (req, res, next) => {
   try {
-    const searchUser = await models.users.findOne({
-      where: { id: req.params.id },
-    });
-    if (searchUser === null) {
-      return next({
-        status: 400,
-        message: "user not found",
-      });
-    } else {
-      const updateUser = await models.users.update(
-        {
-          first_name: req.body.first_name,
-          last_name: req.body.last_name,
-          email: req.body.email,
-          user_name: req.body.user_name,
-          user_password: req.body.user_password,
-          phone_no: req.body.phone_no,
+    const updateUser = await models.users.update(
+      {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        user_name: req.body.user_name,
+        user_password: req.body.user_password,
+        phone_no: req.body.phone_no,
+      },
+      {
+        where: {
+          user_id: req.decoded.user_id,
         },
-        {
-          where: {
-            id: req.params.id,
-          },
-          returning: true,
-        }
-      );
+        returning: true,
+        individualHooks: true,
+      }
+    );
 
-      res.json({
-        updateUser,
-      });
-    }
+    res.json({
+      updateUser,
+    });
   } catch (error) {
-    return res.send({
-      message: error.errors.map((d) => d.message),
+    return next({
+      status: 400,
+      message: error.message,
     });
   }
 };
+
 module.exports = {
   addUserController,
   loginController,
   accountViewController,
-  updateController,
+  updateUserController,
 };

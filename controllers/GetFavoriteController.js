@@ -18,59 +18,49 @@ const addfavoritescontroller = async (req, res) => {
 
 const getFavController = async (req, res) => {
   try {
-    let minPrice;
-    let maxPrice;
-    if (!req.query.user_id) {
-      return res.status(400).json({ error: "Please provide a user_id" });
+    let sortPrice;
+    let whereQuery = {};
+
+    if (req.query.search) {
+      whereQuery.item_name = {
+        [Op.iLike]: `%${req.query.search}%`,
+      };
+    }
+
+    if (req.query.sortPrice) {
+      sortPrice = req.query.sortPrice;
     }
 
     if (req.query.priceRange) {
       const priceRanges = req.query.priceRange.split("-");
-      minPrice = parseFloat(priceRanges[0]);
-      maxPrice = parseFloat(priceRanges[1]);
+      const minPrice = parseFloat(priceRanges[0]);
+      const maxPrice = parseFloat(priceRanges[1]);
+      whereQuery.item_price = {
+        [Op.between]: [minPrice, maxPrice],
+      };
     }
-
-    const items = await models.items.findAll({
+    const getFavourites = await models.favourites.findAll({
+      where: {
+        user_id: req.query.user,
+      },
+      order: [[models.items, "price", sortPrice ? sortPrice : "DESC"]],
       include: [
         {
-          model: models.favourites,
-          where: { user_id: req.query.user_id },
+          model: models.items,
+          where: whereQuery,
+          attributes: ["item_name", "item_content", "price"],
         },
       ],
-      where: {
-        [Op.or]: [
-          {
-            item_name: {
-              [Sequelize.Op.iLike]: `%${req.query.search || ""}%`,
-            },
-          },
-          {
-            price: { [Sequelize.Op.between]: [minPrice, maxPrice] },
-          },
-        ],
-      },
-      order: [
-        [
-          "price",
-          req.query.sortOrder && req.query.sortOrder.toUpperCase() === "DESC"
-            ? "DESC"
-            : "ASC",
-        ],
-      ],
-      attributes: ["item_name", "price"],
       logging: true,
     });
 
     res.json({
-      rows: items,
-      count: items.length,
+      getFavourites,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(400).json({ error: error.message });
   }
 };
-
 module.exports = {
   getFavController,
   addfavoritescontroller,
