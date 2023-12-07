@@ -18,39 +18,41 @@ const addfavouritecontroller = async (req, res) => {
 
 const getFavController = async (req, res) => {
   try {
-    let minPrice;
-    let maxPrice;
+    let sortPrice;
+    let whereQuery = {};
+
+    //search by item_name
+    if (req.query.search) {
+      whereQuery.item_name = {
+        [Op.iLike]: `%${req.query.search}%`,
+      };
+    }
+
+    if (req.query.sortPrice) {
+      sortPrice = req.query.sortPrice;
+    }
 
     if (req.query.priceRange) {
       const priceRanges = req.query.priceRange.split("-");
-      minPrice = parseFloat(priceRanges[0]);
-      maxPrice = parseFloat(priceRanges[1]);
+      const minPrice = parseFloat(priceRanges[0]);
+      const maxPrice = parseFloat(priceRanges[1]);
+      whereQuery.item_price = {
+        [Op.between]: [minPrice, maxPrice],
+      };
     }
-    const getFavourites = await models.items.findAll({
+    const getFavourites = await models.favourites.findAll({
+      where: {
+        user_id: req.query.user,
+      },
+      order: [[models.items, "item_price", sortPrice ? sortPrice : "DESC"]],
       include: [
         {
-          model: models.favourites,
-          // as: favourites,
-          where: { user_id: req.query.user },
+          model: models.items,
+          where: whereQuery,
+          attributes: ["item_name", "item_content", "item_price"],
         },
       ],
-      where: {
-        item_name: {
-          [Sequelize.Op.iLike]: `%${req.query.search || ""}%`,
-        },
-        item_price: {
-          [Sequelize.Op.between]: [minPrice, maxPrice],
-        },
-      },
-      order: [
-        [
-          "item_price",
-          req.query.sortOrder && req.query.sortOrder.toUpperCase() === "DESC"
-            ? "DESC"
-            : "ASC",
-        ],
-      ],
-      attributes: ["item_name", "item_price"],
+      logging: true,
     });
 
     res.json({

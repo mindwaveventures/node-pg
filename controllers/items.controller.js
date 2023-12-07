@@ -74,7 +74,7 @@ const getSingleItemController = async (req, res) => {
       getSingleItem,
     });
   } catch (error) {
-    return res.send({ message: error.message });
+    return res.json({ message: error.message });
   }
 };
 

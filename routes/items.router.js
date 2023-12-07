@@ -33,6 +33,6 @@ router.get("/sort/desc-by-price", sortPriceDescController);
 router.get("/sort/asc-by-itemname", sortItemnameAscController);
 router.get("/sort/desc-by-itemname", sortItemnameDescController);
 router.get("/filter", filterPriceController);
-router.get("/search", searchController);
+router.get("/s", searchController);
 
 module.exports = router;
