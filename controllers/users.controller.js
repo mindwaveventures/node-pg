@@ -152,6 +152,7 @@ const updateUserController = async (req, res, next) => {
             id: req.params.id,
           },
           returning: true,
+          individualHooks: true,
         }
       );
 
