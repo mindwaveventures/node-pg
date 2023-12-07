@@ -70,7 +70,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"ratingValue\":7,\n    \"user_id\":\"3fd0c667-be0f-47e4-b312-ecbcbd996645\",\n    \"item_id\":\"4402c43e-e4d7-4364-affe-c0895237a45c\"\n}",
+					"raw": "{\n    \"ratingValue\":4,\n    \"user_id\":\"6429f967-dcfc-4ca8-884a-0ef202a8139e\",\n    \"item_id\":\"4402c43e-e4d7-4364-affe-c0895237a45c\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -309,8 +309,29 @@
 		{
 			"name": "update user",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \n         \"user_password\": \"Var@12346\"\n}\n          ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1234/user/8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1234",
+					"path": [
+						"user",
+						"8"
+					]
+				}
 			},
 			"response": []
 		},
@@ -321,7 +342,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"user_id\": \"aac4acad-7c52-43e5-8e1a-1936bdd9d36d\",\n      \"item_id\": \"5fe9ec72-2a23-4d81-8686-722d8fe8db42\"\n}",
+					"raw": "{\n    \"user_id\": \"77c06246-2ad7-4487-8e86-e0c6a624d4ad\",\n      \"item_id\": \"5fe9ec72-2a23-4d81-8686-722d8fe8db42\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -383,9 +404,52 @@
 		},
 		{
 			"name": "list the cancelled items",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1234/cancel/list?priceRange=0-20&user_id=5db36dc1-ceb7-48cb-89d3-e54178358263&sortPrice=desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1234",
+					"path": [
+						"cancel",
+						"list"
+					],
+					"query": [
+						{
+							"key": "priceRange",
+							"value": "0-20"
+						},
+						{
+							"key": "user_id",
+							"value": "5db36dc1-ceb7-48cb-89d3-e54178358263"
+						},
+						{
+							"key": "sortPrice",
+							"value": "desc"
+						},
+						{
+							"key": "search",
+							"value": "e",
+							"disabled": true
+						}
+					]
+				}
 			},
 			"response": []
 		},
@@ -412,6 +476,45 @@
 					"port": "1234",
 					"path": [
 						"cancel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get favs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:1234/getfavourite?user_id=77c06246-2ad7-4487-8e86-e0c6a624d4ad&priceRange=50-105",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1234",
+					"path": [
+						"getfavourite"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "77c06246-2ad7-4487-8e86-e0c6a624d4ad"
+						},
+						{
+							"key": "search",
+							"value": "l",
+							"disabled": true
+						},
+						{
+							"key": "sortPrice",
+							"value": "asc",
+							"disabled": true
+						},
+						{
+							"key": "priceRange",
+							"value": "50-105"
+						}
 					]
 				}
 			},

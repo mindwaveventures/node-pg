@@ -32,54 +32,41 @@ const cancelListController = async (req, res) => {
 
     let minPrice;
     let maxPrice;
-    let whereQuery;
+    let whereQuery = {};
+    let sortPrice;
     if (req.query.priceRange) {
       const priceRanges = req.query.priceRange.split("-");
       minPrice = parseFloat(priceRanges[0]);
       maxPrice = parseFloat(priceRanges[1]);
-      whereQuery = {
-        item_price: { [Sequelize.Op.between]: [minPrice, maxPrice] },
+      whereQuery.item_price = {
+        [Op.between]: [minPrice, maxPrice],
       };
     }
     if (req.query.search) {
-      whereQuery = {
-        item_name: {
-          [Sequelize.Op.iLike]: `%${req.query.search || ""}%`,
-        },
+      whereQuery.item_name = {
+        [Op.iLike]: `%${req.query.search}%`,
       };
     }
-    const getCancelOrder = await models.items.findAll({
+    if (req.query.sortPrice) {
+      sortPrice = req.query.sortPrice;
+    }
+    const getCancelOrder = await models.purchases.findAll({
+      attributes: ["status", "purchases_id"],
       where: {
         user_id: req.query.user_id,
+        status: "Cancelled",
       },
+      order: [[models.items, "item_price", sortPrice ? sortPrice : "DESC"]],
       include: [
         {
-          as: "purchases",
-          model: models.purchases,
-          where: { status: "Cancelled" },
+          as: "items",
+          model: models.items,
+          required: true,
+          where: whereQuery,
+          attributes: ["item_name", "item_content", "item_price"],
         },
       ],
-      where: {
-        [Op.and]: [
-          //   {
-          //     item_name: {
-          //       [Sequelize.Op.iLike]: `%${req.query.search || ""}%`,
-          //     },
-          //   },
-          //   {
-          //     item_price: { [Sequelize.Op.between]: [minPrice, maxPrice] },
-          //   },
-          whereQuery,
-        ],
-      },
-      order: [
-        [
-          "item_price",
-          req.query.sortOrder && req.query.sortOrder.toUpperCase() === "DESC"
-            ? "DESC"
-            : "ASC",
-        ],
-      ],
+
       logging: true,
     });
     res.json({
