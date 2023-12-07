@@ -35,44 +35,42 @@ const cancelListController = async (req, res) => {
       return res.status(400).json({ error: "Please provide a user_id" });
     }
 
-    let minPrice;
-    let maxPrice;
-    if (req.query.priceRange) {
-      const priceRanges = req.query.priceRange.split("-");
-      minPrice = parseFloat(priceRanges[0]);
-      maxPrice = parseFloat(priceRanges[1]);
+    let sortPrice;
+    let whereQuery = {};
+
+    if (req.query.search) {
+      whereQuery.item_name = {
+        [Op.iLike]: `%${req.query.search}%`,
+      };
     }
 
-    const cancelList = await models.items.findAll({
+    if (req.query.sortPrice) {
+      sortPrice = req.query.sortPrice;
+    }
+
+    if (req.query.priceRange) {
+      const priceRanges = req.query.priceRange.split("-");
+      const minPrice = parseFloat(priceRanges[0]);
+      const maxPrice = parseFloat(priceRanges[1]);
+      whereQuery.price = {
+        [Op.between]: [minPrice, maxPrice],
+      };
+    }
+    const cancelList = await models.purchases.findAll({
+      attributes: ["status", "purchases_id"],
+      where: {
+        user_id: req.query.user_id,
+        status: "Cancel",
+      },
+      order: [[models.items, "price", sortPrice ? sortPrice : "DESC"]],
       include: [
         {
-          model: models.purchases,
-          where: { user_id: req.query.user_id },
-          where: {
-            status: "Cancel",
-          },
+          model: models.items,
+          where: whereQuery,
+          attributes: ["item_name", "item_content", "price"],
         },
       ],
-      where: {
-        [Op.and]: [
-          {
-            item_name: {
-              [Sequelize.Op.iLike]: `%${req.query.search || ""}%`,
-            },
-          },
-          {
-            price: { [Sequelize.Op.between]: [minPrice, maxPrice] },
-          },
-        ],
-      },
-      order: [
-        [
-          "price",
-          req.query.sortOrder && req.query.sortOrder.toUpperCase() === "DESC"
-            ? "DESC"
-            : "ASC",
-        ],
-      ],
+      logging: true,
     });
 
     res.json({

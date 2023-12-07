@@ -38,7 +38,7 @@ const getFavController = async (req, res) => {
         },
       ],
       where: {
-        [Op.and]: [
+        [Op.or]: [
           {
             item_name: {
               [Sequelize.Op.iLike]: `%${req.query.search || ""}%`,
