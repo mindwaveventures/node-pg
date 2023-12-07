@@ -30,7 +30,7 @@ router.post("/addToCart", validate(addToCartSchema), addToCartController);
 router.post("/addRating", validate(ratingValueSchema), addRatingController);
 
 //purchases
-router.get("/purchaselist/:user_id", PurchasesListController);
+router.get("/purchaselist", PurchasesListController);
 router.post("/add-purchase", validate(buyItemSchema), addPurchaseController);
 router.patch("/cancelOrder", updateStatusController);
 router.get("/cancelList", cancelListController);
