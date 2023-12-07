@@ -1,6 +1,6 @@
 const { models } = require("../config/sequelize-config");
 
-async function addToCartController(req, res) {
+async function addToCartController(req, res, next) {
   try {
     const addCart = await models.carts.create({
       user_id: req.body.user_id,
@@ -10,8 +10,10 @@ async function addToCartController(req, res) {
       addCart,
     });
   } catch (error) {
-    console.log(error);
-    return res.json({ message: error.message });
+    return next({
+      status: 400,
+      message: error.message,
+    });
   }
 }
 

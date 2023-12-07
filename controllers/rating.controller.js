@@ -1,5 +1,4 @@
-const config = require("../config/config");
-const { sequelize, models, Sequelize } = require("../config/sequelize-config");
+const { models, Sequelize } = require("../config/sequelize-config");
 
 async function addRatingController(req, res) {
   try {
@@ -12,19 +11,26 @@ async function addRatingController(req, res) {
       addRating,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 }
 
-const overallRatingController = async (req, res) => {
-  const overallRating = await models.ratings.findAll({
-    attributes: [
-      [Sequelize.fn("AVG", Sequelize.col("ratingValue")), "overall_rating"],
-    ],
-    group: ["item_id"],
-  });
+const overallRatingController = async (req, res, next) => {
+  try {
+    const overallRating = await models.ratings.findAll({
+      attributes: [
+        [Sequelize.fn("AVG", Sequelize.col("ratingValue")), "overall_rating"],
+      ],
+      group: ["item_id"],
+    });
 
-  res.json({ overallRating });
+    res.json({ overallRating });
+  } catch (error) {
+    return next({
+      status: 400,
+      message: error.message,
+    });
+  }
 };
 
 module.exports = {

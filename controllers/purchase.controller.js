@@ -1,7 +1,7 @@
 const { models, Sequelize } = require("../config/sequelize-config");
 const Op = Sequelize.Op;
 
-const addPurchaseController = async (req, res) => {
+const addPurchaseController = async (req, res, next) => {
   try {
     const purchase = await models.purchases.create({
       item_id: req.xop.item_id,
@@ -20,11 +20,13 @@ const addPurchaseController = async (req, res) => {
       updatedItem,
     });
   } catch (error) {
-    console.log(error);
-    return res.status(400).json({ message: error.message });
+    return next({
+      status: 400,
+      message: error.message,
+    });
   }
 };
-const PurchasesListController = async (req, res) => {
+const PurchasesListController = async (req, res, next) => {
   try {
     let sortPrice;
     let whereQuery = {};
@@ -68,7 +70,10 @@ const PurchasesListController = async (req, res) => {
       purchaseList,
     });
   } catch (error) {
-    return res.status(400).json({ message: error.message });
+    return next({
+      status: 400,
+      message: error.message,
+    });
   }
 };
 
@@ -143,7 +148,7 @@ const cancelListController = async (req, res) => {
       getCancelOrder,
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(400).json({ error: error.message });
   }
 };
 

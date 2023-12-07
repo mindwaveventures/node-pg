@@ -2,7 +2,7 @@ const { models, Sequelize } = require("../config/sequelize-config");
 const Op = Sequelize.Op;
 
 // To add favourite
-const addfavouritecontroller = async (req, res) => {
+const addfavouritecontroller = async (req, res, next) => {
   try {
     const favouriteCreate = await models.favourites.create({
       user_id: req.body.user_id,
@@ -12,7 +12,10 @@ const addfavouritecontroller = async (req, res) => {
       favouriteCreate,
     });
   } catch (error) {
-    return res.json({ message: error.message });
+    return next({
+      status: 400,
+      message: error.message,
+    });
   }
 };
 

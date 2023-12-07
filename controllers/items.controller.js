@@ -3,19 +3,23 @@ const { sequelize, models, Sequelize } = require("../config/sequelize-config");
 const Op = Sequelize.Op;
 
 // To get list of items
-const getItemsController = async (req, res) => {
+const getItemsController = async (req, res, next) => {
   try {
     const getItems = await models.items.findAll();
+
     return res.json({
       getItems,
     });
   } catch (error) {
-    return res.json(error);
+    return next({
+      status: 400,
+      message: error.message,
+    });
   }
 };
 
 // To add a item
-const addItemController = async (req, res) => {
+const addItemController = async (req, res, next) => {
   try {
     const addItem = await models.items.create({
       item_name: req.body.item_name,
@@ -27,14 +31,15 @@ const addItemController = async (req, res) => {
       addItem,
     });
   } catch (error) {
-    return res.json({
-      message: error.errors.map((d) => d.message),
+    return next({
+      status: 400,
+      message: error.message,
     });
   }
 };
 
 // To update item content
-const updateItemContentController = async (req, res) => {
+const updateItemContentController = async (req, res, next) => {
   try {
     const updateItem = await models.items.update(
       {
@@ -55,14 +60,15 @@ const updateItemContentController = async (req, res) => {
       updateItem,
     });
   } catch (error) {
-    return res.send({
-      message: error.errors.map((d) => d.message),
+    return next({
+      status: 400,
+      message: error.message,
     });
   }
 };
 
 // To get single item
-const getSingleItemController = async (req, res) => {
+const getSingleItemController = async (req, res, next) => {
   try {
     const getSingleItem = await models.items.findAll({
       where: {
@@ -74,12 +80,15 @@ const getSingleItemController = async (req, res) => {
       getSingleItem,
     });
   } catch (error) {
-    return res.json({ message: error.message });
+    return next({
+      status: 400,
+      message: error.message,
+    });
   }
 };
 
 // Sort price in ascending order
-const sortPriceAscController = async (req, res) => {
+const sortPriceAscController = async (req, res, next) => {
   try {
     const sortItem = await models.items.findAll({
       order: [["item_price", "ASC"]],
@@ -89,12 +98,15 @@ const sortPriceAscController = async (req, res) => {
       sortItem,
     });
   } catch (error) {
-    return res.send(error);
+    return next({
+      status: 400,
+      message: error.message,
+    });
   }
 };
 
 // Sort price in descending order
-const sortPriceDescController = async (req, res) => {
+const sortPriceDescController = async (req, res, next) => {
   try {
     const sortItem = await models.items.findAll({
       order: [["item_price", "DESC"]],
@@ -104,12 +116,15 @@ const sortPriceDescController = async (req, res) => {
       sortItem,
     });
   } catch (error) {
-    return res.send(error);
+    return next({
+      status: 400,
+      message: error.message,
+    });
   }
 };
 
 //ascending by item name
-const sortItemnameAscController = async (req, res) => {
+const sortItemnameAscController = async (req, res, next) => {
   try {
     const sortItem = await models.items.findAll({
       order: [["item_name", "ASC"]],
@@ -119,12 +134,15 @@ const sortItemnameAscController = async (req, res) => {
       sortItem,
     });
   } catch (error) {
-    return res.send(error);
+    return next({
+      status: 400,
+      message: error.message,
+    });
   }
 };
 
 //Descending by item name
-const sortItemnameDescController = async (req, res) => {
+const sortItemnameDescController = async (req, res, next) => {
   try {
     const sortItem = await models.items.findAll({
       order: [["item_name", "DESC"]],
@@ -134,12 +152,15 @@ const sortItemnameDescController = async (req, res) => {
       sortItem,
     });
   } catch (error) {
-    return res.send(error);
+    return next({
+      status: 400,
+      message: error.message,
+    });
   }
 };
 
 // to filter the price range
-const filterPriceController = async (req, res) => {
+const filterPriceController = async (req, res, next) => {
   try {
     const { minPrice, maxPrice } = req.query;
 
@@ -156,12 +177,15 @@ const filterPriceController = async (req, res) => {
       items,
     });
   } catch (error) {
-    return res.send(error);
+    return next({
+      status: 400,
+      message: error.message,
+    });
   }
 };
 
 // To search
-const searchController = async (req, res) => {
+const searchController = async (req, res, next) => {
   try {
     const itemsFind = await models.items.findAndCountAll({
       attributes: ["item_name"],
@@ -175,7 +199,10 @@ const searchController = async (req, res) => {
       itemsFind,
     });
   } catch (error) {
-    return res.send(error);
+    return next({
+      status: 400,
+      message: error.message,
+    });
   }
 };
 
