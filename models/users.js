@@ -36,38 +36,40 @@ module.exports = function model(sequelize, types) {
         defaultValue: "",
       },
       token: {
-        type: types.STRING,
+        type: types.TEXT,
         defaultValue: "",
       },
     },
     {
+      hooks: {
+        beforeCreate: async (user) => {
+          try {
+            if (user.user_password) {
+              user.user_password = await helper.hashPassword(
+                user.user_password
+              );
+            }
+          } catch (error) {
+            console.log("\n save password hash error...", error);
+          }
+        },
+        beforeUpdate: async (user) => {
+          try {
+            if (user.changed("user_password") && user.user_password) {
+              user.user_password = await helper.hashPassword(
+                user.user_password
+              );
+            }
+          } catch (error) {
+            console.log("\n update password hash error...", error);
+          }
+        },
+      },
+    },
+    {
       tableName: "users",
-      // defaultScope: {
-      //     where: {
-      //         status: 'Active'
-      //     }
-      // }
     }
   );
-  Users.beforeCreate(async (user) => {
-    try {
-      if (user.user_password) {
-        user.user_password = await helper.hashPassword(user.user_password);
-      }
-    } catch (error) {
-      console.log("\n save password hash error...", error);
-    }
-  });
-  Users.addHook("beforeUpdate", async (user) => {
-    try {
-      if (user.changed("user_password") && user.user_password) {
-        user.user_password = await helper.hashPassword(user.user_password);
-      }
-    } catch (error) {
-      console.log("\n update password hash error...", error);
-    }
-  });
-
   // Users.associate = function (models) {
   //   Users.hasMany(models.posts, {
   //     as: "posts",

@@ -3,7 +3,7 @@ const {
   signUpSchema,
   updateSchema,
   loginSchema,
-} = require("../validation/authentication.schema");
+} = require("../validations/authentication.schema");
 const {
   addUserController,
   loginController,
