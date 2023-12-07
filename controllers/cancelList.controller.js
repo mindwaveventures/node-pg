@@ -24,11 +24,12 @@ const cancelListController = async (req, res) => {
       orderQuery.push(["price", sortPrice]);
     }
     // filter price
+
     if (req.query.priceRange) {
       const priceRanges = req.query.priceRange.split("-");
       const minPrice = parseFloat(priceRanges[0]);
       const maxPrice = parseFloat(priceRanges[1]);
-      whereQuery.item_price = {
+      whereQuery.price = {
         [Op.between]: [minPrice, maxPrice],
       };
     }
@@ -38,8 +39,8 @@ const cancelListController = async (req, res) => {
         status: "Cancelled",
       },
       order: [
-        [models.items, "price", sortPrice ? sortPrice : "DESC"],
         [models.items, "price", sortPrice ? sortPrice : "ASC"],
+        [models.items, "price", sortPrice ? sortPrice : "DESC"],
       ],
       logging: true,
       include: [

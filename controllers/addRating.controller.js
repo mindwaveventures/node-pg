@@ -16,4 +16,16 @@ const addRatingController = async (req, res) => {
     return res.send(error);
   }
 };
-module.exports = { addRatingController };
+const overallRatingController = async (req, res) => {
+  const ratings = await models.rating.findAndCountAll({
+    attributes: [
+      [Sequelize.fn("AVG", Sequelize.col("rating")), "overall_rating"],
+    ],
+    group: ["item_id"],
+  });
+
+  res.json({
+    ratings,
+  });
+};
+module.exports = { addRatingController, overallRatingController };

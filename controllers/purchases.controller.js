@@ -52,7 +52,7 @@ const listController = async (req, res) => {
       const priceRanges = req.query.priceRange.split("-");
       const minPrice = parseFloat(priceRanges[0]);
       const maxPrice = parseFloat(priceRanges[1]);
-      whereQuery.item_price = {
+      whereQuery.price = {
         [Op.between]: [minPrice, maxPrice],
       };
     }
@@ -61,8 +61,8 @@ const listController = async (req, res) => {
         user_id: req.params.user_id,
       },
       order: [
-        [models.items, "price", sortPrice ? sortPrice : "DESC"],
         [models.items, "price", sortPrice ? sortPrice : "ASC"],
+        [models.items, "price", sortPrice ? sortPrice : "DESC"],
       ],
       logging: true,
       include: [
