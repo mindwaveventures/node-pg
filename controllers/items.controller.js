@@ -166,11 +166,11 @@ const filterPriceController = async (req, res, next) => {
 
     const items = await models.items.findAll({
       where: {
-        price: {
+        item_price: {
           [Op.between]: [minPrice, maxPrice],
         },
       },
-      order: [["price", "ASC"]],
+      order: [["item_price", "ASC"]],
     });
 
     return res.json({
@@ -187,13 +187,14 @@ const filterPriceController = async (req, res, next) => {
 // To search
 const searchController = async (req, res, next) => {
   try {
-    const itemsFind = await models.items.findAndCountAll({
+    const itemsFind = await models.items.findAll({
       attributes: ["item_name"],
       where: {
         item_name: {
-          [Op.iLike]: `%${req.query.item_name}`,
+          [Op.iLike]: `%${req.query.item_name}%`,
         },
       },
+      logging: true,
     });
     return res.json({
       itemsFind,

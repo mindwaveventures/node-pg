@@ -24,6 +24,9 @@ const { overallRatingController } = require("../controllers/rating.controller");
 router.get("/rating", overallRatingController);
 
 router.get("/", getItemsController);
+router.get("/search", searchController);
+router.get("/filter", filterPriceController);
+
 router.post("/add", validate(itemAddSchema), addItemController);
 router.put("/:id", validate(updateItemSchema), updateItemContentController);
 router.get("/:id", getSingleItemController);
@@ -32,7 +35,5 @@ router.get("/sort/asc-by-price", sortPriceAscController);
 router.get("/sort/desc-by-price", sortPriceDescController);
 router.get("/sort/asc-by-itemname", sortItemnameAscController);
 router.get("/sort/desc-by-itemname", sortItemnameDescController);
-router.get("/filter", filterPriceController);
-router.get("/s", searchController);
 
 module.exports = router;

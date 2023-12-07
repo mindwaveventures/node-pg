@@ -1,0 +1,763 @@
+{
+	"info": {
+		"_postman_id": "f8415bd0-7d73-41d8-87c7-298186c7d7b4",
+		"name": "seq-training",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30742118"
+	},
+	"item": [
+		{
+			"name": "items",
+			"item": [
+				{
+					"name": "get all items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:5001/items/",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "5001",
+							"path": [
+								"items",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add new item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item_name\": \"saree\",\n    \"item_content\": \"silk cotton\",\n    \"item_price\": \"1250\",\n    \"item_count\": 150 \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:5001/items/add",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "5001",
+							"path": [
+								"items",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update items",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item_name\": \"Linen saree\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:5001/items/254b5a57-b636-4fcf-9164-1ac5f61d2d3f",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "5001",
+							"path": [
+								"items",
+								"254b5a57-b636-4fcf-9164-1ac5f61d2d3f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get single item",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://0.0.0.0:5001/items/254b5a57-b636-4fcf-9164-1ac5f61d2d3f",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "5001",
+							"path": [
+								"items",
+								"254b5a57-b636-4fcf-9164-1ac5f61d2d3f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sort items using price",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://0.0.0.0:5001/items/sort/desc-by-price",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "5001",
+							"path": [
+								"items",
+								"sort",
+								"desc-by-price"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sort items using item_name",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://0.0.0.0:5001/items/sort/asc-by-itemname",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "5001",
+							"path": [
+								"items",
+								"sort",
+								"asc-by-itemname"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search item list",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://0.0.0.0:5001/items/search?item_name=s",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "5001",
+							"path": [
+								"items",
+								"search"
+							],
+							"query": [
+								{
+									"key": "item_name",
+									"value": "s"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filter item using price",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "http://0.0.0.0:5001/items/filter?minPrice=0&maxPrice=1500",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "5001",
+							"path": [
+								"items",
+								"filter"
+							],
+							"query": [
+								{
+									"key": "minPrice",
+									"value": "0"
+								},
+								{
+									"key": "maxPrice",
+									"value": "1500"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "favourites",
+			"item": [
+				{
+					"name": "get favourites",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://0.0.0.0:5001/u/favourites?user=73129c8c-6359-430c-8d6e-6475f2850701",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "5001",
+							"path": [
+								"u",
+								"favourites"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "s",
+									"disabled": true
+								},
+								{
+									"key": "sortPrice",
+									"value": "asc",
+									"disabled": true
+								},
+								{
+									"key": "priceRange",
+									"value": "0-1500",
+									"disabled": true
+								},
+								{
+									"key": "user",
+									"value": "73129c8c-6359-430c-8d6e-6475f2850701"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add favourites",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"73129c8c-6359-430c-8d6e-6475f2850701\",\n    \"item_id\": \"254b5a57-b636-4fcf-9164-1ac5f61d2d3f\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:5001/u/favourites",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "5001",
+							"path": [
+								"u",
+								"favourites"
+							],
+							"query": [
+								{
+									"key": "user",
+									"value": "73129c8c-6359-430c-8d6e-6475f2850701",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "s",
+									"disabled": true
+								},
+								{
+									"key": "sortOrder",
+									"value": "desc",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add rating",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"73129c8c-6359-430c-8d6e-6475f2850701\",\n    \"item_id\": \"254b5a57-b636-4fcf-9164-1ac5f61d2d3f\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:5001/u/addRating",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "5001",
+							"path": [
+								"u",
+								"addRating"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "purchases",
+			"item": [
+				{
+					"name": "get purchase list",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"73129c8c-6359-430c-8d6e-6475f2850701\",\n    \"item_id\": \"254b5a57-b636-4fcf-9164-1ac5f61d2d3f\",\n    \"order_status\": \"pending\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:5001/u/purchaselist/user_id=73129c8c-6359-430c-8d6e-6475f2850701?search=sa&sortOrder=desc&priceRange=0-1500",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "5001",
+							"path": [
+								"u",
+								"purchaselist",
+								"user_id=73129c8c-6359-430c-8d6e-6475f2850701"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "sa"
+								},
+								{
+									"key": "sortOrder",
+									"value": "desc"
+								},
+								{
+									"key": "priceRange",
+									"value": "0-1500"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get cancel list",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"73129c8c-6359-430c-8d6e-6475f2850701\",\n    \"item_id\": \"254b5a57-b636-4fcf-9164-1ac5f61d2d3f\",\n    \"order_status\": \"pending\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:5001/u/cancelList?user_id=73129c8c-6359-430c-8d6e-6475f2850701&search=s&sortPrice=asc&priceRange=0-1500",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "5001",
+							"path": [
+								"u",
+								"cancelList"
+							],
+							"query": [
+								{
+									"key": "user_id",
+									"value": "73129c8c-6359-430c-8d6e-6475f2850701"
+								},
+								{
+									"key": "search",
+									"value": "s"
+								},
+								{
+									"key": "sortPrice",
+									"value": "asc"
+								},
+								{
+									"key": "priceRange",
+									"value": "0-1500"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cancel purchase order",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"order_status\": \"Cancelled\",\n    \"purchase_id\": \"381935a7-51e3-423b-b40b-59e94f6f6018\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:5001/u/cancelOrder",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "5001",
+							"path": [
+								"u",
+								"cancelOrder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add purchase",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"73129c8c-6359-430c-8d6e-6475f2850701\",\n    \"item_id\": \"254b5a57-b636-4fcf-9164-1ac5f61d2d3f\",\n    \"order_status\": \"pending\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:5001/u/add-purchase",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "5001",
+							"path": [
+								"u",
+								"add-purchase"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add to cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"73129c8c-6359-430c-8d6e-6475f2850701\",\n    \"item_id\": \"254b5a57-b636-4fcf-9164-1ac5f61d2d3f\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://0.0.0.0:5001/u/addToCart",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "5001",
+							"path": [
+								"u",
+								"addToCart"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Signup new user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"first_name\": \"srimathi\",\n    \"last_name\": \"Ramamoorthy\",\n    \"email\": \"mathiram@gmail.com\",\n    \"user_name\": \"sri13_19\",\n    \"user_password\": \"srimathi&619\",\n    \"phone_no\": \"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0:5001/signup",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "5001",
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Login",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_name\": \"sri13_19\",\n    \"user_password\": \"srimathi&619\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0:5001/login",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "5001",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get single account user",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzMxMjljOGMtNjM1OS00MzBjLThkNmUtNjQ3NWYyODUwNzAxIiwidXNlcl9uYW1lIjoic3JpMTNfMTkiLCJpYXQiOjE3MDE4NTE5ODF9.CgHp-4F0Fzw-KQsW2awekpzpw_fvpFJyZK4J2LUZnwg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0:5001/user/73129c8c-6359-430c-8d6e-6475f2850701",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "5001",
+					"path": [
+						"user",
+						"73129c8c-6359-430c-8d6e-6475f2850701"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update single account user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzMxMjljOGMtNjM1OS00MzBjLThkNmUtNjQ3NWYyODUwNzAxIiwidXNlcl9uYW1lIjoic3JpMTNfMTkiLCJpYXQiOjE3MDE4NTE5ODF9.CgHp-4F0Fzw-KQsW2awekpzpw_fvpFJyZK4J2LUZnwg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"user_name\": \"srimathi31\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0:5001/user/73129c8c-6359-430c-8d6e-6475f2850701",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "5001",
+					"path": [
+						"user",
+						"73129c8c-6359-430c-8d6e-6475f2850701"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
