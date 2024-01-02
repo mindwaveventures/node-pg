@@ -8,6 +8,7 @@ const config = require('./config/config');
 const { sequelize, models, Sequelize } = require('./config/sequelize-config');
 const helper = require('./services/helper');
 const { isAuthorised } = require('./middleware/middleware');
+const { mailConfig, transporter } = require('./config/email-config');
 const Op = Sequelize.Op;
 
 // create application/json parser
@@ -29,6 +30,23 @@ app.post('/save-user', async function (req, res) {
     res.json({
         usersCreate
     });
+});
+
+app.post('/test-mail', async function (req, res) {
+    const options = {
+        from: `sender<${mailConfig.email}>`,
+        to: 'gopu@mindwaveventures.com',
+        subject: 'test mail',
+        // text: 'test content', // plain text body
+        html: `<button>test mail ${otp} </button> <a href="${url}" target="_blank">View</a>`, // html body
+    };
+
+    transporter.sendMail(options, (error, info) => {
+        if (error) console.log('\n mail error..', error);
+        return console.log('\n success...', info);;
+    });
+
+    res.json('sending mail');
 });
 
 app.patch('/update-user', async function (req, res) {
