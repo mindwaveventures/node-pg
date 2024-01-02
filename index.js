@@ -7,7 +7,7 @@ const config = require('./config/config');
 // const pgClient = require('./pg-config');
 const { sequelize, models, Sequelize } = require('./config/sequelize-config');
 const helper = require('./services/helper');
-const { isAuthorised } = require('./middleware/middleware');
+const { isAuthorised, multerupload } = require('./middleware/middleware');
 const { mailConfig, transporter } = require('./config/email-config');
 const Op = Sequelize.Op;
 
@@ -19,6 +19,8 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(jsonParser);
 app.use(urlencodedParser);
+
+app.use('/uploads', express.static(__dirname + '/uploads'));
 
 app.post('/save-user', async function (req, res) {
     const usersCreate = await models.users.create({
@@ -46,7 +48,14 @@ app.post('/test-mail', async function (req, res) {
         return console.log('\n success...', info);;
     });
 
-    res.json('sending mail');
+    return res.json('sending mail');
+});
+
+app.post('/upload', multerupload('').single('file'), async function (req, res) {
+    console.log('\n req.file...', req.file);
+    return res.json({
+        file: req.file
+    });
 });
 
 app.patch('/update-user', async function (req, res) {
@@ -59,7 +68,7 @@ app.patch('/update-user', async function (req, res) {
         returning: true
     });
 
-    res.json({
+    return res.json({
         usersUpdate
     });
 });
